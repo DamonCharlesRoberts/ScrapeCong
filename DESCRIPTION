@@ -20,7 +20,9 @@ Imports:
 	lubridate,
 	tidyr,	
 	readr,
-	tm
+	tm,
+	readr,
+
 Suggests: 
     testthat,
     knitr,
