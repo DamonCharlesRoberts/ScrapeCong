@@ -13,8 +13,7 @@ Imports:
 	twitteR,
 	remotes,
 	rtweet,
-	httpuv
-	tm,
+	httpuv,
 	tidytext,
 	tidyverse,
 	dplyr,
