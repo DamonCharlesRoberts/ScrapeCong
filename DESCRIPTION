@@ -1,10 +1,10 @@
 Package: ScrapeCong
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Scrapes Tweets from members of the 116th United States Congress (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Damon C. Roberts
+Maintainer: The package maintainer <damon.roberts-1@colorado.edu>
+Description: Downloads tweets and saves CSV's of the different members of congress. Additionally it organizes them by their gender and by the party label that they are under.
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
 Encoding: UTF-8
