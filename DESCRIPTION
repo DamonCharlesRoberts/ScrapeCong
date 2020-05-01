@@ -18,7 +18,7 @@ Imports:
 	tidyverse,
 	dplyr,
 	lubridate,
-	tidyr	
+	tidyr,	
 	readr,
 Suggests: 
     testthat,
