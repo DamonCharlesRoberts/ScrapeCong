@@ -9,8 +9,20 @@ Description: Downloads tweets and saves CSV's of the different members of congre
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+	twitteR,
+	remotes,
+	rtweet,
+	httpuv
+	tm,
+	tidytext,
+	tidyverse,
+	dplyr,
+	lubridate,
+	tidyr	
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2
 VignetteBuilder: knitr
