@@ -14,6 +14,7 @@ library(dplyr)
 library(lubridate)
 library(tidytext)
 library(tidyr)
+library(readr)
 
 
 senmaleD <- function() {

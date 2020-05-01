@@ -14,11 +14,12 @@ Imports:
 	remotes,
 	rtweet,
 	httpuv,
-	tidytext,
+	tidytext, 
 	tidyverse,
 	dplyr,
 	lubridate,
 	tidyr	
+	readr,
 Suggests: 
     testthat,
     knitr,
