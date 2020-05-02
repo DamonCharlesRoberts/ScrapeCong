@@ -1,12 +1,14 @@
 Package: ScrapeCong
 Type: Package
-Title: Scrapes Tweets from members of the 116th United States Congress (Title Case)
-Version: 0.1.0
+Title: Get Tweets from 116th US Congress (Title Case)
+Version: 1.0.0
 Author: Damon C. Roberts
 Maintainer: The package maintainer <damon.roberts-1@colorado.edu>
 Description: Downloads tweets and saves CSV's of the different members of congress. Additionally it organizes them by their gender and by the party label that they are under.
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+URL: https://github.com/damoncharlesroberts/ScrapeCong/issues
+BugReports: https://github.com/damoncharlesroberts/ScrapeCong/issues
+License: Creat
 Encoding: UTF-8
 LazyData: true
 Imports:
