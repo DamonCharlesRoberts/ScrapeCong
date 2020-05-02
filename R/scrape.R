@@ -162,6 +162,7 @@ save_as_csv(senatemdtweets, "data/senatemdtweets.csv", prepend_ids = TRUE, na = 
 senatemdtweets <- read_csv("data/senatemdtweets.csv")
 }
 
+
 senfemD <- function() {
 sinema <- get_timeline('@SenatorSinema', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
 save_as_csv(sinema,"data/sinema.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
@@ -250,7 +251,8 @@ save_as_csv(senatefdtweets, "data/senatefdtweets.csv", prepend_ids = TRUE, na = 
 senatefdtweets <- read_csv("data/senatefdtweets.csv")
 }
 
-senfemR<- function() {
+
+senfemR <- function() {
   lisamurkowski<- get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   lisamurkowskitweets <- read_csv("data/lisamurkowski.csv")
@@ -296,6 +298,7 @@ senfemR<- function() {
   save_as_csv(senatefrtweets, "data/senatefrtweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   senatefrtweets <- read_csv("data/senatefrtweets.csv")
 }
+
 
 senmaleR <- function() {
 donsullivan <- get_timeline('@SenDanSullivan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -586,6 +589,7 @@ horfemR <- function() {
   save_as_csv(horfrtweets, "data/horfrtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
   horfrtweets <- read_csv("data/horfrtweets.csv")
 }
+
 
 horfemD <- function() {
   terrisewell <- get_timeline('@RepTerriSewell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -1037,7 +1041,8 @@ horfemD <- function() {
   horfdtweets <- read_csv("data/horfdtweets.csv")
 }
 
-hormaleR <- function(){
+
+hormaleR <- function() {
   donyoung <- get_timeline('@repdonyoung', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   byrne <- get_timeline('@RepByrne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   mikerogers <- get_timeline('@RepMikeRogersAL', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
