@@ -250,33 +250,35 @@ save_as_csv(senatefdtweets, "data/senatefdtweets.csv", prepend_ids = TRUE, na = 
 senatefdtweets <- read_csv("data/senatefdtweets.csv")
 }
 
-senfemR <- function(){
+senfemR <- function() {
   lisamurkowski<- get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-lisamurkowskitweets <- read_csv("data/lisamurkowski.csv")
-mcsally <- get_timeline('@SenMcSallyAZ', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(mcsally,"data/mcsally.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-mcsallytweets <- read_csv("data/mcsally.csv")
-joniernst <- get_timeline('@SenJoniErnst', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(joniernst,"data/joniernst.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-joniernsttweets <- read_csv("data/joniernst.csv")
-collins <- get_timeline('@SenatorCollins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(collins,"data/collins.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-collinstweets <- read_csv("data/collins.csv")
-hydesmith <- get_timeline('@SenHydeSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(hydesmith,"data/hydesmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-hydesmithtweets <- read_csv("data/hydesmith.csv")
-fischer <- get_timeline('@SenatorFischer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(fischer,"data/fischer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-fischertweets <- read_csv("data/fischer.csv")
-marshablackburn <- get_timeline('@MarshaBlackburn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(marshablackburn,"data/marshablackburn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-marshablackburntweets <- read_csv("data/marshablackburn.csv")
-capito <- get_timeline('@SenCapito', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-save_as_csv(capito,"data/capito.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-capitotweets <- read_csv("data/capito.csv")
-senatefrtweets <- bind_rows(lisamurkowskitweets %>%
-                              mutate(person = "Lisa Murkowski"),
+  save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  lisamurkowskitweets <- read_csv("data/lisamurkowski.csv")
+  mcsally <- get_timeline('@SenMcSallyAZ', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(mcsally,"data/mcsally.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  mcsallytweets <- read_csv("data/mcsally.csv")
+  joniernst <- get_timeline('@SenJoniErnst', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(joniernst,"data/joniernst.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  joniernsttweets <- read_csv("data/joniernst.csv")
+  collins <- get_timeline('@SenatorCollins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(collins,"data/collins.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  collinstweets <- read_csv("data/collins.csv")
+  hydesmith <- get_timeline('@SenHydeSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(hydesmith,"data/hydesmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  hydesmithtweets <- read_csv("data/hydesmith.csv")
+  fischer <- get_timeline('@SenatorFischer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(fischer,"data/fischer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  fischertweets <- read_csv("data/fischer.csv")
+  marshablackburn <- get_timeline('@MarshaBlackburn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(marshablackburn,"data/marshablackburn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  marshablackburntweets <- read_csv("data/marshablackburn.csv")
+  capito <- get_timeline('@SenCapito', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
+  save_as_csv(capito,"data/capito.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  capitotweets <- read_csv("data/capito.csv")
+
+
+  senatefrtweets <- bind_rows(lisamurkowskitweets %>%
+                                mutate(person = "Lisa Murkowski"),
                               mcsallytweets %>%
                                 mutate(person = "Martha McSally"),
                               joniernsttweets %>%
@@ -291,8 +293,9 @@ senatefrtweets <- bind_rows(lisamurkowskitweets %>%
                                 mutate(person = "Marsha Blackburn"),
                               capitotweets %>%
                                 mutate(person = "Shelley Moore Capito"))
-save_as_csv(senatefrtweets, "data/senatefrtweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-senatefrtweets <- read_csv("data/senatefrtweets.csv")
+  save_as_csv(senatefrtweets, "data/senatefrtweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  senatefrtweets <- read_csv("data/senatefrtweets.csv")
+
 }
 
 senmaleR <- function() {
