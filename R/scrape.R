@@ -340,7 +340,6 @@ senmaleR <- function() {
   ronjohnson<- get_timeline('@SenRonJohnson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   johnbarrasso<- get_timeline('@SenJohnBarrasso', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   enzi<- get_timeline('@SenatorEnzi', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
-
   save_as_csv(donsullivan,"data/donsullivan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(shelby,"data/shelby.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(johnboozman,"data/johnboozman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
