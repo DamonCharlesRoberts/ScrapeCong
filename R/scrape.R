@@ -295,7 +295,7 @@ senfemR <- function() {
   senatefrtweets <- read_csv("data/senatefrtweets.csv")
 }
 
-senmaleR <- function() {
+senmaleRe <- function() {
   donsullivan <- get_timeline('@SenDanSullivan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   shelby <- get_timeline('@SenShelby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   johnboozman <- get_timeline('@JohnBoozman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
