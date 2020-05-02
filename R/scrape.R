@@ -250,7 +250,7 @@ save_as_csv(senatefdtweets, "data/senatefdtweets.csv", prepend_ids = TRUE, na = 
 senatefdtweets <- read_csv("data/senatefdtweets.csv")
 }
 
-senfemR <- function() {
+senfemR<- function() {
   lisamurkowski<- get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   lisamurkowskitweets <- read_csv("data/lisamurkowski.csv")
@@ -295,7 +295,6 @@ senfemR <- function() {
                                 mutate(person = "Shelley Moore Capito"))
   save_as_csv(senatefrtweets, "data/senatefrtweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   senatefrtweets <- read_csv("data/senatefrtweets.csv")
-
 }
 
 senmaleR <- function() {
