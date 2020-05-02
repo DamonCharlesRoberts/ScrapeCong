@@ -9,6 +9,9 @@ summary: Description of the R ScrapeCong Package
 install.packages('devtools')
 devtools::install_github('damoncharlesroberts/ScrapeCong')
 library(ScrapeCong)
+library(readr) #having problems loading a few of the dependencies
+library(rtweet)
+library(dplyr)
 ```
 # You need to also load your Twitter Developer Credentials and API Keys into your R Script. 
 ```{r}
@@ -27,7 +30,7 @@ token <- create_token(
 To set up a twitter developer account, you must apply on their website: dev.twitter.com. Once your account has been approved, you must create an APP. Once you have created an APP, you can access your API KEY, API secret key, Access Token, and Access token Secret. 
 
 ## To Start Scraping Tweets use these functions:
-```{r
+```{r}
 senmaleD()
 senfemD()
 senmaleR()
