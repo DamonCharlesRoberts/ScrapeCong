@@ -250,7 +250,7 @@ senfemD <- function() {
   senatefdtweets <- read_csv("data/senatefdtweets.csv")
 }
 
-senFemR <- function() {
+senfemR <- function() {
   lisamurkowski<- get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   lisamurkowskitweets <- read_csv("data/lisamurkowski.csv")
