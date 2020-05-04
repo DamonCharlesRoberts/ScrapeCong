@@ -1,4 +1,4 @@
-Package: ScrapeCong
+Package: ScrapeCongress
 Type: Package
 Title: Get Tweets from 116th US Congress (Title Case)
 Version: 1.0.0

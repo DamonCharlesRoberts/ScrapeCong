@@ -1,5 +1,5 @@
 ##########################
-# ScrapeCong             #
+# ScrapeCongress             #
 ##########################
 
 library(twitteR)
