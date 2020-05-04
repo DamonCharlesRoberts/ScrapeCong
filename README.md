@@ -7,8 +7,8 @@ summary: Description of the R ScrapeCong Package
 # Set Up
 ```{r}
 install.packages('devtools')
-devtools::install_github('damoncharlesroberts/ScrapeCong')
-library(ScrapeCong)
+devtools::install_github('damoncharlesroberts/ScrapeCongress')
+library(ScrapeCongress)
 library(readr) #having problems loading a few of the dependencies
 library(rtweet)
 library(dplyr)
@@ -48,3 +48,5 @@ To organize the tweets by line, simply run this command
 ```{r Tweet Per Line}
 tweet_per_line()
 ```
+
+When running the commands, you may observe a few "Warnings" or "Errors" in the terminal. This is likely due to a twitter handle change or some privacy restrictions placed on the twitter account. Unfortunately, to my knowledge, this is just going to be an unfortunate thing that cannot be really fixed. If a MC changes their twitter handle or puts some sort of privacy restriction on, I cannot really make adjustments to that. Unless it leads to a massive loss of observations, I'll likely just suggest to treat it like a non-response in a survey. 
