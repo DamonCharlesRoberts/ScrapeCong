@@ -2,7 +2,6 @@
 # ScrapeCongress          #
 ##########################
 
-library(twitteR)
 library(remotes)
 library(rtweet)
 library(httpuv)
@@ -624,6 +623,7 @@ horfemR <- function() {
   save_as_csv(annwagner,"data/annwagner.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(hartzler,"data/hartzler.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(virginiafoxx,"data/virginiafoxx.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
+  save_as_csv(lizcheney,"data/armstrong.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(stefanik,"data/stefanik.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(cathymcmorris,"data/cathymcmorris.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
   save_as_csv(lizcheney,"data/lizcheney.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
