@@ -51,7 +51,7 @@ library(tm)
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Democrat in the Senate
-
+#' @export
 
 senmaleD <- function() {
   dougjones <- get_timeline('@SenDougJones', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -198,7 +198,7 @@ senatemdtweets <- bind_rows(dougjonestweets %>%
 save_as_csv(senatemdtweets, "data/senatemdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
 senatemdtweets <- read_csv("data/senatemdtweets.csv")
 }
-
+}
 
 
 
@@ -209,7 +209,7 @@ senatemdtweets <- read_csv("data/senatemdtweets.csv")
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Democrat in the Senate
-
+#' @export
 
 senfemD <- function() {
   sinema <- get_timeline('@SenatorSinema', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -307,6 +307,7 @@ senatefdtweets <- read_csv("data/senatefdtweets.csv")
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Republican in the Senate
+#' @export
 
 senfemR <- function() {
   lisamurkowski<- get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -363,7 +364,7 @@ senatefrtweets <- read_csv("data/senatefrtweets.csv")
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Republican in the Senate
-
+#' @export
 
 senmaleR <- function() {
   donsullivan <- get_timeline('@SenDanSullivan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -603,6 +604,7 @@ senatemrtweets <- read_csv("data/senatemrtweets.csv")
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Republican in the House of Representatives
+#' @export
 
 horfemR <- function() {
   martharoby <- get_timeline('@RepMarthaRoby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -669,6 +671,8 @@ horfemR <- function() {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Democrat in the House of Representatives
+#' @export
+
 horfemD <- function() {
   terrisewell <- get_timeline('@RepTerriSewell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   kirkpatrick<- get_timeline('@RepKirkpatrick', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -1126,6 +1130,8 @@ horfemD <- function() {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Republican in the House of Representatives
+#' @export
+
 hormaleR <- function() {
   donyoung <- get_timeline('@repdonyoung', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   byrne <- get_timeline('@RepByrne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -2065,6 +2071,8 @@ hormaleR <- function() {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Democrat in the House of Representatives
+#' @export
+
 hormaleD <- function() {
   ohalleran <- get_timeline('@RepOHalleran', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   raulgrijalva<- get_timeline('@RepRaulGrijalva', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
