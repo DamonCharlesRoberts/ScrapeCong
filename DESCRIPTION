@@ -12,16 +12,18 @@ License: Creat
 Encoding: UTF-8
 LazyData: true
 Depends:
-	remotes,
+  remotes,
 	rtweet,
-	httpuv,
-	tidytext, 
+	tidytext,
 	tidyverse,
+	rtweet,
+	dplyr,
 	dplyr,
 	lubridate,
 	tidyr,	
 	readr,
-	tm
+	tm,
+	utils
 Suggests: 
     testthat,
     knitr,

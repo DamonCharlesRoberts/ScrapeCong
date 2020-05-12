@@ -57,7 +57,7 @@ dsenatemdtweets <- select(senatemdtweets, -c(user_id, status_id, created_at, scr
                                              description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                              account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                              profile_image_url, person))
-write.table(dsenatemdtweets, file = "data/senatemd.txt", sep = "")
+utils::write.table(dsenatemdtweets, file = "data/senatemd.txt", sep = "")
 dsenatemrtweets <- select(senatemrtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                              reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
                                              reply_count, hashtags, symbols, urls_url, urls_t.co, urls_expanded_url, media_url,
@@ -72,7 +72,7 @@ dsenatemrtweets <- select(senatemrtweets, -c(user_id, status_id, created_at, scr
                                              description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                              account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                              profile_image_url, person))
-write.table(dsenatemrtweets, file = "data/senatemr.txt", sep = "")
+utils::write.table(dsenatemrtweets, file = "data/senatemr.txt", sep = "")
 
 dsenatefdtweets <- select(senatefdtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                              reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
@@ -88,7 +88,7 @@ dsenatefdtweets <- select(senatefdtweets, -c(user_id, status_id, created_at, scr
                                              description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                              account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                              profile_image_url, person))
-write.table(dsenatefdtweets, file = "data/senatefd.txt", sep = "")
+utils::write.table(dsenatefdtweets, file = "data/senatefd.txt", sep = "")
 
 dsenatefrtweets <- select(senatefrtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                              reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
@@ -104,7 +104,7 @@ dsenatefrtweets <- select(senatefrtweets, -c(user_id, status_id, created_at, scr
                                              description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                              account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                              profile_image_url, person))
-write.table(dsenatefrtweets, file = "data/senatefr.txt", sep = "")
+utils::write.table(dsenatefrtweets, file = "data/senatefr.txt", sep = "")
 
 dhormdtweets <- select(hormdtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                        reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
@@ -120,7 +120,7 @@ dhormdtweets <- select(hormdtweets, -c(user_id, status_id, created_at, screen_na
                                        description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                        account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                        profile_image_url, person))
-write.table(dhormdtweets, file = "data/hormd.txt", sep = "")
+utils::write.table(dhormdtweets, file = "data/hormd.txt", sep = "")
 
 dhormrtweets <- select(hormrtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                        reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
@@ -136,7 +136,7 @@ dhormrtweets <- select(hormrtweets, -c(user_id, status_id, created_at, screen_na
                                        description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                        account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                        profile_image_url, person))
-write.table(dhormrtweets, file = "data/hormr.txt", sep = "")
+utils::write.table(dhormrtweets, file = "data/hormr.txt", sep = "")
 
 dhorfdtweets <- select(horfdtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                        reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
@@ -152,7 +152,7 @@ dhorfdtweets <- select(horfdtweets, -c(user_id, status_id, created_at, screen_na
                                        description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                        account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                        profile_image_url, person))
-write.table(dhorfdtweets, file = "data/horfd.txt", sep = "")
+utils::write.table(dhorfdtweets, file = "data/horfd.txt", sep = "")
 
 dhorfrtweets <- select(horfrtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                        reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,
@@ -168,5 +168,5 @@ dhorfrtweets <- select(horfrtweets, -c(user_id, status_id, created_at, screen_na
                                        description, url, protected, followers_count, friends_count, listed_count, statuses_count, favourites_count,
                                        account_created_at, verified, profile_url, profile_expanded_url, account_lang, profile_banner_url, profile_background_url,
                                        profile_image_url, person))
-write.table(dhorfrtweets, file = "data/horfr.txt", sep = "")
+utils::write.table(dhorfrtweets, file = "data/horfr.txt", sep = "")
 }
