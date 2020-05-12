@@ -1,4 +1,47 @@
-#Tweet per Line
+#############################
+#     Tweet per Line        #
+#############################
+
+library(remotes)
+library(rtweet)
+library(httpuv)
+library(tidytext)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(tidytext)
+library(tidyr)
+library(readr)
+library(tm)
+
+# version 0.1.0
+# 5/12/2020
+# Authors: Damon C. Roberts
+
+## Functions:
+## Dependencies:    twitteR (for access to the Twitter API)
+#                   remotes (for access to github repositories)
+#                   rtweets (for access to the Twitter API)
+#                   httpuv  (assists with converting JSON files to CSV)
+#                   tidytext (useful for managing strings in a tibble)
+#                   tidyverse (useful to bring in the many tidyverse packages to make clean data storage and management)
+#                   ggplot2 (suggested to help with any graphical representation of data)
+#                   dplyr (assists with tibble management/manipulation)
+#                   lubridate (assists with conversion from JSON to tibble)
+#                   tidyr (assists with clean data storage and management)
+#                   readr (assists with reading CSVs)
+#                   tm (used in text mining)
+
+## Functions Included:
+# (1) tweet_per_line
+
+######################
+#-(1) tweet_per_line-#
+######################
+#' Takes each dataframe for the tweets that you downloaded and removes unimportant information if you are only interested in who posted it and the text of  the tweet
+#' Writes a txt file with each tweet per row
+
 tweet_per_line <- function() {
 dsenatemdtweets <- select(senatemdtweets, -c(user_id, status_id, created_at, screen_name, source, display_text_width, reply_to_status_id,
                                              reply_to_user_id, reply_to_screen_name, is_quote, is_retweet, favorite_count, retweet_count, quote_count,

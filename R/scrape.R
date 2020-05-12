@@ -1,5 +1,5 @@
 ##########################
-# ScrapeCongress             #
+# ScrapeCongress          #
 ##########################
 
 library(twitteR)
@@ -16,11 +16,42 @@ library(tidyr)
 library(readr)
 library(tm)
 
+# version 0.1.0
+# 5/12/2020
+# Authors: Damon C. Roberts
+
+
+## Functions:
+## Dependencies:    twitteR (for access to the Twitter API)
+#                   remotes (for access to github repositories)
+#                   rtweets (for access to the Twitter API)
+#                   httpuv  (assists with converting JSON files to CSV)
+#                   tidytext (useful for managing strings in a tibble)
+#                   tidyverse (useful to bring in the many tidyverse packages to make clean data storage and management)
+#                   ggplot2 (suggested to help with any graphical representation of data)
+#                   dplyr (assists with tibble management/manipulation)
+#                   lubridate (assists with conversion from JSON to tibble)
+#                   tidyr (assists with clean data storage and management)
+#                   readr (assists with reading CSVs)
+#                   tm (used in text mining)
+
+## Functions Included:
+# (1) senmaleD()
+# (2) senfemD()
+# (3) senfemR()
+# (4) senmaleR()
+# (5) horfemR()
+# (6) horfemD()
+# (7) hormaleR()
+# (8) hormaleD()
 
 #############################
-## Senate Male Democrats    #
+#--------(1) senmaleD-------#
 #############################
-
+#' Grabs the 50 most recent tweets from Male Democrats in the Senate
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Democrat in the Senate
 
 
 senmaleD <- function() {
@@ -173,8 +204,12 @@ senatemdtweets <- read_csv("data/senatemdtweets.csv")
 
 
 #############################
-## Senate Female Democrats  #
+#--------(2) senfemD-------#
 #############################
+#' Grabs the 50 most recent tweets from Female Democrats in the Senate
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Democrat in the Senate
 
 
 senfemD <- function() {
@@ -267,8 +302,12 @@ senatefdtweets <- read_csv("data/senatefdtweets.csv")
 }
 
 #############################
-## Senate Female Republicans#
+#--------(3) senfemR-------#
 #############################
+#' Grabs the 50 most recent tweets from Female Republicans in the Senate
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Republican in the Senate
 
 senfemR <- function() {
   lisamurkowski<- get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -319,8 +358,12 @@ senatefrtweets <- read_csv("data/senatefrtweets.csv")
 
 
 #############################
-## Senate Male Republicans  #
+#--------(4) senmaleR-------#
 #############################
+#' Grabs the 50 most recent tweets from Male Republicans in the Senate
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Republican in the Senate
 
 
 senmaleR <- function() {
@@ -554,7 +597,13 @@ senatemrtweets <- read_csv("data/senatemrtweets.csv")
 }
 
 
-#### House of Representatives ######
+#############################
+#--------(5) horfemR-------#
+#############################
+#' Grabs the 50 most recent tweets from Female Republicans in the House of Representatives
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Republican in the House of Representatives
 
 horfemR <- function() {
   martharoby <- get_timeline('@RepMarthaRoby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -613,7 +662,13 @@ horfemR <- function() {
   horfrtweets <- read_csv("data/horfrtweets.csv")
 }
 
-
+#############################
+#--------(6) horfemD-------#
+#############################
+#' Grabs the 50 most recent tweets from Female Democrats in the House of Representatives
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Democrat in the House of Representatives
 horfemD <- function() {
   terrisewell <- get_timeline('@RepTerriSewell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   kirkpatrick<- get_timeline('@RepKirkpatrick', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -1064,7 +1119,13 @@ horfemD <- function() {
   horfdtweets <- read_csv("data/horfdtweets.csv")
 }
 
-
+#############################
+#--------(7) hormaleR-------#
+#############################
+#' Grabs the 50 most recent tweets from Male Republicans in the House of Representatives
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Republican in the House of Representatives
 hormaleR <- function() {
   donyoung <- get_timeline('@repdonyoung', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   byrne <- get_timeline('@RepByrne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -1997,6 +2058,13 @@ hormaleR <- function() {
   hormrtweets <- read_csv("data/hormrtweets.csv")
 }
 
+#############################
+#--------(8) hormaleD-------#
+#############################
+#' Grabs the 50 most recent tweets from Male Democrats in the House of Representatives
+#' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
+#' Creates one dataframe to combine all of the tweets from each MC
+#' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Democrat in the House of Representatives
 hormaleD <- function() {
   ohalleran <- get_timeline('@RepOHalleran', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   raulgrijalva<- get_timeline('@RepRaulGrijalva', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
