@@ -21,8 +21,7 @@ Depends:
 	lubridate,
 	tidyr,	
 	readr,
-	tm,
-	readr,
+	tm
 Suggests: 
     testthat,
     knitr,
