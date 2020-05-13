@@ -39,7 +39,7 @@ library(readr)
 library(tm)
 library(utils)
 
-authenticate <- function{
+authenticate <- function {
 api_key <- readline(prompt = "Enter Twitter API Key: ")
 api_secret <- readline(prompt = "Enter Twitter API Secret: ")
 access_token <- readline(prompt = "Enter Twitter Access Token: ")
