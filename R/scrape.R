@@ -46,8 +46,8 @@ api_secret <- readline(prompt = "Enter API_SECRET: ")
 access_token <- readline(prompt = "Enter ACCESS_TOKEN: ")
 access_token_secret <- readline(prompt = "Enter ACCESS_TOKEN_SECRET: ")
 app_name <- readline(prompt = "Enter APP NAME: ")
-token <- rtweet::create_token(
-  app = app_name,
+token <- create_token(
+  app = 'Congress_Gender',
   consumer_key = api_key,
   consumer_secret = api_secret,
   access_token = access_token,

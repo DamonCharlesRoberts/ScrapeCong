@@ -2,9 +2,11 @@ context("horfemR")
 library(ScrapeCongress)
 test_that('horfemR', {
   skip_on_cran()
-  expect_message(horfemD())
+  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
+  expect_message(horfemR())
 })
 test_that('horfemR', {
   skip_on_cran()
-  expect_warning(horfemR)
+  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
+  expect_warning(horfemR())
 })

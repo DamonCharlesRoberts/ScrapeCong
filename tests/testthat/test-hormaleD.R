@@ -2,9 +2,11 @@ context("hormaleD")
 library(ScrapeCongress)
 test_that('hormaleD', {
   skip_on_cran()
-  expect_message(horfemD())
+  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
+  expect_message(hormaleD())
 })
 test_that('hormaleD', {
   skip_on_cran()
-  expect_warning(hormaleD)
+  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
+  expect_warning(hormaleD())
 })

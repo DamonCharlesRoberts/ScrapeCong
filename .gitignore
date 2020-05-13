@@ -3,8 +3,4 @@
 .RData
 .Ruserdata
 inst/doc
-tests/testthat/access_token.RDS
-tests/testthat/access_token_secret.RDS
-tests/testthat/api_key.RDS
-tests/testthat/api_secret.RDS
-cran-comments.md
+tests/testthat/data
