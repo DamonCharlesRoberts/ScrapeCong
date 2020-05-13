@@ -2,18 +2,14 @@
 # ScrapeCongress          #
 ##########################
 
-library(remotes)
 library(rtweet)
-library(httpuv)
 library(tidytext)
-library(tidyverse)
 library(ggplot2)
 library(dplyr)
-library(lubridate)
 library(tidytext)
-library(tidyr)
 library(readr)
 library(tm)
+library(utils)
 
 # version 0.1.0
 # 5/12/2020
@@ -54,6 +50,9 @@ library(tm)
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 senmaleD <- function() {
@@ -213,6 +212,9 @@ senatemdtweets <- readr::read_csv("data/senatemdtweets.csv")
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 senfemD <- function() {
@@ -314,6 +316,9 @@ senatefdtweets <- readr::read_csv("data/senatefdtweets.csv")
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 senfemR <- function() {
@@ -374,6 +379,9 @@ senatefrtweets <- readr::read_csv("data/senatefrtweets.csv")
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 senmaleR <- function() {
@@ -617,6 +625,9 @@ senatemrtweets <- readr::read_csv("data/senatemrtweets.csv")
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 horfemR <- function() {
@@ -687,6 +698,9 @@ horfemR <- function() {
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 horfemD <- function() {
@@ -1149,6 +1163,9 @@ horfemD <- function() {
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 hormaleR <- function() {
@@ -2093,6 +2110,9 @@ hormaleR <- function() {
 #' @import rtweet
 #' @import dplyr
 #' @import readr
+#' @import utils
+#' @import tm
+#' @import tidytext
 #' @export
 
 hormaleD <- function() {
