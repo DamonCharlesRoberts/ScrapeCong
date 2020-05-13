@@ -42,7 +42,7 @@ library(utils)
 
 
 #############################
-#----(1) Authenticate-------#
+#----(1) Keys-------#
 #############################
 #' RStudio Console prompts the user to enter their twitter credentials
 #' Users should keep these keys handy when starting a new session of R and should run this function before the others.
@@ -53,7 +53,7 @@ library(utils)
 #' @import tm
 #' @import tidytext
 #' @export
-authenticate <- function() {
+keys <- function() {
 api_key <- readline(prompt = "Enter Twitter API Key: ")
 api_secret <- readline(prompt = "Enter Twitter API Secret: ")
 access_token <- readline(prompt = "Enter Twitter Access Token: ")

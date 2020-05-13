@@ -21,6 +21,7 @@ You also need to create a data folder in your current working directory. The fol
 
 ## To Start Scraping Tweets use these functions:
 ```{r}
+keys()
 senmaleD()
 senfemD()
 senmaleR()
