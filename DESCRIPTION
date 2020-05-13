@@ -22,5 +22,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+    ggplot2
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0

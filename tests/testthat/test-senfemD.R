@@ -1,10 +1,12 @@
 context("senfemD")
 library(ScrapeCongress)
+
+context("senfemD")
+library(ScrapeCongress)
+library(rtweet)
 test_that('senfemD', {
   skip_on_cran()
-  expect_message(senfemD())
-})
-test_that('senfemD', {
-  skip_on_cran()
-  expect_warning(senfemD())
+  token <- rtweet::get_token()
+  f <- senmaleD()
+  expect_message(f, "Check your Data Folder. Function ran successfully")
 })
