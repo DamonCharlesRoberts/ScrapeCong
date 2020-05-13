@@ -2,14 +2,6 @@
 # ScrapeCongress          #
 ##########################
 
-library(rtweet)
-library(tidytext)
-library(dplyr)
-library(tidytext)
-library(readr)
-library(tm)
-library(utils)
-
 # version 0.1.0
 # 5/12/2020
 # Authors: Damon C. Roberts
@@ -38,6 +30,26 @@ library(utils)
 # (6) horfemD()
 # (7) hormaleR()
 # (8) hormaleD()
+
+library(rtweet)
+library(tidytext)
+library(dplyr)
+library(tidytext)
+library(readr)
+library(tm)
+library(utils)
+
+api_key <- readline(prompt = "Enter Twitter API Key: ")
+api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+access_token <- readline(prompt = "Enter Twitter Access Token: ")
+access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+token <- rtweet::create_token(
+  app = "Congress_Gender",
+  consumer_key = api_key,
+  consumer_secret = api_secret,
+  access_token = access_token,
+  access_secret = access_token_secret
+)
 
 #############################
 #--------(1) senmaleD-------#
