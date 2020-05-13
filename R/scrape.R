@@ -4,7 +4,6 @@
 
 library(rtweet)
 library(tidytext)
-library(ggplot2)
 library(dplyr)
 library(tidytext)
 library(readr)
