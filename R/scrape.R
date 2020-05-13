@@ -199,6 +199,10 @@ senatemdtweets <- dplyr::bind_rows(dougjonestweets %>%
 
 save_as_csv(senatemdtweets, "data/senatemdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
 senatemdtweets <- readr::read_csv("data/senatemdtweets.csv")
+
+if(nrow(senatemdtweets)>0) {
+  message("Check your Data Folder. Function ran successfully")
+}
 }
 
 
@@ -304,6 +308,9 @@ senatefdtweets <- dplyr::bind_rows(feinsteintweets %>%
 
 save_as_csv(senatefdtweets, "data/senatefdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
 senatefdtweets <- readr::read_csv("data/senatefdtweets.csv")
+if(nrow(senatefdtweets)>0) {
+  message("Check your Data Folder. Function ran successfully")
+}
 }
 
 #############################
@@ -366,6 +373,9 @@ senatefrtweets <- dplyr::bind_rows(lisamurkowskitweets %>%
 
 save_as_csv(senatefrtweets, "data/senatefrtweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
 senatefrtweets <- readr::read_csv("data/senatefrtweets.csv")
+if(nrow(senatefrtweets)>0) {
+  message("Check your Data Folder. Function ran successfully")
+}
 }
 
 
@@ -612,6 +622,9 @@ senatemrtweets <- dplyr::bind_rows(donsullivantweets %>%
 
 save_as_csv(senatemrtweets, "data/senatemrtweets.csv",prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
 senatemrtweets <- readr::read_csv("data/senatemrtweets.csv")
+if(nrow(senatemrtweets)>0) {
+  message("Check your Data Folder. Function ran successfully")
+}
 }
 
 
@@ -686,6 +699,9 @@ horfemR <- function() {
                              dplyr::mutate(person = "Liz Cheney"))
   save_as_csv(horfrtweets, "data/horfrtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
   horfrtweets <- readr::read_csv("data/horfrtweets.csv")
+  if(nrow(horfrtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 #############################
@@ -1151,6 +1167,9 @@ horfemD <- function() {
 
   save_as_csv(horfdtweets, "data/horfdtweets.csv", prepend_ids = TRUE , na = "", fileEncoding = "UTF-8")
   horfdtweets <- readr::read_csv("data/horfdtweets.csv")
+  if(nrow(horfdtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 #############################
@@ -2098,6 +2117,9 @@ hormaleR <- function() {
 
   save_as_csv(hormrtweets, "data/hormrtweets.csv", prepend_ids = TRUE , na = "", fileEncoding = "UTF-8")
   hormrtweets <- readr::read_csv("data/hormrtweets.csv")
+  if(nrow(hormrtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 #############################
@@ -2874,5 +2896,8 @@ hormaleD <- function() {
 
   save_as_csv(hormdtweets, "data/hormdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
   hormdtweets <- readr::read_csv("data/hormdtweets.csv")
+  if(nrow(hormdtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
