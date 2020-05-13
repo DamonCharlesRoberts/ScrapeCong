@@ -22,15 +22,14 @@
 #                   tm (used in text mining)
 
 ## Functions Included:
-# (1) token()
-# (2) senmaleD()
-# (3) senfemD()
-# (4) senfemR()
-# (5) senmaleR()
-# (6) horfemR()
-# (7) horfemD()
-# (8) hormaleR()
-# (9) hormaleD()
+# (1) senmaleD()
+# (2) senfemD()
+# (3) senfemR()
+# (4) senmaleR()
+# (5) horfemR()
+# (6) horfemD()
+# (7) hormaleR()
+# (8) hormaleD()
 
 library(rtweet)
 library(tidytext)
@@ -41,33 +40,6 @@ library(tm)
 library(utils)
 
 
-#############################
-#----(1) token-------#
-#############################
-#' RStudio Console prompts the user to enter their twitter credentials
-#' Users should keep these keys handy when starting a new session of R and should run this function before the others.
-#' @import rtweet
-#' @import dplyr
-#' @import readr
-#' @import utils
-#' @import tm
-#' @import tidytext
-#' @export
-token <- function() {
-api_key <- readline(prompt = "Enter Twitter API Key: ")
-api_secret <- readline(prompt = "Enter Twitter API Secret: ")
-access_token <- readline(prompt = "Enter Twitter Access Token: ")
-access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
-app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
-token <- rtweet::create_token(
-  app = app_name,
-  consumer_key = api_key,
-  consumer_secret = api_secret,
-  access_token = access_token,
-  access_secret = access_token_secret
-)
-print(token())
-}
 #############################
 #--------(1) senmaleD-------#
 #############################
@@ -84,6 +56,18 @@ print(token())
 #' @export
 
 senmaleD <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   dougjones <- rtweet::get_timeline('@SenDougJones', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
 save_as_csv(dougjones, "data/dougjones.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
 dougjonestweets <- readr::read_csv("data/dougjones.csv")
@@ -250,6 +234,18 @@ if(nrow(senatemdtweets)>0) {
 #' @export
 
 senfemD <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   sinema <- rtweet::get_timeline('@SenatorSinema', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
 save_as_csv(sinema,"data/sinema.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
 sinematweets <- readr::read_csv("data/sinema.csv")
@@ -357,6 +353,18 @@ if(nrow(senatefdtweets)>0) {
 #' @export
 
 senfemR <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   lisamurkowski<- rtweet::get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
 save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
 lisamurkowskitweets <- readr::read_csv("data/lisamurkowski.csv")
@@ -423,6 +431,18 @@ if(nrow(senatefrtweets)>0) {
 #' @export
 
 senmaleR <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   donsullivan <- rtweet::get_timeline('@SenDanSullivan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
 shelby <- rtweet::get_timeline('@SenShelby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
 johnboozman <- rtweet::get_timeline('@JohnBoozman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -672,6 +692,18 @@ if(nrow(senatemrtweets)>0) {
 #' @export
 
 horfemR <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   martharoby <- rtweet::get_timeline('@RepMarthaRoby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   walorski <- rtweet::get_timeline('@RepWalorski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   susanbrooks <- rtweet::get_timeline('@SusanWBrooks', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -748,6 +780,18 @@ horfemR <- function() {
 #' @export
 
 horfemD <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   terrisewell <- rtweet::get_timeline('@RepTerriSewell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   kirkpatrick<- rtweet::get_timeline('@RepKirkpatrick', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   dorismatsui<- rtweet::get_timeline('@DorisMatsui', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -1216,6 +1260,18 @@ horfemD <- function() {
 #' @export
 
 hormaleR <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   donyoung <- rtweet::get_timeline('@repdonyoung', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   byrne <- rtweet::get_timeline('@RepByrne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   mikerogers <- rtweet::get_timeline('@RepMikeRogersAL', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
@@ -2166,6 +2222,18 @@ hormaleR <- function() {
 #' @export
 
 hormaleD <- function() {
+  api_key <- readline(prompt = "Enter Twitter API Key: ")
+  api_secret <- readline(prompt = "Enter Twitter API Secret: ")
+  access_token <- readline(prompt = "Enter Twitter Access Token: ")
+  access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+  app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
+  token <- rtweet::create_token(
+    app = app_name,
+    consumer_key = api_key,
+    consumer_secret = api_secret,
+    access_token = access_token,
+    access_secret = access_token_secret
+  )
   ohalleran <- rtweet::get_timeline('@RepOHalleran', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   raulgrijalva<- rtweet::get_timeline('@RepRaulGrijalva', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
   rubengallego <- rtweet::get_timeline('@RepRubenGallego', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, token = token, include_rts = FALSE)
