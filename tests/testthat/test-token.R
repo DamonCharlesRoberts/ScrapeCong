@@ -1,6 +1,6 @@
-context("keys")
+context("token")
 library(ScrapeCongress)
-test_that('keys has output', {
+test_that('token has output', {
   str1 = 2
   str2 = 3
   str3 = 4

@@ -22,7 +22,7 @@
 #                   tm (used in text mining)
 
 ## Functions Included:
-# (1) authenticate()
+# (1) token()
 # (2) senmaleD()
 # (3) senfemD()
 # (4) senfemR()
@@ -42,7 +42,7 @@ library(utils)
 
 
 #############################
-#----(1) Keys-------#
+#----(1) token-------#
 #############################
 #' RStudio Console prompts the user to enter their twitter credentials
 #' Users should keep these keys handy when starting a new session of R and should run this function before the others.
@@ -53,7 +53,7 @@ library(utils)
 #' @import tm
 #' @import tidytext
 #' @export
-keys <- function() {
+token <- function() {
 api_key <- readline(prompt = "Enter Twitter API Key: ")
 api_secret <- readline(prompt = "Enter Twitter API Secret: ")
 access_token <- readline(prompt = "Enter Twitter Access Token: ")
@@ -66,7 +66,7 @@ token <- rtweet::create_token(
   access_token = access_token,
   access_secret = access_token_secret
 )
-print(keys())
+print(token())
 }
 #############################
 #--------(1) senmaleD-------#
