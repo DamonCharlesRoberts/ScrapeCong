@@ -33,7 +33,6 @@ You also need to create a data folder in your current working directory. The fol
 
 ## To Start Scraping Tweets use these functions:
 ```{r eval = FALSE}
-token() #This function should be run first each time in a new R session
 senmaleD()
 senfemD()
 senmaleR()
