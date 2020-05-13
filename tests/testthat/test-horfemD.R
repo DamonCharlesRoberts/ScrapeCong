@@ -7,6 +7,7 @@ library(rtweet)
 test_that('horfemD', {
   skip_on_cran()
 <<<<<<< HEAD
+<<<<<<< HEAD
   api_key <- "K9ArCyiCmOaJDTAArBXHDnGo0"
   api_secret <- "1egMquUAtE9Kp5mDVmMomwfFIDrOZQcYoxUBcxUsZzEhtUnegw"
   access_token <- "1114308687261261824-FEK7ybe6LwG4DFB4oofByZvouN6Jiz"
@@ -36,6 +37,11 @@ test_that('horfemD', {
     access_secret = access_token_secret
   )
   expect_warning(horfemD())
+=======
+  token <- rtweet::get_token()
+  f <- senmaleD()
+  expect_message(f, "Check your Data Folder. Function ran successfully")
+>>>>>>> parent of 0badd50... Final Changes before CRAN
 =======
   token <- rtweet::get_token()
   f <- senmaleD()
