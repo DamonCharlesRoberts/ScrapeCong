@@ -15,7 +15,7 @@ output: pdf_document
 
 There were no errors or warnings.
 
-For windows, there was one note about potential misspellings in the DESCRIPTION file. These were incorrectly flagged.
+For there was one note about a non-standard file at the top level. This is just my cran-comments.md file for your reference.
   
 ## Downstream dependencies
 
