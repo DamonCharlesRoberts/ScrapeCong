@@ -66,6 +66,7 @@ token <- rtweet::create_token(
   access_token = access_token,
   access_secret = access_token_secret
 )
+print(keys())
 }
 #############################
 #--------(1) senmaleD-------#
