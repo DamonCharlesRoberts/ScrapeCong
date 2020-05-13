@@ -9,9 +9,6 @@ summary: Description of the R ScrapeCong Package
 install.packages('devtools')
 devtools::install_github('damoncharlesroberts/ScrapeCongress')
 library(ScrapeCongress)
-library(readr) #having problems loading a few of the dependencies
-library(rtweet)
-library(dplyr)
 ```
 # You need to also load your Twitter Developer Credentials and API Keys into your R Script. 
 ```{r}
