@@ -39,8 +39,6 @@ library(utils)
 # (7) hormaleR()
 # (8) hormaleD()
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 library(rtweet)
 library(tidytext)
 library(dplyr)
@@ -49,11 +47,6 @@ library(readr)
 library(tm)
 library(utils)
 
-
-=======
->>>>>>> parent of 0badd50... Final Changes before CRAN
-=======
->>>>>>> parent of 0badd50... Final Changes before CRAN
 #############################
 #--------(1) senmaleD-------#
 #############################
