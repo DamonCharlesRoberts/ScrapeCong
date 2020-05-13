@@ -2,13 +2,6 @@
 # ScrapeCongress          #
 ##########################
 
-library(rtweet)
-library(tidytext)
-library(dplyr)
-library(tidytext)
-library(readr)
-library(tm)
-library(utils)
 
 # version 0.1.0
 # 5/12/2020
@@ -39,7 +32,6 @@ library(utils)
 # (7) hormaleR()
 # (8) hormaleD()
 
-<<<<<<< HEAD
 library(rtweet)
 library(tidytext)
 library(dplyr)
@@ -61,8 +53,7 @@ token <- rtweet::create_token(
   access_token = access_token,
   access_secret = access_token_secret
 )
-=======
->>>>>>> parent of 0badd50... Final Changes before CRAN
+
 #############################
 #--------(1) senmaleD-------#
 #############################
