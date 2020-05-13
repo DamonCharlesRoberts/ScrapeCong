@@ -2,7 +2,7 @@
 title: "cran-comments"
 author: "Damon C. Roberts"
 date: "5/13/2020"
-output: html_document
+output: pdf_document
 ---
 ## Test environments
 

@@ -43,8 +43,9 @@ api_key <- readline(prompt = "Enter Twitter API Key: ")
 api_secret <- readline(prompt = "Enter Twitter API Secret: ")
 access_token <- readline(prompt = "Enter Twitter Access Token: ")
 access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
+app_name <- readline(prompt = "Enter Twitter APP Name (Exactly as it appears on Twitter): ")
 token <- rtweet::create_token(
-  app = "Congress_Gender",
+  app = app_name,
   consumer_key = api_key,
   consumer_secret = api_secret,
   access_token = access_token,

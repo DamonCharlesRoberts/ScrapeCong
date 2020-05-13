@@ -6,25 +6,18 @@ summary: Description of the R ScrapeCong Package
 
 # Set Up
 ```{r}
+#From Github:
 install.packages('devtools')
 devtools::install_github('damoncharlesroberts/ScrapeCongress')
 library(ScrapeCongress)
+#From Cran:
+install.packages('ScrapeCongress')
 ```
 # You need to also load your Twitter Developer Credentials and API Keys into your R Script. 
-```{r}
-api_key <- "YOUR API KEY HERE"
-api_secret <- "YOUR API SECRET KEY HERE"
-access_token <- "YOUR ACCESS TOKEN HERE"
-access_token_secret <- "YOUR ACCESS TOKEN SECRET HERE"
-token <- create_token(
-  app = "APP NAME HERE",
-  consumer_key = api_key,
-  consumer_secret = api_secret,
-  access_token = access_token,
-  access_secret = access_token_secret
-)
-```
-To set up a twitter developer account, you must apply on their website: dev.twitter.com. Once your account has been approved, you must create an APP. Once you have created an APP, you can access your API KEY, API secret key, Access Token, and Access token Secret. 
+
+To set up a twitter developer account, you must apply on their website: dev.twitter.com. Once your account has been approved, you must create an APP. Once you have created an APP, you can access your API KEY, API secret key, Access Token, and Access token Secret. Each time that you start a new R session and use the ScrapeCongress library, you will need to have your API KEY, API Secret Key, Access Token, Access Token Secret, and the Name of your APP (As it appears on twitter) handy.
+
+You also need to create a data folder in your current working directory. The folder can be empty, just set or find your current working directory and create a folder called 'data' no need for capitalization. This is where all of your CSV's will download to. If you do not do this step, you will run into issues.
 
 ## To Start Scraping Tweets use these functions:
 ```{r}
