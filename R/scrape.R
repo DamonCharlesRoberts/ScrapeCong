@@ -40,21 +40,14 @@ library(readr)
 library(tm)
 library(utils)
 
-<<<<<<< HEAD
 
-api_key <- readline(prompt = "API_KEY: ")
-api_secret <- readline(prompt = "API_SECRET: ")
-access_token <- readline(prompt = "ACCESS_TOKEN: ")
-access_token_secret <- readline(prompt = "ACCESS_TOKEN_SECRET: ")
-app_name <- readline(prompt = "APP NAME: ")
-=======
-api_key <- readline(prompt = "Enter Twitter API Key: ")
-api_secret <- readline(prompt = "Enter Twitter API Secret: ")
-access_token <- readline(prompt = "Enter Twitter Access Token: ")
-access_token_secret <- readline(prompt = "Enter Twitter Token Secret: ")
->>>>>>> parent of 8f5b371... App_Name Function
+api_key <- readline(prompt = "Enter API_KEY: ")
+api_secret <- readline(prompt = "Enter API_SECRET: ")
+access_token <- readline(prompt = "Enter ACCESS_TOKEN: ")
+access_token_secret <- readline(prompt = "Enter ACCESS_TOKEN_SECRET: ")
+app_name <- readline(prompt = "Enter APP NAME: ")
 token <- rtweet::create_token(
-  app = "Congress_Gender",
+  app = app_name,
   consumer_key = api_key,
   consumer_secret = api_secret,
   access_token = access_token,
