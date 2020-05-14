@@ -2,6 +2,6 @@ context("horfemD")
 library(ScrapeCongress)
 test_that('horfemD', {
   skip_on_cran()
-  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
+  token <- rtweet::get_token()
   expect_message(horfemD())
 })

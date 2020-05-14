@@ -9,16 +9,10 @@
 
 
 ## Functions:
-## Dependencies:    twitteR (for access to the Twitter API)
-#                   remotes (for access to github repositories)
+## Dependencies:
 #                   rtweets (for access to the Twitter API)
-#                   httpuv  (assists with converting JSON files to CSV)
 #                   tidytext (useful for managing strings in a tibble)
-#                   tidyverse (useful to bring in the many tidyverse packages to make clean data storage and management)
-#                   ggplot2 (suggested to help with any graphical representation of data)
 #                   dplyr (assists with tibble management/manipulation)
-#                   lubridate (assists with conversion from JSON to tibble)
-#                   tidyr (assists with clean data storage and management)
 #                   readr (assists with reading CSVs)
 #                   tm (used in text mining)
 

@@ -2,7 +2,7 @@ context("senfemR")
 library(ScrapeCongress)
 test_that('senfemR', {
   skip_on_cran()
-  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
+  token <- rtweet::get_token()
   expect_message(senfemR())
 })
 
