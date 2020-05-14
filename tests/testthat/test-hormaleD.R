@@ -5,8 +5,3 @@ test_that('hormaleD', {
   token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
   expect_message(hormaleD())
 })
-test_that('hormaleD', {
-  skip_on_cran()
-  token <- readRDS('/Users/damonroberts/.rtweet_token.rds')
-  expect_warning(hormaleD())
-})
