@@ -27,6 +27,9 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2
+<<<<<<< HEAD
+>>>>>>> parent of 0badd50... Final Changes before CRAN
+=======
 >>>>>>> parent of 0badd50... Final Changes before CRAN
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0

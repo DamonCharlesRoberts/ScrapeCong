@@ -3,7 +3,10 @@
 ##########################
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 0badd50... Final Changes before CRAN
 =======
 >>>>>>> parent of 0badd50... Final Changes before CRAN
 library(rtweet)
@@ -39,6 +42,7 @@ library(utils)
 # (8) hormaleD()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 library(rtweet)
 library(tidytext)
@@ -49,6 +53,8 @@ library(utils)
 library(remotes)
 
 
+=======
+>>>>>>> parent of 0badd50... Final Changes before CRAN
 =======
 >>>>>>> parent of 0badd50... Final Changes before CRAN
 #############################
