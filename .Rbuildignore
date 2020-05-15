@@ -5,5 +5,8 @@ tests/testthat/access_token.RDS
 tests/testthat/access_token_secret.RDS
 tests/testthat/api_key.RDS
 tests/testthat/api_secret.RDS
+<<<<<<< HEAD
 tests/testthat/data
 ^\.httr-oauth$
+=======
+>>>>>>> parent of 0badd50... Final Changes before CRAN
