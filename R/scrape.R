@@ -10,7 +10,8 @@
 
 ## Functions:
 ## Dependencies:
-#                   rtweets (for access to the Twitter API)
+#                   twitteR (uses userTimeline() function to access tweets)      
+#                   rtweets (uses save_as_csv() function to make quick use of json files)
 #                   tidytext (useful for managing strings in a tibble)
 #                   dplyr (assists with tibble management/manipulation)
 #                   readr (assists with reading CSVs)
@@ -26,14 +27,14 @@
 # (7) hormaleR()
 # (8) hormaleD()
 
+library(twitteR)
 library(rtweet)
 library(tidytext)
 library(dplyr)
-library(tidytext)
 library(readr)
 library(tm)
 library(utils)
-
+library(remotes)
 
 #############################
 #--------(1) senmaleD-------#
@@ -42,162 +43,193 @@ library(utils)
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Democrat in the Senate
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 senmaleD <- function() {
-  dougjones <- rtweet::get_timeline('@SenDougJones', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(dougjones, "data/dougjones.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-dougjonestweets <- readr::read_csv("data/dougjones.csv")
-bennet <- rtweet::get_timeline('@SenatorBennet', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(bennet, "data/bennet.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-bennettweets <- readr::read_csv("data/bennet.csv")
-blumenthal <- rtweet::get_timeline('@SenBlumenthal', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(blumenthal, "data/blumenthal.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-blumenthaltweets <- readr::read_csv("data/blumenthal.csv")
-murphey <- rtweet::get_timeline('@SenMurphyOffice', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(murphey, "data/murphy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-murpheytweets <- readr::read_csv("data/murphy.csv")
-chriscoons <- rtweet::get_timeline('@ChrisCoons', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(chriscoons, "data/chriscoons.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-chriscoonstweets <- readr::read_csv("data/chriscoons.csv")
-cooper <- rtweet::get_timeline('@SenatorCarper', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(cooper, "data/cooper.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-coopertweets <- readr::read_csv("data/cooper.csv")
-brianschatz <- rtweet::get_timeline('@SenBrianSchatz', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(brianschatz, "data/brianschatz.csv")
-brianschatztweets <- readr::read_csv("data/brianschatz.csv")
-durbin <- rtweet::get_timeline('@SenatorDurbin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(durbin, "data/durbin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-durbintweets <- readr::read_csv("data/durbin.csv")
-martoken <- rtweet::get_timeline('@SenMartoken', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(martoken, "data/martoken.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-martokentweets <- readr::read_csv("data/martoken.csv")
-cardin <- rtweet::get_timeline('@SenatorCardin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(cardin, "data/cardin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-cardintweets <- readr::read_csv("data/cardin.csv")
-chrisvanhollen <- rtweet::get_timeline('@ChrisVanHollen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(chrisvanhollen, "data/chrisvanhollen.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-chrisvanhollentweets <- readr::read_csv("data/chrisvanhollen.csv")
-garypeters <- rtweet::get_timeline('@SenGaryPeters', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(garypeters, "data/garypeters.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-garypeterstweets <- readr::read_csv("data/garypeters.csv")
-booker <- rtweet::get_timeline('@SenBooker', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(booker, "data/booker.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-bookertweets <- readr::read_csv("data/booker.csv")
-menedez <- rtweet::get_timeline('@SenatorMenendez', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(menedez, "data/menedez.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-menedeztweets <- readr::read_csv("data/menedez.csv")
-martinheinrich <- rtweet::get_timeline('@MartinHeinrich', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(martinheinrich, "data/martinheinrich.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-martinheinrichtweets <- readr::read_csv("data/martinheinrich.csv")
-tomudall <- rtweet::get_timeline('@SenatorTomUdall', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(tomudall, "data/tomudall.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-tomudalltweets <- readr::read_csv("data/tomudall.csv")
-schumer <- rtweet::get_timeline('@SenSchumer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(schumer, "data/schumer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-schumertweets <- readr::read_csv("data/schumer.csv")
-sherrodbrown <- rtweet::get_timeline('@SenSherrodBrown', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(sherrodbrown, "data/sherrodbrown.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-sherrodbrowntweets <- readr::read_csv("data/sherrodbrown.csv")
-jeffmerkley <- rtweet::get_timeline('@SenJeffMerkley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(jeffmerkley, "data/jeffmerkley.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-jeffmerkleytweets <- readr::read_csv("data/jeffmerkley.csv")
-ronwyden <- rtweet::get_timeline('@RonWyden', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(ronwyden, "data/ronwyden.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-ronwydentweets <- readr::read_csv("data/ronwyden.csv")
-bobcasey <- rtweet::get_timeline('@SenBobCasey', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(bobcasey, "data/bobcasey.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-bobcaseytweets <- readr::read_csv("data/bobcasey.csv")
-toomey <- rtweet::get_timeline('@SenToomey', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(toomey, "data/toomey.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-toomeytweets <- readr::read_csv("data/toomey.csv")
-jackreed <- rtweet::get_timeline('@SenJackReed', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(jackreed, "data/jackreed.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-jackreedtweets <- readr::read_csv("data/jackreed.csv")
-whitehouse <- rtweet::get_timeline('@SenWhitehouse', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(whitehouse, "data/whitehouse.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-whitehousetweets <- readr::read_csv("data/whitehouse.csv")
-leahy <- rtweet::get_timeline('@SenatorLeahy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(leahy, "data/leahy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-leahytweets <- readr::read_csv("data/leahy.csv")
-sanders <- rtweet::get_timeline('@SenSanders', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(sanders, "data/sanders.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-sanderstweets <- readr::read_csv("data/sanders.csv")
-warner <- rtweet::get_timeline('@MarkWarner', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(warner, "data/warner.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-warnertweets <- readr::read_csv("data/warner.csv")
-joemanchin <- rtweet::get_timeline('@Sen_JoeManchin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(joemanchin, "data/joemanchin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-joemanchintweets <- readr::read_csv("data/joemanchin.csv")
-senatemdtweets <- dplyr::bind_rows(dougjonestweets %>%
-                              dplyr::mutate(person = "Doug Jones"),
-                            bennettweets %>%
-                              dplyr::mutate(person = "Bennet"),
-                            blumenthaltweets %>%
-                              dplyr::mutate(person = "Blumenthal"),
-                            murpheytweets %>%
-                              dplyr::mutate(person = "Murphey"),
-                            chriscoonstweets %>%
-                              dplyr::mutate(person = "Chris Coons"),
-                            coopertweets %>%
-                              dplyr::mutate(person = "Cooper"),
-                            brianschatztweets %>%
-                              dplyr::mutate(person = "Brian Schatz"),
-                            durbintweets %>%
-                              dplyr::mutate(person = "Durbin"),
-                            martokentweets %>%
-                              dplyr::mutate(person = "Martoken"),
-                            cardintweets %>%
-                              dplyr::mutate(person = "Cardin"),
-                            chrisvanhollentweets %>%
-                              dplyr::mutate(person = "Chris Vanhollen"),
-                            garypeterstweets %>%
-                              dplyr::mutate(person = "Gary Peters"),
-                            bookertweets %>%
-                              dplyr::mutate(person = "Booker"),
-                            menedeztweets %>%
-                              dplyr::mutate(person = "Menedez"),
-                            martinheinrichtweets %>%
-                              dplyr::mutate(person = "Martin Heinrich"),
-                            tomudalltweets %>%
-                              dplyr::mutate(person = "Tom Udall"),
-                            schumertweets %>%
-                              dplyr::mutate(person = "Schumer"),
-                            sherrodbrowntweets %>%
-                              dplyr::mutate(person = "Sherrod Brown"),
-                            jeffmerkleytweets %>%
-                              dplyr::mutate(person = "Jeff Merkley"),
-                            ronwydentweets %>%
-                              dplyr::mutate(person = "Ron Wyden"),
-                            bobcaseytweets %>%
-                              dplyr::mutate(person = "Bob Casey"),
-                            toomeytweets %>%
-                              dplyr::mutate(person = "Toomey"),
-                            jackreedtweets %>%
-                              dplyr::mutate(person = "Jack Reed"),
-                            whitehousetweets %>%
-                              dplyr::mutate(person = "Whitehouse"),
-                            leahytweets %>%
-                              dplyr::mutate(person = "Leahy"),
-                            sanderstweets %>%
-                              dplyr::mutate(person = "Sanders"),
-                            warnertweets %>%
-                              dplyr::mutate(person = "Warner"),
-                            joemanchintweets %>%
-                              dplyr::mutate(person = "Joe Manchin"))
-
-save_as_csv(senatemdtweets, "data/senatemdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
-senatemdtweets <- readr::read_csv("data/senatemdtweets.csv")
-
-if(nrow(senatemdtweets)>0) {
-  message("Check your Data Folder. Function ran successfully")
-}
+  dougjones <- twitteR::userTimeline('@SenDougJones', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dougjonesDF <- twitteR::twListToDF(dougjones)
+  write.csv(dougjonesDF, "data/dougjones.csv")
+  dougjonestweets <- readr::read_csv("data/dougjones.csv")
+  bennet <- twitteR::userTimeline('@SenatorBennet', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bennetDF <- twitteR::twListToDF(bennet)
+  write.csv(bennetDF,"data/bennet.csv")
+  bennettweets <- readr::read_csv("data/bennet.csv")
+  blumenthal <- twitteR::userTimeline('@SenBlumenthal', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  blumenthalDF <- twitteR::twListToDF(blumenthal)
+  write.csv(blumenthalDF,"data/blumenthal.csv")
+  blumenthaltweets <- readr::read_csv("data/blumenthal.csv")
+  murphey <- twitteR::userTimeline('@SenMurphyOffice', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  murpheyDF <- twitteR::twListToDF(murphey)
+  write.csv(murpheyDF, "data/murphy.csv")
+  murpheytweets <- readr::read_csv("data/murphy.csv")
+  chriscoons <- twitteR::userTimeline('@ChrisCoons', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chriscoonsDF <- twitteR::twListToDF(chriscoons)
+  write.csv(chriscoonsDF, "data/chriscoons.csv")
+  chriscoonstweets <- readr::read_csv("data/chriscoons.csv")
+  cooper <- twitteR::userTimeline('@SenatorCarper', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cooperDF <- twitteR::twListToDF(cooper)
+  write.csv(cooperDF, "data/cooper.csv")
+  coopertweets <- readr::read_csv("data/cooper.csv")
+  brianschatz <- twitteR::userTimeline('@SenBrianSchatz', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brianschatzDF <- twitteR::twListToDF(brianschatz)
+  write.csv(brianschatzDF, "data/brianschatz.csv")
+  brianschatztweets <- readr::read_csv("data/brianschatz.csv")
+  durbin <- twitteR::userTimeline('@SenatorDurbin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  durbinDF <- twitteR::twListToDF(durbin)
+  write.csv(durbinDF, "data/durbin.csv")
+  durbintweets <- readr::read_csv("data/durbin.csv")
+  markey <- twitteR::userTimeline('@SenMarkey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  markeyDF <- twitteR::twListToDF(markey)
+  write.csv(markeyDF, "data/markey.csv")
+  markeytweets <- readr::read_csv("data/markey.csv")
+  cardin <- twitteR::userTimeline('@SenatorCardin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cardinDF <- twitteR::twListToDF(cardin)
+  write.csv(cardinDF, "data/cardin.csv")
+  cardintweets <- readr::read_csv("data/cardin.csv")
+  chrisvanhollen <- twitteR::userTimeline('@ChrisVanHollen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chrisvanhollenDF <- twitteR::twListToDF(chrisvanhollen)
+  write.csv(chrisvanhollenDF, "data/chrisvanhollen.csv")
+  chrisvanhollentweets <- readr::read_csv("data/chrisvanhollen.csv")
+  garypeters <- twitteR::userTimeline('@SenGaryPeters', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  garypetersDF <- twitteR::twListToDF(garypeters)
+  write.csv(garypetersDF, "data/garypeters.csv")
+  garypeterstweets <- readr::read_csv("data/garypeters.csv")
+  booker <- twitteR::userTimeline('@SenBooker', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bookerDF <- twitteR::twListToDF(booker)
+  write.csv(bookerDF, "data/booker.csv")
+  bookertweets <- readr::read_csv("data/booker.csv")
+  menendez <- twitteR::userTimeline('@SenatorMenendez', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  menendezDF <- twitteR::twListToDF(menendez)
+  write.csv(menendezDF, "data/menendez.csv")
+  menendeztweets <- readr::read_csv("data/menendez.csv")
+  martinheinrich <- twitteR::userTimeline('@MartinHeinrich', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  martinheinrichDF <- twitteR::twListToDF(martinheinrich)
+  write.csv(martinheinrichDF, "data/martinheinrich.csv")
+  martinheinrichtweets <- readr::read_csv("data/martinheinrich.csv")
+  tomudall <- twitteR::userTimeline('@SenatorTomUdall', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomudallDF <- twitteR::twListToDF(tomudall)
+  write.csv(tomudallDF, "data/tomudall.csv")
+  tomudalltweets <- readr::read_csv("data/tomudall.csv")
+  schumer <- twitteR::userTimeline('@SenSchumer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  schumerDF <- twitteR::twListToDF(schumer)
+  write.csv(schumerDF, "data/schumer.csv")
+  schumertweets <- readr::read_csv("data/schumer.csv")
+  sherrodbrown <- twitteR::userTimeline('@SenSherrodBrown', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sherrodbrownDF <- twitteR::twListToDF(sherrodbrown)
+  write.csv(sherrodbrownDF, "data/sherrodbrown.csv")
+  sherrodbrowntweets <- readr::read_csv("data/sherrodbrown.csv")
+  jeffmerkley <- twitteR::userTimeline('@SenJeffMerkley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jeffmerkleyDF <- twitteR::twListToDF(jeffmerkley)
+  write.csv(jeffmerkleyDF, "data/jeffmerkley.csv")
+  jeffmerkleytweets <- readr::read_csv("data/jeffmerkley.csv")
+  ronwyden <- twitteR::userTimeline('@RonWyden', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ronwydenDF <- twitteR::twListToDF(ronwyden)
+  write.csv(ronwydenDF, "data/ronwyden.csv")
+  ronwydentweets <- readr::read_csv("data/ronwyden.csv")
+  bobcasey <- twitteR::userTimeline('@SenBobCasey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bobcaseyDF <- twitteR::twListToDF(bobcasey)
+  write.csv(bobcaseyDF, "data/bobcasey.csv")
+  bobcaseytweets <- readr::read_csv("data/bobcasey.csv")
+  toomey <- twitteR::userTimeline('@SenToomey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  toomeyDF <- twitteR::twListToDF(toomey)
+  write.csv(toomeyDF, "data/toomey.csv")
+  toomeytweets <- readr::read_csv("data/toomey.csv")
+  jackreed <- twitteR::userTimeline('@SenJackReed', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jackreedDF <- twitteR::twListToDF(jackreed)
+  write.csv(jackreedDF, "data/jackreed.csv")
+  jackreedtweets <- readr::read_csv("data/jackreed.csv")
+  whitehouse <- twitteR::userTimeline('@SenWhitehouse', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  whitehouseDF <- twitteR::twListToDF(whitehouse)
+  write.csv(whitehouseDF, "data/whitehouse.csv")
+  whitehousetweets <- readr::read_csv("data/whitehouse.csv")
+  leahy <- twitteR::userTimeline('@SenatorLeahy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  leahyDF <- twitteR::twListToDF(leahy)
+  write.csv(leahyDF, "data/leahy.csv")
+  leahytweets <- readr::read_csv("data/leahy.csv")
+  sanders <- twitteR::userTimeline('@SenSanders', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sandersDF <- twitteR::twListToDF(sanders)
+  write.csv(sandersDF, "data/sanders.csv")
+  sanderstweets <- readr::read_csv("data/sanders.csv")
+  warner <- twitteR::userTimeline('@MarkWarner', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  warnerDF <- twitteR::twListToDF(warner)
+  write.csv(warnerDF, "data/warner.csv")
+  warnertweets <- readr::read_csv("data/warner.csv")
+  joemanchin <- twitteR::userTimeline('@Sen_JoeManchin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joemanchinDF <- twitteR::twListToDF(joemanchin)
+  write.csv(joemanchinDF, "data/joemanchin.csv")
+  joemanchintweets <- readr::read_csv("data/joemanchin.csv")
+  senatemdtweets <- dplyr::bind_rows(dougjonestweets %>%
+                                       dplyr::mutate(person = "Doug Jones"),
+                                     bennettweets %>%
+                                       dplyr::mutate(person = "Bennet"),
+                                     blumenthaltweets %>%
+                                       dplyr::mutate(person = "Blumenthal"),
+                                     murpheytweets %>%
+                                       dplyr::mutate(person = "Murphey"),
+                                     chriscoonstweets %>%
+                                       dplyr::mutate(person = "Chris Coons"),
+                                     coopertweets %>%
+                                       dplyr::mutate(person = "Cooper"),
+                                     brianschatztweets %>%
+                                       dplyr::mutate(person = "Brian Schatz"),
+                                     durbintweets %>%
+                                       dplyr::mutate(person = "Durbin"),
+                                     martokentweets %>%
+                                       dplyr::mutate(person = "Martoken"),
+                                     cardintweets %>%
+                                       dplyr::mutate(person = "Cardin"),
+                                     chrisvanhollentweets %>%
+                                       dplyr::mutate(person = "Chris Vanhollen"),
+                                     garypeterstweets %>%
+                                       dplyr::mutate(person = "Gary Peters"),
+                                     bookertweets %>%
+                                       dplyr::mutate(person = "Booker"),
+                                     menedeztweets %>%
+                                       dplyr::mutate(person = "Menedez"),
+                                     martinheinrichtweets %>%
+                                       dplyr::mutate(person = "Martin Heinrich"),
+                                     tomudalltweets %>%
+                                       dplyr::mutate(person = "Tom Udall"),
+                                     schumertweets %>%
+                                       dplyr::mutate(person = "Schumer"),
+                                     sherrodbrowntweets %>%
+                                       dplyr::mutate(person = "Sherrod Brown"),
+                                     jeffmerkleytweets %>%
+                                       dplyr::mutate(person = "Jeff Merkley"),
+                                     ronwydentweets %>%
+                                       dplyr::mutate(person = "Ron Wyden"),
+                                     bobcaseytweets %>%
+                                       dplyr::mutate(person = "Bob Casey"),
+                                     toomeytweets %>%
+                                       dplyr::mutate(person = "Toomey"),
+                                     jackreedtweets %>%
+                                       dplyr::mutate(person = "Jack Reed"),
+                                     whitehousetweets %>%
+                                       dplyr::mutate(person = "Whitehouse"),
+                                     leahytweets %>%
+                                       dplyr::mutate(person = "Leahy"),
+                                     sanderstweets %>%
+                                       dplyr::mutate(person = "Sanders"),
+                                     warnertweets %>%
+                                       dplyr::mutate(person = "Warner"),
+                                     joemanchintweets %>%
+                                       dplyr::mutate(person = "Joe Manchin"))
+  
+  senatemdDF <- twitteR::twListToDF(senatemdtweets)
+  write.csv(senatemdDF, "data/senatemdtweets.csv")
+  senatemdtweets <- readr::read_csv("data/senatemdtweets.csv")
+  
+  if(nrow(senatemdtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 
@@ -208,104 +240,124 @@ if(nrow(senatemdtweets)>0) {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Democrat in the Senate
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 senfemD <- function() {
-  sinema <- rtweet::get_timeline('@SenatorSinema', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(sinema,"data/sinema.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-sinematweets <- readr::read_csv("data/sinema.csv")
-feinstein <- rtweet::get_timeline('@SenFeinstein', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(feinstein,"data/feinstein.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-feinsteintweets <- readr::read_csv("data/feinstein.csv")
-kamalaharris <- rtweet::get_timeline('@SenKamalaHarris', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(kamalaharris,"data/kamalaharris.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-kamalaharristweets <- readr::read_csv("data/kamalaharris.csv")
-maziehirono <- rtweet::get_timeline('@maziehirono', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(maziehirono,"data/maziehirono.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-maziehironotweets <- readr::read_csv("data/maziehirono.csv")
-duckworth <- rtweet::get_timeline('@SenDuckworth', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(duckworth,"data/duckworth.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-duckworthtweets <- readr::read_csv("data/duckworth.csv")
-warren <- rtweet::get_timeline('@SenWarren', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(warren,"data/warren.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-warrentweets <- readr::read_csv("data/warren.csv")
-stabenow <- rtweet::get_timeline('@SenStabenow', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(stabenow,"data/stabenow.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-stabenowtweets <- readr::read_csv("data/stabenow.csv")
-amyklobuchar <- rtweet::get_timeline('@SenAmyKlobuchar', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(amyklobuchar,"data/amyklobuchar.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-amyklobuchartweets <- readr::read_csv("data/amyklobuchar.csv")
-tinasmith <- rtweet::get_timeline('@SenTinaSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(tinasmith,"data/tinasmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-tinasmithtweets <- readr::read_csv("data/tinasmith.csv")
-hassan <- rtweet::get_timeline('@SenatorHassan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(hassan,"data/hassan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-hassantweets <- readr::read_csv("data/hassan.csv")
-shaheen <- rtweet::get_timeline('@SenatorShaheen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(shaheen,"data/shaheen.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-shaheentweets <- readr::read_csv("data/shaheen.csv")
-cortezmasto <- rtweet::get_timeline('@SenCortezMasto', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(cortezmasto,"data/cortezmasto.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-cortezmastotweets <- readr::read_csv("data/cortezmasto.csv")
-jackyrosen <- rtweet::get_timeline(' @SenJackyRosen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(jackyrosen,"data/jackyrosen.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-jackyrosentweets <- readr::read_csv("data/jackyrosen.csv")
-gillibrand <- rtweet::get_timeline('@gillibrandny', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(gillibrand,"data/gillibrand.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-gillibrandtweets <- readr::read_csv("data/gillibrand.csv")
-cantwell <- rtweet::get_timeline('@SenatorCantwell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(cantwell,"data/cantewell.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-cantwelltweets <- readr::read_csv("data/cantewell.csv")
-pattymurray <- rtweet::get_timeline('@PattyMurray', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(pattymurray,"data/pattymurray.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-pattymurraytweets <- readr::read_csv("data/pattymurray.csv")
-baldwin <- rtweet::get_timeline('@SenatorBaldwin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(baldwin,"data/baldwin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-baldwintweets <- readr::read_csv("data/baldwin.csv")
-senatefdtweets <- dplyr::bind_rows(feinsteintweets %>%
-                                dplyr::mutate(person = "Feinstein"),
-                              kamalaharristweets %>%
-                                dplyr::mutate(person = "Kamala Harris"),
-                              maziehironotweets %>%
-                                dplyr::mutate(person = "Mazie Hirono"),
-                              duckworthtweets %>%
-                                dplyr::mutate(person = "Duckworth"),
-                              warrentweets %>%
-                                dplyr::mutate(person = "Warren"),
-                              stabenowtweets %>%
-                                dplyr::mutate(person = "Stabenow"),
-                              amyklobuchartweets %>%
-                                dplyr::mutate(person = "Amy Klobuchar"),
-                              tinasmithtweets %>%
-                                dplyr::mutate(person = "Tina Smith"),
-                              hassantweets %>%
-                                dplyr::mutate(person = "Hassan"),
-                              shaheentweets %>%
-                                dplyr::mutate(person = "Shaheen"),
-                              cortezmastotweets %>%
-                                dplyr::mutate(person = "Cortez-Masto"),
-                              jackyrosentweets %>%
-                                dplyr::mutate(person = "Jacky Rosen"),
-                              gillibrandtweets %>%
-                                dplyr::mutate(person = "Gillibrand"),
-                              cantwelltweets %>%
-                                dplyr::mutate(person = "Cantwell"),
-                              pattymurraytweets %>%
-                                dplyr::mutate(person = "Patty Murray"),
-                              baldwintweets %>%
-                                dplyr::mutate(person = "Baldwin"))
-
-save_as_csv(senatefdtweets, "data/senatefdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
-senatefdtweets <- readr::read_csv("data/senatefdtweets.csv")
-if(nrow(senatefdtweets)>0) {
-  message("Check your Data Folder. Function ran successfully")
-}
+  sinema <- twitteR::userTimeline('@SenatorSinema', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sinemaDF <- twitteR::twListToDF(sinema)
+  write.csv(sinemaDF,"data/sinema.csv")
+  sinematweets <- readr::read_csv("data/sinema.csv")
+  feinstein <- twitteR::userTimeline('@SenFeinstein', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  feinsteinDF <- twitteR::twListToDF(feinstein)
+  write.csv(feinsteinDF,"data/feinstein.csv")
+  feinsteintweets <- readr::read_csv("data/feinstein.csv")
+  kamalaharris <- twitteR::userTimeline('@SenKamalaHarris', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kamalaharrisDF <- twitteR::twListToDF(kamalaharris)
+  write.csv(kamalaharrisDF,"data/kamalaharris.csv")
+  kamalaharristweets <- readr::read_csv("data/kamalaharris.csv")
+  maziehirono <- twitteR::userTimeline('@maziehirono', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  maziehironoDF <- twitteR::twListToDF(maziehirono)
+  write.csv(maziehironoDF,"data/maziehirono.csv")
+  maziehironotweets <- readr::read_csv("data/maziehirono.csv")
+  duckworth <- twitteR::userTimeline('@SenDuckworth', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  duckworthDF <- twitteR::twListToDF(duckworth)
+  write.csv(duckworthDF,"data/duckworth.csv")
+  duckworthtweets <- readr::read_csv("data/duckworth.csv")
+  warren <- twitteR::userTimeline('@SenWarren', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  warrenDF <- twitteR::twListToDF(warren)
+  write.csv(warrenDF,"data/warren.csv")
+  warrentweets <- readr::read_csv("data/warren.csv")
+  stabenow <- twitteR::userTimeline('@SenStabenow', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stabenowDF <- twitteR::twListToDF(stabenow)
+  write.csv(stabenowDF,"data/stabenow.csv")
+  stabenowtweets <- readr::read_csv("data/stabenow.csv")
+  amyklobuchar <- twitteR::userTimeline('@SenAmyKlobuchar', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  amyklobucharDF <- twitteR::twListToDF(amyklobuchar)
+  write.csv(amyklobucharDF,"data/amyklobuchar.csv")
+  amyklobuchartweets <- readr::read_csv("data/amyklobuchar.csv")
+  tinasmith <- twitteR::userTimeline('@SenTinaSmith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tinasmithDF <- twitteR::twListToDF(tinasmith)
+  write.csv(tinasmithDF,"data/tinasmith.csv")
+  tinasmithtweets <- readr::read_csv("data/tinasmith.csv")
+  hassan <- twitteR::userTimeline('@SenatorHassan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hassanDF <- twitteR::twListToDF(hassan)
+  write.csv(hassanDF,"data/hassan.csv")
+  hassantweets <- readr::read_csv("data/hassan.csv")
+  shaheen <- twitteR::userTimeline('@SenatorShaheen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  shaheenDF <- twitteR::twListToDF(shaheen)
+  write.csv(shaheenDF,"data/shaheen.csv")
+  shaheentweets <- readr::read_csv("data/shaheen.csv")
+  cortezmasto <- twitteR::userTimeline('@SenCortezMasto', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cortezmastoDF <- twitteR::twListToDF(cortezmasto)
+  write.csv(cortezmastoDF,"data/cortezmasto.csv")
+  cortezmastotweets <- readr::read_csv("data/cortezmasto.csv")
+  jackyrosen <- twitteR::userTimeline(' @SenJackyRosen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jackyrosenDF <- twitteR::twListToDF(jackyrosen)
+  write.csv(jackyrosenDF,"data/jackyrosen.csv")
+  jackyrosentweets <- readr::read_csv("data/jackyrosen.csv")
+  gillibrand <- twitteR::userTimeline('@gillibrandny', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gillibrandDF <- twitteR::twListToDF(gillibrand)
+  write.csv(gillibrandDF,"data/gillibrand.csv")
+  gillibrandtweets <- readr::read_csv("data/gillibrand.csv")
+  cantwell <- twitteR::userTimeline('@SenatorCantwell', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cantwellDF <- twitteR::twListToDF(cantwell)
+  write.csv(cantwellDF,"data/cantewell.csv")
+  cantwelltweets <- readr::read_csv("data/cantewell.csv")
+  pattymurray <- twitteR::userTimeline('@PattyMurray', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  pattymurrayDF <- twitteR::twListToDF(pattymurray)
+  write.csv(pattymurrayDF,"data/pattymurray.csv")
+  pattymurraytweets <- readr::read_csv("data/pattymurray.csv")
+  baldwin <- twitteR::userTimeline('@SenatorBaldwin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  baldwinDF <- twitteR::twListToDF(baldwin)
+  write.csv(baldwinDF,"data/baldwin.csv")
+  baldwintweets <- readr::read_csv("data/baldwin.csv")
+  senatefdtweets <- dplyr::bind_rows(feinsteintweets %>%
+                                       dplyr::mutate(person = "Feinstein"),
+                                     kamalaharristweets %>%
+                                       dplyr::mutate(person = "Kamala Harris"),
+                                     maziehironotweets %>%
+                                       dplyr::mutate(person = "Mazie Hirono"),
+                                     duckworthtweets %>%
+                                       dplyr::mutate(person = "Duckworth"),
+                                     warrentweets %>%
+                                       dplyr::mutate(person = "Warren"),
+                                     stabenowtweets %>%
+                                       dplyr::mutate(person = "Stabenow"),
+                                     amyklobuchartweets %>%
+                                       dplyr::mutate(person = "Amy Klobuchar"),
+                                     tinasmithtweets %>%
+                                       dplyr::mutate(person = "Tina Smith"),
+                                     hassantweets %>%
+                                       dplyr::mutate(person = "Hassan"),
+                                     shaheentweets %>%
+                                       dplyr::mutate(person = "Shaheen"),
+                                     cortezmastotweets %>%
+                                       dplyr::mutate(person = "Cortez-Masto"),
+                                     jackyrosentweets %>%
+                                       dplyr::mutate(person = "Jacky Rosen"),
+                                     gillibrandtweets %>%
+                                       dplyr::mutate(person = "Gillibrand"),
+                                     cantwelltweets %>%
+                                       dplyr::mutate(person = "Cantwell"),
+                                     pattymurraytweets %>%
+                                       dplyr::mutate(person = "Patty Murray"),
+                                     baldwintweets %>%
+                                       dplyr::mutate(person = "Baldwin"))
+  
+  senatefdDF <- twitteR::twListToDF(senatefdtweets)
+  write.csv(senatefdDF, "data/senatefdtweets.csv")
+  senatefdtweets <- readr::read_csv("data/senatefdtweets.csv")
+  if(nrow(senatefdtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 #############################
@@ -315,62 +367,73 @@ if(nrow(senatefdtweets)>0) {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Republican in the Senate
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 senfemR <- function() {
-  lisamurkowski<- rtweet::get_timeline('@lisamurkowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(lisamurkowski,"data/lisamurkowski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-lisamurkowskitweets <- readr::read_csv("data/lisamurkowski.csv")
-mcsally <- rtweet::get_timeline('@SenMcSallyAZ', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(mcsally,"data/mcsally.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-mcsallytweets <- readr::read_csv("data/mcsally.csv")
-joniernst <- rtweet::get_timeline('@SenJoniErnst', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(joniernst,"data/joniernst.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-joniernsttweets <- readr::read_csv("data/joniernst.csv")
-collins <- rtweet::get_timeline('@SenatorCollins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(collins,"data/collins.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-collinstweets <- readr::read_csv("data/collins.csv")
-hydesmith <- rtweet::get_timeline('@SenHydeSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(hydesmith,"data/hydesmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-hydesmithtweets <- readr::read_csv("data/hydesmith.csv")
-fischer <- rtweet::get_timeline('@SenatorFischer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(fischer,"data/fischer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-fischertweets <- readr::read_csv("data/fischer.csv")
-marshablackburn <- rtweet::get_timeline('@MarshaBlackburn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(marshablackburn,"data/marshablackburn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-marshablackburntweets <- readr::read_csv("data/marshablackburn.csv")
-capito <- rtweet::get_timeline('@SenCapito', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-save_as_csv(capito,"data/capito.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-capitotweets <- readr::read_csv("data/capito.csv")
-
-senatefrtweets <- dplyr::bind_rows(lisamurkowskitweets %>%
-                                dplyr::mutate(person = "Lisa Murkowski"),
-                              mcsallytweets %>%
-                                dplyr::mutate(person = "Martha McSally"),
-                              joniernsttweets %>%
-                                dplyr::mutate(person = "Joni Ernst"),
-                              collinstweets %>%
-                                dplyr::mutate(person = "Susan Collinis"),
-                              hydesmithtweets %>%
-                                dplyr::mutate(person = "Cindy Hyde-Smith"),
-                              fischertweets %>%
-                                dplyr::mutate(person = "Deb Fischer"),
-                              marshablackburntweets %>%
-                                dplyr::mutate(person = "Marsha Blackburn"),
-                              capitotweets %>%
-                                dplyr::mutate(person = "Shelley Moore Capito"))
-
-save_as_csv(senatefrtweets, "data/senatefrtweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-senatefrtweets <- readr::read_csv("data/senatefrtweets.csv")
-if(nrow(senatefrtweets)>0) {
-  message("Check your Data Folder. Function ran successfully")
-}
+  lisamurkowski<- twitteR::userTimeline('@lisamurkowski', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lisamurkowskiDF <- twitteR::twListToDF(lisamurkowski)
+  write.csv(lisamurkowskiDF,"data/lisamurkowski.csv")
+  lisamurkowskitweets <- readr::read_csv("data/lisamurkowski.csv")
+  mcsally <- twitteR::userTimeline('@SenMcSallyAZ', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mcsallyDF <- twitteR::twListToDF(mcsally)
+  write.csv(mcsallyDF,"data/mcsally.csv")
+  mcsallytweets <- readr::read_csv("data/mcsally.csv")
+  joniernst <- twitteR::userTimeline('@SenJoniErnst', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joniernstDF <- twitteR::twListToDF(joniernst)
+  write.csv(joniernstDF,"data/joniernst.csv")
+  joniernsttweets <- readr::read_csv("data/joniernst.csv")
+  collins <- twitteR::userTimeline('@SenatorCollins', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  collinsDF <- twitteR::twListToDF(collins)
+  write.csv(collinsDF,"data/collins.csv")
+  collinstweets <- readr::read_csv("data/collins.csv")
+  hydesmith <- twitteR::userTimeline('@SenHydeSmith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hydesmithDF <- twitteR::twListToDF(hydesmith)
+  write.csv(hydesmithDF,"data/hydesmith.csv")
+  hydesmithtweets <- readr::read_csv("data/hydesmith.csv")
+  fischer <- twitteR::userTimeline('@SenatorFischer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  fischerDF <- twitteR::twListToDF(fischer)
+  write.csv(fischerDF,"data/fischer.csv")
+  fischertweets <- readr::read_csv("data/fischer.csv")
+  marshablackburn <- twitteR::userTimeline('@MarshaBlackburn', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  marshablackburnDF <- twitteR::twListToDF(marshablackburn)
+  write.csv(marshablackburnDF,"data/marshablackburn.csv")
+  marshablackburntweets <- readr::read_csv("data/marshablackburn.csv")
+  capito <- twitteR::userTimeline('@SenCapito', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  capitoDF <- twitteR::twListToDF(capito)
+  write.csv(capitoDF,"data/capito.csv")
+  capitotweets <- readr::read_csv("data/capito.csv")
+  
+  senatefrtweets <- dplyr::bind_rows(lisamurkowskitweets %>%
+                                       dplyr::mutate(person = "Lisa Murkowski"),
+                                     mcsallytweets %>%
+                                       dplyr::mutate(person = "Martha McSally"),
+                                     joniernsttweets %>%
+                                       dplyr::mutate(person = "Joni Ernst"),
+                                     collinstweets %>%
+                                       dplyr::mutate(person = "Susan Collinis"),
+                                     hydesmithtweets %>%
+                                       dplyr::mutate(person = "Cindy Hyde-Smith"),
+                                     fischertweets %>%
+                                       dplyr::mutate(person = "Deb Fischer"),
+                                     marshablackburntweets %>%
+                                       dplyr::mutate(person = "Marsha Blackburn"),
+                                     capitotweets %>%
+                                       dplyr::mutate(person = "Shelley Moore Capito"))
+  
+  senatefrDF <- twitteR::twListToDF(senatefrtweets)
+  write.csv(senatefrDF, "data/senatefrtweets.csv")
+  senatefrtweets <- readr::read_csv("data/senatefrtweets.csv")
+  if(nrow(senatefrtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 
@@ -381,245 +444,292 @@ if(nrow(senatefrtweets)>0) {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Republican in the Senate
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 senmaleR <- function() {
-  donsullivan <- rtweet::get_timeline('@SenDanSullivan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-shelby <- rtweet::get_timeline('@SenShelby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-johnboozman <- rtweet::get_timeline('@JohnBoozman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-tomcotton <- rtweet::get_timeline('@SenTomCotton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-corygardner <- rtweet::get_timeline('@SenCoryGardner', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-rubio <- rtweet::get_timeline('@SenRubioPress', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-rickscott<- rtweet::get_timeline('@SenRickScott', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-isakson <- rtweet::get_timeline('@SenatorIsakson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-davidperdue <- rtweet::get_timeline('@sendavidperdue', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-chuckgrassley <- rtweet::get_timeline('@ChuckGrassley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-mikecrapo <- rtweet::get_timeline('@MikeCrapo', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-risch <- rtweet::get_timeline('@SenatorRisch', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-braun<- rtweet::get_timeline('@SenatorBraun', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-toddyoung<- rtweet::get_timeline('@SenToddYoung', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-jerrymoran<- rtweet::get_timeline('@JerryMoran', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-patroberts<- rtweet::get_timeline('@SenPatRoberts', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-mitchmconnell<- rtweet::get_timeline('@SenateMajLdr', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-randpaul<- rtweet::get_timeline('@RandPaul', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-billcassidy<- rtweet::get_timeline('@SenBillCassidy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-johnkennedy<- rtweet::get_timeline('@SenJohnKennedy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-royblunt<- rtweet::get_timeline('@RoyBlunt', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-hawley<- rtweet::get_timeline('@SenHawleyPress', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-wicker<- rtweet::get_timeline('@SenatorWicker', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-stevedaines<- rtweet::get_timeline('@SteveDaines', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-burr<- rtweet::get_timeline('@SenatorBurr', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-thomtillis<- rtweet::get_timeline('@SenThomTillis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-kevincramer<- rtweet::get_timeline('@@SenKevinCramer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-johnhoeven<- rtweet::get_timeline('@SenJohnHoeven', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-sasse<- rtweet::get_timeline('@SenSasse', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-robportman<- rtweet::get_timeline('@senrobportman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-jiminhofe<- rtweet::get_timeline('@JimInhofe', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-lankford<- rtweet::get_timeline('@SenatorLankford', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-lindseygraham<- rtweet::get_timeline('@LindseyGrahamSC', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-timscott<- rtweet::get_timeline('@SenatorTimScott', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-rounds<- rtweet::get_timeline('@SenatorRounds', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-johnthune<- rtweet::get_timeline('@SenJohnThune', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-alexander<- rtweet::get_timeline('@SenAlexander', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-johncornyn<- rtweet::get_timeline('@JohnCornyn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-tedcruz<- rtweet::get_timeline('@SenTedCruz', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-mikelee<- rtweet::get_timeline('@SenMikeLee', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-romney<- rtweet::get_timeline('@SenatorRomney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-ronjohnson<- rtweet::get_timeline('@SenRonJohnson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-johnbarrasso<- rtweet::get_timeline('@SenJohnBarrasso', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-enzi<- rtweet::get_timeline('@SenatorEnzi', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-
-
-save_as_csv(donsullivan,"data/donsullivan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(shelby,"data/shelby.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(johnboozman,"data/johnboozman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(tomcotton,"data/tomcotton.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(corygardner,"data/corygardner.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(rubio,"data/rubio.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(rickscott,"data/rickscott.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(isakson,"data/isakson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(davidperdue,"data/davidperdue.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(chuckgrassley,"data/chuckgrassley.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(mikecrapo,"data/mikecrapo.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(risch,"data/risch.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(braun,"data/braun.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(toddyoung,"data/toddyoung.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(jerrymoran,"data/jerrymoran.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(patroberts,"data/patroberts.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(mitchmconnell,"data/mitchmconnell.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(randpaul,"data/randpaul.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(billcassidy,"data/billcassidy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(johnkennedy,"data/johnkennedy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(royblunt,"data/royblunt.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(hawley,"data/hawley.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(wicker,"data/wicker.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(stevedaines,"data/stevedaines.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(burr,"data/burr.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(thomtillis,"data/thomtillis.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(kevincramer,"data/kevincramer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(johnhoeven,"data/johnhoeven.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(sasse,"data/sasse.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(robportman,"data/robportman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(jiminhofe,"data/jiminhofe.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(lankford,"data/lankford.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(lindseygraham,"data/lindseygraham.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(timscott,"data/timscott.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(rounds,"data/rounds.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(johnthune,"data/johnthune.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(alexander,"data/alexander.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(johncornyn,"data/johncornyn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(tedcruz,"data/tedcruz.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(mikelee,"data/mikelee.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(romney,"data/romney.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(ronjohnson,"data/ronjohnson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(johnbarrasso,"data/johnbarrasso.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-save_as_csv(enzi,"data/enzi.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-
-donsullivantweets <- readr::read_csv("data/donsullivan.csv")
-shelbytweets <- readr::read_csv("data/shelby.csv")
-johnboozmantweets <- readr::read_csv("data/johnboozman.csv")
-tomcottontweets <- readr::read_csv("data/tomcotton.csv")
-corygardnertweets <- readr::read_csv("data/corygardner.csv")
-rubiotweets <- readr::read_csv("data/rubio.csv")
-rickscotttweets <- readr::read_csv("data/rickscott.csv")
-isaksontweets <- readr::read_csv("data/isakson.csv")
-davidperduetweets <- readr::read_csv("data/davidperdue.csv")
-chuckgrassleytweets <- readr::read_csv("data/chuckgrassley.csv")
-mikecrapotweets <- readr::read_csv("data/mikecrapo.csv")
-rischtweets <- readr::read_csv("data/risch.csv")
-brauntweets <- readr::read_csv("data/braun.csv")
-toddyoungtweets <- readr::read_csv("data/toddyoung.csv")
-jerrymorantweets <- readr::read_csv("data/jerrymoran.csv")
-patrobertstweets <- readr::read_csv("data/patroberts.csv")
-mitchmconnelltweets <- readr::read_csv("data/mitchmconnell.csv")
-randpaultweets <- readr::read_csv("data/randpaul.csv")
-billcassidytweets <- readr::read_csv("data/billcassidy.csv")
-johnkennedytweets <- readr::read_csv("data/johnkennedy.csv")
-royblunttweets <- readr::read_csv("data/royblunt.csv")
-hawleytweets <- readr::read_csv("data/hawley.csv")
-wickertweets <- readr::read_csv("data/wicker.csv")
-stevedainestweets <- readr::read_csv("data/stevedaines.csv")
-burrtweets <- readr::read_csv("data/burr.csv")
-thomtillistweets <- readr::read_csv("data/thomtillis.csv")
-kevincramertweets <- readr::read_csv("data/kevincramer.csv")
-johnhoeventweets <- readr::read_csv("data/johnhoeven.csv")
-sassetweets <- readr::read_csv("data/sasse.csv")
-robportmantweets <- readr::read_csv("data/robportman.csv")
-jiminhofetweets <- readr::read_csv("data/jiminhofe.csv")
-lankfordtweets <- readr::read_csv("data/lankford.csv")
-lindseygrahamtweets <- readr::read_csv("data/lindseygraham.csv")
-timscotttweets <- readr::read_csv("data/timscott.csv")
-roundstweets <- readr::read_csv("data/rounds.csv")
-johnthunetweets <- readr::read_csv("data/johnthune.csv")
-alexandertweets <- readr::read_csv("data/alexander.csv")
-johncornyntweets <- readr::read_csv("data/johncornyn.csv")
-tedcruztweets <- readr::read_csv("data/tedcruz.csv")
-mikeleetweets <- readr::read_csv("data/mikelee.csv")
-romneytweets <- readr::read_csv("data/romney.csv")
-ronjohnsontweets <- readr::read_csv("data/ronjohnson.csv")
-johnbarrassotweets <- readr::read_csv("data/johnbarrasso.csv")
-enzitweets <- readr::read_csv("data/enzi.csv")
-
-senatemrtweets <- dplyr::bind_rows(donsullivantweets %>%
-                              dplyr::mutate(person = "Mike Lee"),
-                            shelbytweets %>%
-                              dplyr::mutate(person = "Shelby"),
-                            johnboozmantweets %>%
-                              dplyr::mutate(person = "John Boozman"),
-                            tomcottontweets %>%
-                              dplyr::mutate(person = "Tom Cotton"),
-                            corygardnertweets %>%
-                              dplyr::mutate(person = "Cory Gardner"),
-                            rubiotweets %>%
-                              dplyr::mutate(person = "Marco Rubio"),
-                            rickscotttweets %>%
-                              dplyr::mutate(person = "Rick Scott"),
-                            isaksontweets %>%
-                              dplyr::mutate(person = "Isakson"),
-                            davidperduetweets %>%
-                              dplyr::mutate(person = "David Perdue"),
-                            chuckgrassleytweets %>%
-                              dplyr::mutate(person = "Chuck ChuckGrassley"),
-                            mikecrapotweets %>%
-                              dplyr::mutate(person = "Mike Crapo"),
-                            rischtweets %>%
-                              dplyr::mutate(person = "Tim Risch"),
-                            brauntweets %>%
-                              dplyr::mutate(person = "Braun"),
-                            toddyoungtweets %>%
-                              dplyr::mutate(person = "Todd Young"),
-                            jerrymorantweets %>%
-                              dplyr::mutate(person = "Jerry Moran"),
-                            patrobertstweets %>%
-                              dplyr::mutate(person = "Pat Roberts"),
-                            mitchmconnelltweets %>%
-                              dplyr::mutate(person = "Mitch McConnell"),
-                            randpaultweets %>%
-                              dplyr::mutate(person = "Rand Paul"),
-                            billcassidytweets %>%
-                              dplyr::mutate(person = "Bill Cassidy"),
-                            johnkennedytweets %>%
-                              dplyr::mutate(person = "John Kennedy"),
-                            royblunttweets %>%
-                              dplyr::mutate(person = "Roy Blunt"),
-                            hawleytweets %>%
-                              dplyr::mutate(person = "Hawley"),
-                            wickertweets %>%
-                              dplyr::mutate(person = "Wicker"),
-                            stevedainestweets %>%
-                              dplyr::mutate(person = "Steven Daines"),
-                            burrtweets %>%
-                              dplyr::mutate(person = "Burr"),
-                            thomtillistweets %>%
-                              dplyr::mutate(person = "Thom Tillis"),
-                            kevincramertweets %>%
-                              dplyr::mutate(person = "Kevin Cramer"),
-                            johnhoeventweets %>%
-                              dplyr::mutate(person = "John Hoeven"),
-                            sassetweets %>%
-                              dplyr::mutate(person = "Sasse"),
-                            robportmantweets %>%
-                              dplyr::mutate(person = "Rob Portman"),
-                            jiminhofetweets %>%
-                              dplyr::mutate(person = "Jim Inhofe"),
-                            lankfordtweets %>%
-                              dplyr::mutate(person = "Lankford"),
-                            lindseygrahamtweets %>%
-                              dplyr::mutate(person = "Lindsey Graham"),
-                            timscotttweets %>%
-                              dplyr::mutate(person = "Tim Scott"),
-                            roundstweets %>%
-                              dplyr::mutate(person = "Rounds"),
-                            johnthunetweets %>%
-                              dplyr::mutate(person = "John Thune"),
-                            alexandertweets %>%
-                              dplyr::mutate(person = "Alexander"),
-                            johncornyntweets %>%
-                              dplyr::mutate(person = "John Cornyn"),
-                            tedcruztweets %>%
-                              dplyr::mutate(person = "Ted Cruz"),
-                            mikeleetweets %>%
-                              dplyr::mutate(person = "Mike Lee"),
-                            romneytweets %>%
-                              dplyr::mutate(person = "Mitt Romney"),
-                            ronjohnsontweets %>%
-                              dplyr::mutate(person = "Ron Johnson"),
-                            johnbarrassotweets %>%
-                              dplyr::mutate(person = "John Barrasso"),
-                            enzitweets %>%
-                              dplyr::mutate(person = "Enzi"))
-
-save_as_csv(senatemrtweets, "data/senatemrtweets.csv",prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
-senatemrtweets <- readr::read_csv("data/senatemrtweets.csv")
-if(nrow(senatemrtweets)>0) {
-  message("Check your Data Folder. Function ran successfully")
-}
+  donsullivan <- twitteR::userTimeline('@SenDanSullivan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  shelby <- twitteR::userTimeline('@SenShelby', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnboozman <- twitteR::userTimeline('@JohnBoozman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomcotton <- twitteR::userTimeline('@SenTomCotton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  corygardner <- twitteR::userTimeline('@SenCoryGardner', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rubio <- twitteR::userTimeline('@SenRubioPress', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rickscott<- twitteR::userTimeline('@SenRickScott', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  isakson <- twitteR::userTimeline('@SenatorIsakson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidperdue <- twitteR::userTimeline('@sendavidperdue', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chuckgrassley <- twitteR::userTimeline('@ChuckGrassley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikecrapo <- twitteR::userTimeline('@MikeCrapo', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  risch <- twitteR::userTimeline('@SenatorRisch', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  braun<- twitteR::userTimeline('@SenatorBraun', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  toddyoung<- twitteR::userTimeline('@SenToddYoung', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jerrymoran<- twitteR::userTimeline('@JerryMoran', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  patroberts<- twitteR::userTimeline('@SenPatRoberts', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mitchmconnell<- twitteR::userTimeline('@SenateMajLdr', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  randpaul<- twitteR::userTimeline('@RandPaul', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  billcassidy<- twitteR::userTimeline('@SenBillCassidy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnkennedy<- twitteR::userTimeline('@SenJohnKennedy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  royblunt<- twitteR::userTimeline('@RoyBlunt', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hawley<- twitteR::userTimeline('@SenHawleyPress', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  wicker<- twitteR::userTimeline('@SenatorWicker', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stevedaines<- twitteR::userTimeline('@SteveDaines', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  burr<- twitteR::userTimeline('@SenatorBurr', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  thomtillis<- twitteR::userTimeline('@SenThomTillis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kevincramer<- twitteR::userTimeline('@@SenKevinCramer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnhoeven<- twitteR::userTimeline('@SenJohnHoeven', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sasse<- twitteR::userTimeline('@SenSasse', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  robportman<- twitteR::userTimeline('@senrobportman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jiminhofe<- twitteR::userTimeline('@JimInhofe', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lankford<- twitteR::userTimeline('@SenatorLankford', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lindseygraham<- twitteR::userTimeline('@LindseyGrahamSC', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  timscott<- twitteR::userTimeline('@SenatorTimScott', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rounds<- twitteR::userTimeline('@SenatorRounds', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnthune<- twitteR::userTimeline('@SenJohnThune', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  alexander<- twitteR::userTimeline('@SenAlexander', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johncornyn<- twitteR::userTimeline('@JohnCornyn', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tedcruz<- twitteR::userTimeline('@SenTedCruz', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikelee<- twitteR::userTimeline('@SenMikeLee', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  romney<- twitteR::userTimeline('@SenatorRomney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ronjohnson<- twitteR::userTimeline('@SenRonJohnson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnbarrasso<- twitteR::userTimeline('@SenJohnBarrasso', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  enzi<- twitteR::userTimeline('@SenatorEnzi', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  
+  
+  donsullivanDF <- twitteR::twListToDF(donsullivan)
+  write.csv(donsullivanDF,"data/donsullivan.csv")
+  shelbyDF <- twitteR::twListToDF(shelby)
+  write.csv(shelbyDF,"data/shelby.csv")
+  johnboozmanDF <- twitteR::twListToDF(johnboozman)
+  write.csv(johnboozmanDF,"data/johnboozman.csv")
+  tomcottonDF <- twitteR::twListToDF(tomcotton)
+  write.csv(tomcottonDF,"data/tomcotton.csv")
+  corygardnerDF <- twitteR::twListToDF(corygardner)
+  write.csv(corygardnerDF,"data/corygardner.csv")
+  rubioDF <- twitteR::twListToDF(rubio)
+  write.csv(rubioDF,"data/rubio.csv")
+  rickscottDF <- twitteR::twListToDF(rickscott)
+  write.csv(rickscottDF,"data/rickscott.csv")
+  isaksonDF <- twitteR::twListToDF(isakson)
+  write.csv(isaksonDF,"data/isakson.csv")
+  davidperdueDF <- twitteR::twListToDF(davidperdue)
+  write.csv(davidperdueDF,"data/davidperdue.csv")
+  chuckgrassleyDF <- twitteR::twListToDF(chuckgrassley)
+  write.csv(chuckgrassleyDF,"data/chuckgrassley.csv")
+  mikecrapoDF <- twitteR::twListToDF(mikecrapo)
+  write.csv(mikecrapoDF,"data/mikecrapo.csv")
+  rischDF <- twitteR::twListToDF(risch)
+  write.csv(rischDF,"data/risch.csv")
+  braunDF <- twitteR::twListToDF(braun)
+  write.csv(braunDF,"data/braun.csv")
+  toddyoungDF <- twitteR::twListToDF(toddyoung)
+  write.csv(toddyoungDF,"data/toddyoung.csv")
+  jerrymoranDF <- twitteR::twListToDF(jerrymoran)
+  write.csv(jerrymoranDF,"data/jerrymoran.csv")
+  patrobertsDF <- twitteR::twListToDF(patroberts)
+  write.csv(patrobertsDF,"data/patroberts.csv")
+  mitchmconnellDF <- twitteR::twListToDF(mitchmconnell)
+  write.csv(mitchmconnellDF,"data/mitchmconnell.csv")
+  randpaulDF <- twitteR::twListToDF(randpaul)
+  write.csv(randpaulDF,"data/randpaul.csv")
+  billcassidyDF <- twitteR::twListToDF(billcassidy)
+  write.csv(billcassidyDF,"data/billcassidy.csv")
+  johnkennedyDF <- twitteR::twListToDF(johnkennedy)
+  write.csv(johnkennedyDF,"data/johnkennedy.csv")
+  roybluntDF <- twitteR::twListToDF(royblunt)
+  write.csv(roybluntDF,"data/royblunt.csv")
+  hawleyDF <- twitteR::twListToDF(hawley)
+  write.csv(hawleyDF,"data/hawley.csv")
+  wickerDF <- twitteR::twListToDF(wicker)
+  write.csv(wickerDF,"data/wicker.csv")
+  stevedainesDF <- twitteR::twListToDF(stevedaines)
+  write.csv(stevedainesDF,"data/stevedaines.csv")
+  burrDF <- twitteR::twListToDF(burr)
+  write.csv(burrDF,"data/burr.csv")
+  thomtillisDF <- twitteR::twListToDF(thomtillis)
+  write.csv(thomtillisDF,"data/thomtillis.csv")
+  kevincramerDF <- twitteR::twListToDF(kevincrame)
+  write.csv(kevincramerDF,"data/kevincramer.csv")
+  johnhoevenDF <- twitteR::twListToDF(johnhoeven)
+  write.csv(johnhoevenDF,"data/johnhoeven.csv")
+  sasseDF <- twitteR::twListToDF(sasse)
+  write.csv(sasseDF,"data/sasse.csv")
+  robportmanDF <- twitteR::twListToDF(robportman)
+  write.csv(robportmanDF,"data/robportman.csv")
+  jiminhofeDF <- twitteR::twListToDF(jiminhofe)
+  write.csv(jiminhofeDF,"data/jiminhofe.csv")
+  lankfordDF <- twitteR::twListToDF(lankford)
+  write.csv(lankfordDF,"data/lankford.csv")
+  lindseygrahamDF <- twitteR::twListToDF(lindseygraham)
+  write.csv(lindseygrahamDF,"data/lindseygraham.csv")
+  timscottDF <- twitteR::twListToDF(timscott)
+  write.csv(timscottDF,"data/timscott.csv")
+  roundsDF <- twitteR::twListToDF(rounds)
+  write.csv(roundsDF,"data/rounds.csv")
+  johnthuneDF <- twitteR::twListToDF(johnthune)
+  write.csv(johnthuneDF,"data/johnthune.csv")
+  alexanderDF <- twitteR::twListToDF(alexander)
+  write.csv(alexanderDF,"data/alexander.csv")
+  johncornynDF <- twitteR::twListToDF(johncornyn)
+  write.csv(johncornynDF,"data/johncornyn.csv")
+  tedcruzDF <- twitteR::twListToDF(tedcruz)
+  write.csv(tedcruzDF,"data/tedcruz.csv")
+  mikeleeDF <- twitteR::twListToDF(mikelee)
+  write.csv(mikeleeDF,"data/mikelee.csv")
+  romneyDF <- twitteR::twListToDF(romney)
+  write.csv(romneyDF,"data/romney.csv")
+  ronjohnsonDF <- twitteR::twListToDF(ronjohnson)
+  write.csv(ronjohnsonDF,"data/ronjohnson.csv")
+  johnbarrassoDF <- twitteR::twListToDF(johnbarrasso)
+  write.csv(johnbarrassoDF,"data/johnbarrasso.csv")
+  enziDF <- twitteR::twListToDF(enzi)
+  write.csv(enziDF,"data/enzi.csv")
+  
+  donsullivantweets <- readr::read_csv("data/donsullivan.csv")
+  shelbytweets <- readr::read_csv("data/shelby.csv")
+  johnboozmantweets <- readr::read_csv("data/johnboozman.csv")
+  tomcottontweets <- readr::read_csv("data/tomcotton.csv")
+  corygardnertweets <- readr::read_csv("data/corygardner.csv")
+  rubiotweets <- readr::read_csv("data/rubio.csv")
+  rickscotttweets <- readr::read_csv("data/rickscott.csv")
+  isaksontweets <- readr::read_csv("data/isakson.csv")
+  davidperduetweets <- readr::read_csv("data/davidperdue.csv")
+  chuckgrassleytweets <- readr::read_csv("data/chuckgrassley.csv")
+  mikecrapotweets <- readr::read_csv("data/mikecrapo.csv")
+  rischtweets <- readr::read_csv("data/risch.csv")
+  brauntweets <- readr::read_csv("data/braun.csv")
+  toddyoungtweets <- readr::read_csv("data/toddyoung.csv")
+  jerrymorantweets <- readr::read_csv("data/jerrymoran.csv")
+  patrobertstweets <- readr::read_csv("data/patroberts.csv")
+  mitchmconnelltweets <- readr::read_csv("data/mitchmconnell.csv")
+  randpaultweets <- readr::read_csv("data/randpaul.csv")
+  billcassidytweets <- readr::read_csv("data/billcassidy.csv")
+  johnkennedytweets <- readr::read_csv("data/johnkennedy.csv")
+  royblunttweets <- readr::read_csv("data/royblunt.csv")
+  hawleytweets <- readr::read_csv("data/hawley.csv")
+  wickertweets <- readr::read_csv("data/wicker.csv")
+  stevedainestweets <- readr::read_csv("data/stevedaines.csv")
+  burrtweets <- readr::read_csv("data/burr.csv")
+  thomtillistweets <- readr::read_csv("data/thomtillis.csv")
+  kevincramertweets <- readr::read_csv("data/kevincramer.csv")
+  johnhoeventweets <- readr::read_csv("data/johnhoeven.csv")
+  sassetweets <- readr::read_csv("data/sasse.csv")
+  robportmantweets <- readr::read_csv("data/robportman.csv")
+  jiminhofetweets <- readr::read_csv("data/jiminhofe.csv")
+  lankfordtweets <- readr::read_csv("data/lankford.csv")
+  lindseygrahamtweets <- readr::read_csv("data/lindseygraham.csv")
+  timscotttweets <- readr::read_csv("data/timscott.csv")
+  roundstweets <- readr::read_csv("data/rounds.csv")
+  johnthunetweets <- readr::read_csv("data/johnthune.csv")
+  alexandertweets <- readr::read_csv("data/alexander.csv")
+  johncornyntweets <- readr::read_csv("data/johncornyn.csv")
+  tedcruztweets <- readr::read_csv("data/tedcruz.csv")
+  mikeleetweets <- readr::read_csv("data/mikelee.csv")
+  romneytweets <- readr::read_csv("data/romney.csv")
+  ronjohnsontweets <- readr::read_csv("data/ronjohnson.csv")
+  johnbarrassotweets <- readr::read_csv("data/johnbarrasso.csv")
+  enzitweets <- readr::read_csv("data/enzi.csv")
+  
+  senatemrtweets <- dplyr::bind_rows(donsullivantweets %>%
+                                       dplyr::mutate(person = "Mike Lee"),
+                                     shelbytweets %>%
+                                       dplyr::mutate(person = "Shelby"),
+                                     johnboozmantweets %>%
+                                       dplyr::mutate(person = "John Boozman"),
+                                     tomcottontweets %>%
+                                       dplyr::mutate(person = "Tom Cotton"),
+                                     corygardnertweets %>%
+                                       dplyr::mutate(person = "Cory Gardner"),
+                                     rubiotweets %>%
+                                       dplyr::mutate(person = "Marco Rubio"),
+                                     rickscotttweets %>%
+                                       dplyr::mutate(person = "Rick Scott"),
+                                     isaksontweets %>%
+                                       dplyr::mutate(person = "Isakson"),
+                                     davidperduetweets %>%
+                                       dplyr::mutate(person = "David Perdue"),
+                                     chuckgrassleytweets %>%
+                                       dplyr::mutate(person = "Chuck ChuckGrassley"),
+                                     mikecrapotweets %>%
+                                       dplyr::mutate(person = "Mike Crapo"),
+                                     rischtweets %>%
+                                       dplyr::mutate(person = "Tim Risch"),
+                                     brauntweets %>%
+                                       dplyr::mutate(person = "Braun"),
+                                     toddyoungtweets %>%
+                                       dplyr::mutate(person = "Todd Young"),
+                                     jerrymorantweets %>%
+                                       dplyr::mutate(person = "Jerry Moran"),
+                                     patrobertstweets %>%
+                                       dplyr::mutate(person = "Pat Roberts"),
+                                     mitchmconnelltweets %>%
+                                       dplyr::mutate(person = "Mitch McConnell"),
+                                     randpaultweets %>%
+                                       dplyr::mutate(person = "Rand Paul"),
+                                     billcassidytweets %>%
+                                       dplyr::mutate(person = "Bill Cassidy"),
+                                     johnkennedytweets %>%
+                                       dplyr::mutate(person = "John Kennedy"),
+                                     royblunttweets %>%
+                                       dplyr::mutate(person = "Roy Blunt"),
+                                     hawleytweets %>%
+                                       dplyr::mutate(person = "Hawley"),
+                                     wickertweets %>%
+                                       dplyr::mutate(person = "Wicker"),
+                                     stevedainestweets %>%
+                                       dplyr::mutate(person = "Steven Daines"),
+                                     burrtweets %>%
+                                       dplyr::mutate(person = "Burr"),
+                                     thomtillistweets %>%
+                                       dplyr::mutate(person = "Thom Tillis"),
+                                     kevincramertweets %>%
+                                       dplyr::mutate(person = "Kevin Cramer"),
+                                     johnhoeventweets %>%
+                                       dplyr::mutate(person = "John Hoeven"),
+                                     sassetweets %>%
+                                       dplyr::mutate(person = "Sasse"),
+                                     robportmantweets %>%
+                                       dplyr::mutate(person = "Rob Portman"),
+                                     jiminhofetweets %>%
+                                       dplyr::mutate(person = "Jim Inhofe"),
+                                     lankfordtweets %>%
+                                       dplyr::mutate(person = "Lankford"),
+                                     lindseygrahamtweets %>%
+                                       dplyr::mutate(person = "Lindsey Graham"),
+                                     timscotttweets %>%
+                                       dplyr::mutate(person = "Tim Scott"),
+                                     roundstweets %>%
+                                       dplyr::mutate(person = "Rounds"),
+                                     johnthunetweets %>%
+                                       dplyr::mutate(person = "John Thune"),
+                                     alexandertweets %>%
+                                       dplyr::mutate(person = "Alexander"),
+                                     johncornyntweets %>%
+                                       dplyr::mutate(person = "John Cornyn"),
+                                     tedcruztweets %>%
+                                       dplyr::mutate(person = "Ted Cruz"),
+                                     mikeleetweets %>%
+                                       dplyr::mutate(person = "Mike Lee"),
+                                     romneytweets %>%
+                                       dplyr::mutate(person = "Mitt Romney"),
+                                     ronjohnsontweets %>%
+                                       dplyr::mutate(person = "Ron Johnson"),
+                                     johnbarrassotweets %>%
+                                       dplyr::mutate(person = "John Barrasso"),
+                                     enzitweets %>%
+                                       dplyr::mutate(person = "Enzi"))
+  
+  senatemrDF <- twitteR::twListToDF(senatemrtweets)
+  write.csv(senatemrDF, "data/senatemrtweets.csv")
+  senatemrtweets <- readr::read_csv("data/senatemrtweets.csv")
+  if(nrow(senatemrtweets)>0) {
+    message("Check your Data Folder. Function ran successfully")
+  }
 }
 
 
@@ -630,38 +740,50 @@ if(nrow(senatemrtweets)>0) {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Republican in the House of Representatives
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 horfemR <- function() {
-  martharoby <- rtweet::get_timeline('@RepMarthaRoby', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  walorski <- rtweet::get_timeline('@RepWalorski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  susanbrooks <- rtweet::get_timeline('@SusanWBrooks', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  annwagner <- rtweet::get_timeline('@RepAnnWagner', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hartzler <- rtweet::get_timeline('@RepHartzler', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  virginiafoxx <- rtweet::get_timeline('@virginiafoxx', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  armstrong <- rtweet::get_timeline('@RepArmstrongND', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stefanik <- rtweet::get_timeline('@RepStefanik', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cathymcmorris <- rtweet::get_timeline('@cathymcmorris', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lizcheney<- rtweet::get_timeline('@RepLizCheney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-
-
-  save_as_csv(martharoby,"data/martharoby.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(walorski,"data/walorski.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(susanbrooks,"data/susanbrooks.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(annwagner,"data/annwagner.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(hartzler,"data/hartzler.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(virginiafoxx,"data/virginiafoxx.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(armstrong,"data/armstrong.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(stefanik,"data/stefanik.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(cathymcmorris,"data/cathymcmorris.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lizcheney,"data/lizcheney.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-
+  martharoby <- twitteR::userTimeline('@RepMarthaRoby', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  walorski <- twitteR::userTimeline('@RepWalorski', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  susanbrooks <- twitteR::userTimeline('@SusanWBrooks', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  annwagner <- twitteR::userTimeline('@RepAnnWagner', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hartzler <- twitteR::userTimeline('@RepHartzler', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  virginiafoxx <- twitteR::userTimeline('@virginiafoxx', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  armstrong <- twitteR::userTimeline('@RepArmstrongND', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stefanik <- twitteR::userTimeline('@RepStefanik', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cathymcmorris <- twitteR::userTimeline('@cathymcmorris', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lizcheney<- twitteR::userTimeline('@RepLizCheney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  
+  
+  martharobyDF <- twitteR::twListToDF(martharoby)
+  write.csv(martharobyDF,"data/martharoby.csv")
+  walorskiDF <- twitteR::twListToDF(walorski)
+  write.csv(walorskiDF,"data/walorski.csv")
+  susanbrooksDF <- twitteR::twListToDF(susanbrooks)
+  write.csv(susanbrooksDF,"data/susanbrooks.csv")
+  annwagnerDF <- twitteR::twListToDF(annwagner)
+  write.csv(annwagnerDF,"data/annwagner.csv")
+  hartzlerDF <- twitteR::twListToDF(hartzler)
+  write.csv(hartzlerDF,"data/hartzler.csv")
+  virginiafoxxDF <- twitteR::twListToDF(virginiafoxx)
+  write.csv(virginiafoxxDF,"data/virginiafoxx.csv")
+  armstrongDF <- twitteR::twListToDF(armstrong)
+  write.csv(armstrongDF,"data/armstrong.csv")
+  stefanikDF <- twitteR::twListToDF(stefanik)
+  write.csv(stefanikDF,"data/stefanik.csv")
+  cathymcmorrisDF <- twitteR::twListToDF(cathymcmorris)
+  write.csv(cathymcmorrisDF,"data/cathymcmorris.csv")
+  lizcheneyDF <- twitteR::twListToDF(lizcheney)
+  write.csv(lizcheneyDF,"data/lizcheney.csv")
+  
   martharobytweets <- readr::read_csv("data/martharoby.csv")
   walorskitweets <- readr::read_csv("data/walorski.csv")
   susanbrookstweets <- readr::read_csv("data/susanbrooks.csv")
@@ -672,27 +794,29 @@ horfemR <- function() {
   stefaniktweets <- readr::read_csv("data/stefanik.csv")
   cathymcmorristweets <- readr::read_csv("data/cathymcmorris.csv")
   lizcheneytweets <- readr::read_csv("data/lizcheney.csv")
+  
   horfrtweets <- dplyr::bind_rows(martharobytweets %>%
-                             dplyr::mutate(person = "Martha Roby"),
-                           walorskitweets %>%
-                             dplyr::mutate(person = "Walorksi"),
-                           susanbrookstweets %>%
-                             dplyr::mutate(person = "Susan Brooks"),
-                           annwagnertweets %>%
-                             dplyr::mutate(person = "Ann Wagner"),
-                           hartzlertweets %>%
-                             dplyr::mutate(person = "Hartzler"),
-                           virginiafoxxtweets %>%
-                             dplyr::mutate(person = "Virginia Foxx"),
-                           armstrongtweets %>%
-                             dplyr::mutate(person = "Armstrong"),
-                           stefaniktweets %>%
-                             dplyr::mutate(person = "Stefanik"),
-                           cathymcmorristweets %>%
-                             dplyr::mutate(person = "Cathy McMorris"),
-                           lizcheneytweets %>%
-                             dplyr::mutate(person = "Liz Cheney"))
-  save_as_csv(horfrtweets, "data/horfrtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
+                                    dplyr::mutate(person = "Martha Roby"),
+                                  walorskitweets %>%
+                                    dplyr::mutate(person = "Walorksi"),
+                                  susanbrookstweets %>%
+                                    dplyr::mutate(person = "Susan Brooks"),
+                                  annwagnertweets %>%
+                                    dplyr::mutate(person = "Ann Wagner"),
+                                  hartzlertweets %>%
+                                    dplyr::mutate(person = "Hartzler"),
+                                  virginiafoxxtweets %>%
+                                    dplyr::mutate(person = "Virginia Foxx"),
+                                  armstrongtweets %>%
+                                    dplyr::mutate(person = "Armstrong"),
+                                  stefaniktweets %>%
+                                    dplyr::mutate(person = "Stefanik"),
+                                  cathymcmorristweets %>%
+                                    dplyr::mutate(person = "Cathy McMorris"),
+                                  lizcheneytweets %>%
+                                    dplyr::mutate(person = "Liz Cheney"))
+  horfrDF <- twitteR::twListToDF(horfrtweets)
+  write.csv(horfrDF, "data/horfrtweets.csv")
   horfrtweets <- readr::read_csv("data/horfrtweets.csv")
   if(nrow(horfrtweets)>0) {
     message("Check your Data Folder. Function ran successfully")
@@ -706,193 +830,283 @@ horfemR <- function() {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Female Democrat in the House of Representatives
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 horfemD <- function() {
-  terrisewell <- rtweet::get_timeline('@RepTerriSewell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kirkpatrick<- rtweet::get_timeline('@RepKirkpatrick', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dorismatsui<- rtweet::get_timeline('@DorisMatsui', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bera<- rtweet::get_timeline('@RepBera', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  pelosi <- rtweet::get_timeline('@SpeakerPelosi', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  barbaralee <- rtweet::get_timeline('@RepBarbaraLee', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  speier <- rtweet::get_timeline('@RepSpeier', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  annaeshoo <- rtweet::get_timeline('@RepAnnaEshoo', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  zoelofgren <- rtweet::get_timeline('@RepZoeLofgren', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  katiehill <- rtweet::get_timeline('@RepKatieHill', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  brownley <- rtweet::get_timeline('@RepBrownley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  judychu <- rtweet::get_timeline('@RepJudyChu', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gracenapolitano <- rtweet::get_timeline('@gracenapolitano', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  normatorres <- rtweet::get_timeline('@NormaJTorres', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  karenbass <- rtweet::get_timeline('@RepKarenBass', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lindasanchez <- rtweet::get_timeline('@RepLindaSanchez', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  roybalallard<- rtweet::get_timeline('@RepRoybalAllard', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  maxinewaters<- rtweet::get_timeline('@RepMaxineWaters', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  barragan<- rtweet::get_timeline('@RepBarragan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  katieporter <- rtweet::get_timeline('@RepKatiePorter', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  susandavis <- rtweet::get_timeline('@RepSusanDavis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dianadegette <- rtweet::get_timeline('@RepDianaDeGette', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rosadelauro<- rtweet::get_timeline('@rosadelauro', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jahanahayes<- rtweet::get_timeline('@RepJahanaHayes', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lbr<- rtweet::get_timeline('@RepLBR', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  eleanornorton<- rtweet::get_timeline('@EleanorNorton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stephmurphy<- rtweet::get_timeline('@RepStephMurphy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kcastor<- rtweet::get_timeline('@USRepKCastor', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hastings <- rtweet::get_timeline('@RepHastingsFL', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  loisfrankel <- rtweet::get_timeline('@RepLoisFrankel', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dwstweets <- rtweet::get_timeline('@RepDWStweets', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  wilson <- rtweet::get_timeline('@RepWilson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dmp <- rtweet::get_timeline('@RepDMP', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  shalala <- rtweet::get_timeline('@RepShalala', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tulsi <- rtweet::get_timeline('@TulsiPress', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  finkenauer <- rtweet::get_timeline('@RepFinkenauer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cindyaxne <- rtweet::get_timeline('@RepCindyAxne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  robinkelly <- rtweet::get_timeline('@RepRobinKelly', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  janschakowsky <- rtweet::get_timeline('@janschakowsky', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  underwood <- rtweet::get_timeline('@RepUnderwood', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cheri <- rtweet::get_timeline('@RepCheri', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davids <- rtweet::get_timeline('@RepDavids', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  loritrahan <- rtweet::get_timeline('@RepLoriTrahan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kclark <- rtweet::get_timeline('@RepKClark', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  pressley <- rtweet::get_timeline('@RepPressley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  haleystevens <- rtweet::get_timeline('@RepHaleyStevens', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  debdingell <- rtweet::get_timeline('@RepDebDingell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rashida <- rtweet::get_timeline('@RepRashida', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lawrence <- rtweet::get_timeline('@RepLawrence', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  angiecraig <- rtweet::get_timeline('@RepAngieCraig', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  deanphillips <- rtweet::get_timeline('@RepDeanPhillips', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bettymccollum <- rtweet::get_timeline('@BettyMcCollum04', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ilhan<- rtweet::get_timeline('@Ilhan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lacyclay <- rtweet::get_timeline('@LacyClayMO1', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  adams <- rtweet::get_timeline('@RepAdams', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  anniekuster <- rtweet::get_timeline('@RepAnnieKuster', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bonnie<- rtweet::get_timeline('@RepBonnie', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  debhaaland <- rtweet::get_timeline('@RepDebHaaland', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  torressmall <- rtweet::get_timeline('@RepTorresSmall', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dinatitus<- rtweet::get_timeline('@repdinatitus', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  susielee <- rtweet::get_timeline('@RepSusieLee', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kathleenrice <- rtweet::get_timeline('@RepKathleenRice', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  nydiavelazquez<- rtweet::get_timeline('@NydiaVelazquez', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  yvetteclarke<- rtweet::get_timeline('@RepYvetteClarke', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  maloney<- rtweet::get_timeline('@RepMaloney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  aoc <- rtweet::get_timeline('@RepAOC', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  nitalowey <- rtweet::get_timeline('@NitaLowey', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  beatty <- rtweet::get_timeline('@RepBeatty', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  marcykaptur <- rtweet::get_timeline('@RepMarcyKaptur', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  marciafudge<- rtweet::get_timeline('@RepMarciaFudge', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kendrahorn<- rtweet::get_timeline('@RepKendraHorn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bonamici <- rtweet::get_timeline('@RepBonamici', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mgs <- rtweet::get_timeline('@RepMGS', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dean <- rtweet::get_timeline('@RepDean', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  houlahan <- rtweet::get_timeline('@RepHoulahan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  susanwild <- rtweet::get_timeline('@RepSusanWild', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  fletcher <- rtweet::get_timeline('@RepFletcher', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  escobar <- rtweet::get_timeline('@RepEscobar', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jacksonlee <- rtweet::get_timeline('@JacksonLeeTX18', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  sylviagarcia <- rtweet::get_timeline('@RepSylviaGarcia', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  elaineluria<- rtweet::get_timeline('@RepElaineLuria', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  spanberger<- rtweet::get_timeline('@RepSpanberger', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  wexton <- rtweet::get_timeline('@RepWexton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  delbene <- rtweet::get_timeline('@RepDelBene', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  herrerabeutler <- rtweet::get_timeline('@HerreraBeutler', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jayapal<- rtweet::get_timeline('@RepJayapal', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kimschrier <- rtweet::get_timeline('@RepKimSchrier', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gwenmoore <- rtweet::get_timeline('@RepGwenMoore', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-
-  save_as_csv(terrisewell,"data/terrisewell.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kirkpatrick,"data/kirkpatrick.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dorismatsui,"data/dorismatsui.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bera,"data/bera.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(pelosi,"data/pelosi.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(barbaralee,"data/barbaralee.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(speier,"data/speier.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(annaeshoo,"data/annaeshoo.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(zoelofgren,"data/zoelofgren.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(katiehill,"data/katiehill.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(brownley,"data/brownley.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(judychu,"data/judychu.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gracenapolitano,"data/gracenapolitano.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(normatorres,"data/normatorres.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(karenbass,"data/karenbass.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lindasanchez,"data/lindasanchez.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(roybalallard,"data/roybalallard.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(maxinewaters,"data/maxinewaters.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(barragan,"data/barragan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(katieporter,"data/katieporter.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(susandavis,"data/susandavis.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dianadegette,"data/dianadegette.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rosadelauro,"data/rosadelauro.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jahanahayes,"data/jahanahayes.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lbr,"data/lbr.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(eleanornorton,"data/eleanornorton.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(stephmurphy,"data/stephmurphy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kcastor,"data/kcastor.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(hastings,"data/hastings.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(loisfrankel,"data/loisfrankel.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dwstweets,"data/dwstweets.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(wilson,"data/wilson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dmp,"data/dmp.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(shalala,"data/shalala.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tulsi,"data/tulsi.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(finkenauer,"data/finkenauer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(cindyaxne,"data/cindyaxne.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(robinkelly,"data/robinkelly.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(janschakowsky,"data/janschakowsky.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(underwood,"data/underwood.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(cheri,"data/cheri.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(davids,"data/davids.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(loritrahan,"data/loritrahan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kclark,"data/kclark.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(pressley,"data/pressley.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(haleystevens,"data/haleystevens.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(debdingell,"data/debdingell.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rashida,"data/rashida.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lawrence,"data/lawrence.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(angiecraig,"data/angiecraig.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(deanphillips,"data/deanphillips.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bettymccollum,"data/bettymccollum.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(ilhan,"data/ilhan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lacyclay,"data/lacyclay.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(adams,"data/adams.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(anniekuster,"data/anniekuster.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bonnie,"data/bonnie.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(debhaaland,"data/debhaaland.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(torressmall,"data/torressmall.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dinatitus,"data/dinatitus.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(susielee,"data/susielee.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kathleenrice,"data/kathleenrice.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(nydiavelazquez,"data/nydiavelazquez.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(yvetteclarke,"data/yvetteclarke.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(maloney,"data/maloney.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(aoc,"data/aoc.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(nitalowey,"data/nitalowey.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(beatty,"data/beatty.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(marcykaptur,"data/marcykaptur.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(marciafudge,"data/marciafudge.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kendrahorn,"data/kendrahorn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bonamici,"data/bonamici.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mgs,"data/mgs.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dean,"data/dean.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(houlahan,"data/houlahan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(susanwild,"data/susanwild.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(fletcher,"data/fletcher.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(escobar,"data/escobar.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jacksonlee,"data/jacksonlee.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(sylviagarcia,"data/sylviagarcia.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(elaineluria,"data/elaineluria.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(spanberger,"data/spanberger.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(wexton,"data/wexton.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(delbene,"data/delbene.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(herrerabeutler,"data/herrerabeutler.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jayapal,"data/jayapal.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kimschrier,"data/kimschrier.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gwenmoore,"data/gwenmoore.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-
+  terrisewell <- twitteR::userTimeline('@RepTerriSewell', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kirkpatrick<- twitteR::userTimeline('@RepKirkpatrick', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dorismatsui<- twitteR::userTimeline('@DorisMatsui', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bera<- twitteR::userTimeline('@RepBera', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  pelosi <- twitteR::userTimeline('@SpeakerPelosi', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  barbaralee <- twitteR::userTimeline('@RepBarbaraLee', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  speier <- twitteR::userTimeline('@RepSpeier', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  annaeshoo <- twitteR::userTimeline('@RepAnnaEshoo', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  zoelofgren <- twitteR::userTimeline('@RepZoeLofgren', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  katiehill <- twitteR::userTimeline('@RepKatieHill', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brownley <- twitteR::userTimeline('@RepBrownley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  judychu <- twitteR::userTimeline('@RepJudyChu', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gracenapolitano <- twitteR::userTimeline('@gracenapolitano', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  normatorres <- twitteR::userTimeline('@NormaJTorres', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  karenbass <- twitteR::userTimeline('@RepKarenBass', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lindasanchez <- twitteR::userTimeline('@RepLindaSanchez', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  roybalallard<- twitteR::userTimeline('@RepRoybalAllard', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  maxinewaters<- twitteR::userTimeline('@RepMaxineWaters', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  barragan<- twitteR::userTimeline('@RepBarragan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  katieporter <- twitteR::userTimeline('@RepKatiePorter', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  susandavis <- twitteR::userTimeline('@RepSusanDavis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dianadegette <- twitteR::userTimeline('@RepDianaDeGette', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rosadelauro<- twitteR::userTimeline('@rosadelauro', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jahanahayes<- twitteR::userTimeline('@RepJahanaHayes', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lbr<- twitteR::userTimeline('@RepLBR', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  eleanornorton<- twitteR::userTimeline('@EleanorNorton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stephmurphy<- twitteR::userTimeline('@RepStephMurphy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kcastor<- twitteR::userTimeline('@USRepKCastor', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hastings <- twitteR::userTimeline('@RepHastingsFL', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  loisfrankel <- twitteR::userTimeline('@RepLoisFrankel', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dwstweets <- twitteR::userTimeline('@RepDWStweets', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  wilson <- twitteR::userTimeline('@RepWilson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dmp <- twitteR::userTimeline('@RepDMP', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  shalala <- twitteR::userTimeline('@RepShalala', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tulsi <- twitteR::userTimeline('@TulsiPress', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  finkenauer <- twitteR::userTimeline('@RepFinkenauer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cindyaxne <- twitteR::userTimeline('@RepCindyAxne', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  robinkelly <- twitteR::userTimeline('@RepRobinKelly', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  janschakowsky <- twitteR::userTimeline('@janschakowsky', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  underwood <- twitteR::userTimeline('@RepUnderwood', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cheri <- twitteR::userTimeline('@RepCheri', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davids <- twitteR::userTimeline('@RepDavids', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  loritrahan <- twitteR::userTimeline('@RepLoriTrahan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kclark <- twitteR::userTimeline('@RepKClark', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  pressley <- twitteR::userTimeline('@RepPressley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  haleystevens <- twitteR::userTimeline('@RepHaleyStevens', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  debdingell <- twitteR::userTimeline('@RepDebDingell', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rashida <- twitteR::userTimeline('@RepRashida', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lawrence <- twitteR::userTimeline('@RepLawrence', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  angiecraig <- twitteR::userTimeline('@RepAngieCraig', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  deanphillips <- twitteR::userTimeline('@RepDeanPhillips', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bettymccollum <- twitteR::userTimeline('@BettyMcCollum04', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ilhan<- twitteR::userTimeline('@Ilhan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lacyclay <- twitteR::userTimeline('@LacyClayMO1', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  adams <- twitteR::userTimeline('@RepAdams', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  anniekuster <- twitteR::userTimeline('@RepAnnieKuster', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bonnie<- twitteR::userTimeline('@RepBonnie', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  debhaaland <- twitteR::userTimeline('@RepDebHaaland', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  torressmall <- twitteR::userTimeline('@RepTorresSmall', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dinatitus<- twitteR::userTimeline('@repdinatitus', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  susielee <- twitteR::userTimeline('@RepSusieLee', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kathleenrice <- twitteR::userTimeline('@RepKathleenRice', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  nydiavelazquez<- twitteR::userTimeline('@NydiaVelazquez', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  yvetteclarke<- twitteR::userTimeline('@RepYvetteClarke', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  maloney<- twitteR::userTimeline('@RepMaloney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  aoc <- twitteR::userTimeline('@RepAOC', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  nitalowey <- twitteR::userTimeline('@NitaLowey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  beatty <- twitteR::userTimeline('@RepBeatty', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  marcykaptur <- twitteR::userTimeline('@RepMarcyKaptur', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  marciafudge<- twitteR::userTimeline('@RepMarciaFudge', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kendrahorn<- twitteR::userTimeline('@RepKendraHorn', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bonamici <- twitteR::userTimeline('@RepBonamici', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mgs <- twitteR::userTimeline('@RepMGS', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dean <- twitteR::userTimeline('@RepDean', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  houlahan <- twitteR::userTimeline('@RepHoulahan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  susanwild <- twitteR::userTimeline('@RepSusanWild', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  fletcher <- twitteR::userTimeline('@RepFletcher', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  escobar <- twitteR::userTimeline('@RepEscobar', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jacksonlee <- twitteR::userTimeline('@JacksonLeeTX18', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sylviagarcia <- twitteR::userTimeline('@RepSylviaGarcia', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  elaineluria<- twitteR::userTimeline('@RepElaineLuria', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  spanberger<- twitteR::userTimeline('@RepSpanberger', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  wexton <- twitteR::userTimeline('@RepWexton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  delbene <- twitteR::userTimeline('@RepDelBene', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  herrerabeutler <- twitteR::userTimeline('@HerreraBeutler', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jayapal<- twitteR::userTimeline('@RepJayapal', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kimschrier <- twitteR::userTimeline('@RepKimSchrier', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gwenmoore <- twitteR::userTimeline('@RepGwenMoore', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  
+  terrisewellDF <- twitteR::twListToDF(terrisewell)
+  write.csv(terrisewellDF,"data/terrisewell.csv")
+  kirkpatrickDF <- twitteR::twListToDF(kirkpatrick)
+  write.csv(kirkpatrickDF,"data/kirkpatrick.csv")
+  dorismatsuiDF <- twitteR::twListToDF(dorismatsui)
+  write.csv(dorismatsuiDF,"data/dorismatsui.csv")
+  beraDF <- twitteR::twListToDF(bera)
+  write.csv(beraDF,"data/bera.csv")
+  pelosiDF <- twitteR::twListToDF(pelosi)
+  write.csv(pelosiDF,"data/pelosi.csv")
+  barbaraleeDF <- twitteR::twListToDF(barbaralee)
+  write.csv(barbaraleedf,"data/barbaralee.csv")
+  speierDF <- twitteR::twListToDF(speier)
+  write.csv(speierDF,"data/speier.csv")
+  annaeshooDF <- twitteR::twListToDF(annaeshoo)
+  write.csv(annaeshooDF,"data/annaeshoo.csv")
+  zoelofgrenDF <- twitteR::twListToDF(zoelofgren)
+  write.csv(zoelofgrenDF,"data/zoelofgren.csv")
+  katiehillDF <- twitteR::twListToDF(katiehill)
+  write.csv(katiehillDF,"data/katiehill.csv")
+  brownleyDF <- twitteR::twListToDF(brownley)
+  write.csv(brownleyDF,"data/brownley.csv")
+  judychuDF <- twitteR::twListToDF(judychu)
+  write.csv(judychuDF,"data/judychu.csv")
+  gracenapolitanoDF <- twitteR::twListToDF(gracenapolitano)
+  write.csv(gracenapolitanoDF,"data/gracenapolitano.csv")
+  normatorresDF <- twitteR::twListToDF(normatorres)
+  write.csv(normatorresDF,"data/normatorres.csv")
+  karenbassDF <- twitteR::twListToDF(karenbass)
+  write.csv(karenbassDF,"data/karenbass.csv")
+  lindasanchezDF <- twitteR::twListToDF(lindasanchez)
+  write.csv(lindasanchezDF,"data/lindasanchez.csv")
+  roybalallardDF <- twitteR::twListToDF(roybalallard)
+  write.csv(roybalallardDF,"data/roybalallard.csv")
+  maxinewatersDF <- twitteR::twListToDF(maxinewaters)
+  write.csv(maxinewatersDF,"data/maxinewaters.csv")
+  barraganDF <- twitteR::twListToDF(barragan)
+  write.csv(barraganDF,"data/barragan.csv")
+  katieporterDF <- twitteR::twListToDF(katieporter)
+  write.csv(katieporterDF,"data/katieporter.csv")
+  susandavisDF <- twitteR::twListToDF(susandavis)
+  write.csv(susandavisDF,"data/susandavis.csv")
+  dianadegetteDF <- twitteR::twListToDF(dianadegette)
+  write.csv(dianadegetteDF,"data/dianadegette.csv")
+  rosadelauroDF <- twitteR::twListToDF(rosadelauro)
+  write.csv(rosadelauroDF,"data/rosadelauro.csv")
+  jahanahayesDF <- twitteR::twListToDF(jahanahayes)
+  write.csv(jahanahayesDF,"data/jahanahayes.csv")
+  lbrDF <- twitteR::twListToDF(lbr)
+  write.csv(lbrDF,"data/lbr.csv")
+  eleanornortonDF <- twitteR::twListToDF(eleanornorton)
+  write.csv(eleanornortonDF,"data/eleanornorton.csv")
+  stephmurphyDF <- twitteR::twListToDF(stephmurphy)
+  write.csv(stephmurphyDF,"data/stephmurphy.csv")
+  kcastorDF <- twitteR::twListToDF(kcastor)
+  write.csv(kcastorDF,"data/kcastor.csv")
+  hastingsDF <- twitteR::twListToDF(hastings)
+  write.csv(hastingsDF,"data/hastings.csv")
+  loisfrankelDF <- twitteR::twListToDF(loisfrankel)
+  write.csv(loisfrankelDF,"data/loisfrankel.csv")
+  dwstweetsDF <- twitteR::twListToDF(dwstweets)
+  write.csv(dwstweetsDF,"data/dwstweets.csv")
+  wilsonDF <- twitteR::twListToDF(wilson)
+  write.csv(wilsonDF,"data/wilson.csv")
+  dmpDF <- twitteR::twListToDF(dmp)
+  write.csv(dmpDF,"data/dmp.csv")
+  shalalaDF <- twitteR::twListToDF(shalala)
+  write.csv(shalalaDF,"data/shalala.csv")
+  tulsiDF <- twitteR::twListToDF(tulsi)
+  write.csv(tulsiDF,"data/tulsi.csv")
+  finkenauerDF <- twitteR::twListToDF(finkenauer)
+  write.csv(finkenauerDF,"data/finkenauer.csv")
+  cindyaxneDF <- twitteR::twListToDF(cindyaxne)
+  write.csv(cindyaxneDF,"data/cindyaxne.csv")
+  robinkellyDF <- twitteR::twListToDF(robinkelly)
+  write.csv(robinkellyDF,"data/robinkelly.csv")
+  janschakowskyDF <- twitteR::twListToDF(janschakowsky)
+  write.csv(janschakowskyDF,"data/janschakowsky.csv")
+  underwoodDF <- twitteR::twListToDF(underwood)
+  write.csv(underwoodDF,"data/underwood.csv")
+  cheriDF <- twitteR::twListToDF(cheri)
+  write.csv(cheriDF,"data/cheri.csv")
+  davidsDF <- twitteR::twListToDF(davids)
+  write.csv(davidsDF,"data/davids.csv")
+  loritrahanDF <- twitteR::twListToDF(loritrahan)
+  write.csv(loritrahanDF, "data/loritrahan.csv")
+  kclarkDF <- twitteR::twListToDF(kclark)
+  write.csv(kclarkDF,"data/kclark.csv")
+  pressleyDF <- twitteR::twListToDF(pressley)
+  write.csv(pressleyDF,"data/pressley.csv")
+  haleystevensDF <- twitteR::twListToDF(haleystevens)
+  write.csv(haleystevensDF,"data/haleystevens.csv")
+  debdingellDF <- twitteR::twListToDF(debdingell)
+  write.csv(debdingellDF,"data/debdingell.csv")
+  rashidaDF <- twitteR::twListToDF(rashida)
+  write.csv(rashidaDF,"data/rashida.csv")
+  lawrenceDF <- twitteR::twListToDF(lawrence)
+  write.csv(lawrenceDF,"data/lawrence.csv")
+  anniecraigDF <- twitteR::twListToDF(angiecraig)
+  write.csv(anniecraigDF,"data/angiecraig.csv")
+  deanphillipsDF <- twitteR::twListToDF(deanphillips)
+  write.csv(deanphillipsDF,"data/deanphillips.csv")
+  bettymccollumDF <- twitteR::twListToDF(bettymccollum)
+  write.csv(bettymccollumDF,"data/bettymccollum.csv")
+  ilhanDF <- twitteR::twListToDF(ilhan)
+  write.csv(ilhanDF,"data/ilhan.csv")
+  lacyclayDF <- twitteR::twListToDF(lacyclay)
+  write.csv(lacyclayDF,"data/lacyclay.csv")
+  adamsDF <- twitteR::twListToDF(adams)
+  write.csv(adamsDF,"data/adams.csv")
+  anniekusterDF <- twitteR::twListToDF(anniekuster)
+  write.csv(anniekusterDF,"data/anniekuster.csv")
+  bonnieDF <- twitteR::twListToDF(bonnie)
+  write.csv(bonnieDF,"data/bonnie.csv")
+  debhaalandDF <- twitteR::twListToDF(debhaaland)
+  write.csv(debhaalandDF,"data/debhaaland.csv")
+  torressmallDF <- twitteR::twListToDF(torressmall)
+  write.csv(torressmallDF,"data/torressmall.csv")
+  dinatitusDF <- twitteR::twListToDF(dinatitus)
+  write.csv(dinatitusDF,"data/dinatitus.csv")
+  susieleeDF <- twitteR::twListToDF(susielee)
+  write.csv(susieleeDF,"data/susielee.csv")
+  kathleenriceDF <- twitteR::twListToDF(kathleenrice)
+  write.csv(kathleenriceDF,"data/kathleenrice.csv")
+  nydiavelazquezDF <- twitteR::twListToDF(nydiavelazquez)
+  write.csv(nydiavelazquezDF,"data/nydiavelazquez.csv")
+  yvetteclarkeDF <- twitteR::twListToDF(yvetteclarke)
+  write.csv(yvetteclarkeDF,"data/yvetteclarke.csv")
+  maloneyDF <- twitteR::twListToDF(maloney)
+  write.csv(maloneyDF,"data/maloney.csv")
+  aocDF <- twitteR::twListToDF(aoc)
+  write.csv(aocDF,"data/aoc.csv")
+  nitaloweyDF <- twitteR::twListToDF(nitalowey)
+  write.csv(nitaloweyDF,"data/nitalowey.csv")
+  beattyDF <- twitteR::twListToDF(beatty)
+  write.csv(beattyDF,"data/beatty.csv")
+  marcykapturDF <- twitteR::twListToDF(marcykaptur)
+  write.csv(marcykapturDF,"data/marcykaptur.csv")
+  marciafudgeDF <- twitteR::twListToDF(marciafudge)
+  write.csv(marciafudgeDF,"data/marciafudge.csv")
+  kendrahornDF <- twitteR::twListToDF(kendrahorn)
+  write.csv(kendrahornDF,"data/kendrahorn.csv")
+  bonamiciDF <- twitteR::twListToDF(bonamici)
+  write.csv(bonamiciDF,"data/bonamici.csv")
+  mgsDF <- twitteR::twListToDF(mgs)
+  write.csv(mgsDF,"data/mgs.csv")
+  deanDF <- twitteR::twListToDF(dean)
+  write.csv(deanDF,"data/dean.csv")
+  houlahanDF <- twitteR::twListToDF(houlahan)
+  write.csv(houlahanDF,"data/houlahan.csv")
+  susanwildDF <- twitteR::twListToDF(susanwild)
+  write.csv(susanwildDF,"data/susanwild.csv")
+  fletcherDF <- twitteR::twListToDF(fletcher)
+  write.csv(fletcherDF,"data/fletcher.csv")
+  escobarDF <- twitteR::twListToDF(escobar)
+  write.csv(escobarDF,"data/escobar.csv")
+  jacksonleeDF <- twitteR::twListToDF(jacksonlee)
+  write.csv(jacksonleeDF,"data/jacksonlee.csv")
+  sylviagarciaDF <- twitteR::twListToDF(sylviagarcia)
+  write.csv(sylviagarciaDF,"data/sylviagarcia.csv")
+  elaineluriaDF <- twitteR::twListToDF(elaineluria)
+  write.csv(elaineluriaDF,"data/elaineluria.csv")
+  spanbergerDF <- twitteR::twListToDF(spanberger)
+  write.csv(spanbergerDF,"data/spanberger.csv")
+  wextonDF <- twitteR::twListToDF(wexton)
+  write.csv(wextonDF,"data/wexton.csv")
+  delbeneDF <- twitteR::twListToDF(delbene)
+  write.csv(delbeneDF,"data/delbene.csv")
+  herrerabeutlerDF <- twitteR::twListToDF(herrerabeutler)
+  write.csv(herrerabeutlerDF,"data/herrerabeutler.csv")
+  jayapalDF <- twitteR::twListToDF(jayapal)
+  write.csv(jayapalDF,"data/jayapal.csv")
+  kimschrierDF <- twitteR::twListToDF(kimschrier)
+  write.csv(kimschrierDF,"data/kimschrier.csv")
+  gwenmooreDF <- twitteR::twListToDF(gwenmoore)
+  write.csv(gwenmooreDF,"data/gwenmoore.csv")
+  
   terrisewelltweets <- readr::read_csv("data/terrisewell.csv")
   kirkpatricktweets <- readr::read_csv("data/kirkpatrick.csv")
   dorismatsuitweets <- readr::read_csv("data/dorismatsui.csv")
@@ -981,186 +1195,187 @@ horfemD <- function() {
   jayapaltweets <- readr::read_csv("data/jayapal.csv")
   kimschriertweets <- readr::read_csv("data/kimschrier.csv")
   gwenmooretweets <- readr::read_csv("data/gwenmoore.csv")
-
-
+  
+  
   horfdtweets <- dplyr::bind_rows(terrisewelltweets %>%
-                             dplyr::mutate(person = "Terri Swell"),
-                           kirkpatricktweets %>%
-                             dplyr::mutate(person = "Kirkpatrick"),
-                           dorismatsuitweets %>%
-                             dplyr::mutate(person = "Doris Matsui"),
-                           beratweets %>%
-                             dplyr::mutate(person = "Bera"),
-                           pelositweets %>%
-                             dplyr::mutate(person = "Nancy Pelosi"),
-                           barbaraleetweets %>%
-                             dplyr::mutate(person = "Barbara Lee"),
-                           speiertweets %>%
-                             dplyr::mutate(person = "Speier"),
-                           annaeshootweets %>%
-                             dplyr::mutate(person = "Anna Eshoo"),
-                           zoelofgrentweets %>%
-                             dplyr::mutate(person = "Zoe Lofgren"),
-                           katiehilltweets %>%
-                             dplyr::mutate(person = "Katie Hill"),
-                           brownleytweets %>%
-                             dplyr::mutate(person = "Brownley"),
-                           judychutweets %>%
-                             dplyr::mutate(person = "Judy Chu"),
-                           gracenapolitanotweets %>%
-                             dplyr::mutate(person = "Grace Napolitano"),
-                           normatorrestweets %>%
-                             dplyr::mutate(person = "Norma Torres"),
-                           karenbasstweets %>%
-                             dplyr::mutate(person = "Karen Bass"),
-                           lindasancheztweets %>%
-                             dplyr::mutate(person = "Linda Sanchez"),
-                           roybalallardtweets %>%
-                             dplyr::mutate(person = "Roybal Allard"),
-                           maxinewaterstweets %>%
-                             dplyr::mutate(person = "Maxine Waters"),
-                           barragantweets %>%
-                             dplyr::mutate(person = "Barragan"),
-                           katieportertweets %>%
-                             dplyr::mutate(person = "Katie Porter"),
-                           susandavistweets %>%
-                             dplyr::mutate(person = "Susan Davis"),
-                           dianadegettetweets %>%
-                             dplyr::mutate(person = "Diana Delgette"),
-                           rosadelaurotweets %>%
-                             dplyr::mutate(person = "Rosa Delauro"),
-                           jahanahayestweets %>%
-                             dplyr::mutate(person = "Jahana Hayes"),
-                           lbrtweets %>%
-                             dplyr::mutate(person = "LBR"),
-                           eleanornortontweets %>%
-                             dplyr::mutate(person = "Eleanor Norton"),
-                           stephmurphytweets %>%
-                             dplyr::mutate(person = "Steph Murphy"),
-                           kcastortweets %>%
-                             dplyr::mutate(person = "K Castor"),
-                           hastingstweets %>%
-                             dplyr::mutate(person = "Hastings"),
-                           loisfrankeltweets %>%
-                             dplyr::mutate(person = "Lois Frankel"),
-                           dwsweetstweets %>%
-                             dplyr::mutate(person = "DW Stweets"),
-                           wilsontweets %>%
-                             dplyr::mutate(person = "Wilson"),
-                           dmptweets %>%
-                             dplyr::mutate(person = "DMP"),
-                           shalalatweets %>%
-                             dplyr::mutate(person = "Shalala"),
-                           tulsitweets %>%
-                             dplyr::mutate(person = "Tulsi"),
-                           finkenauertweets %>%
-                             dplyr::mutate(person = "Finkenauer"),
-                           cindyaxnetweets %>%
-                             dplyr::mutate(person = "Cindy Axne"),
-                           robinkellytweets %>%
-                             dplyr::mutate(person = "Robin Kelly"),
-                           janschakowskytweets %>%
-                             dplyr::mutate(person = "Janschakowsky"),
-                           underwoodtweets %>%
-                             dplyr::mutate(person = "Underwood"),
-                           cheritweets %>%
-                             dplyr::mutate(person = "Cheri"),
-                           davidstweets %>%
-                             dplyr::mutate(person = "Davids"),
-                           loritrahantweets %>%
-                             dplyr::mutate(person = "Lori Trahan"),
-                           kclarktweets %>%
-                             dplyr::mutate(person = "K Clark"),
-                           pressleytweets %>%
-                             dplyr::mutate(person = "Pressley"),
-                           haleystevenstweets %>%
-                             dplyr::mutate(person = "Haley Stevens"),
-                           debdingelltweets %>%
-                             dplyr::mutate(person = "Deb Dingell"),
-                           rashidatweets %>%
-                             dplyr::mutate(person = "Rashida Talib"),
-                           lawrencetweets %>%
-                             dplyr::mutate(person = "Lawrence"),
-                           angiecraigtweets %>%
-                             dplyr::mutate(person = "Angie Craig"),
-                           deanphillipstweets %>%
-                             dplyr::mutate(person = "Dean Phillips"),
-                           bettymccollumtweets %>%
-                             dplyr::mutate(person = "Betty McCollum"),
-                           ilhantweets %>%
-                             dplyr::mutate(person = "Ilhan Omar"),
-                           lacyclaytweets %>%
-                             dplyr::mutate(person = "Lacy Clay"),
-                           adamstweets %>%
-                             dplyr::mutate(person = "Adams"),
-                           anniekustertweets %>%
-                             dplyr::mutate(person = "Annie Kuster"),
-                           bonnietweets %>%
-                             dplyr::mutate(person = "Bonnie"),
-                           debhaalandtweets %>%
-                             dplyr::mutate(person = "Deb Haaland"),
-                           torressmalltweets %>%
-                             dplyr::mutate(person = "Torres Small"),
-                           dinatitustweets %>%
-                             dplyr::mutate(person = "Dina Titus"),
-                           susieleetweets %>%
-                             dplyr::mutate(person = "Susie Lee"),
-                           kathleenricetweets %>%
-                             dplyr::mutate(person = "Kathleen Rice"),
-                           nydiavelazqueztweets %>%
-                             dplyr::mutate(person = "Nydia Velazquez"),
-                           yvetteclarketweets %>%
-                             dplyr::mutate(person = "Yvette Clarke"),
-                           maloneytweets %>%
-                             dplyr::mutate(person = "Maloney"),
-                           aoctweets %>%
-                             dplyr::mutate(person = "AOC"),
-                           nitaloweytweets %>%
-                             dplyr::mutate(person = "Nita Lowey"),
-                           beattytweets %>%
-                             dplyr::mutate(person = "Beatty"),
-                           marcykapturtweets %>%
-                             dplyr::mutate(person = "Marcy Kaptur"),
-                           marciafudgetweets %>%
-                             dplyr::mutate(person = "Marcia Fudge"),
-                           kendrahorntweets %>%
-                             dplyr::mutate(person = "Kendra Horn"),
-                           bonamicitweets %>%
-                             dplyr::mutate(person = "Bonamici"),
-                           mgstweets %>%
-                             dplyr::mutate(person = "MGS"),
-                           deantweets %>%
-                             dplyr::mutate(person = "Dean"),
-                           houlahantweets %>%
-                             dplyr::mutate(person = "Houlahan"),
-                           susanwildtweets %>%
-                             dplyr::mutate(person = "Susan Wild"),
-                           fletchertweets %>%
-                             dplyr::mutate(person = "Fletcher"),
-                           escobartweets %>%
-                             dplyr::mutate(person = "Escobar"),
-                           jacksonleetweets %>%
-                             dplyr::mutate(person = "Jackson Lee"),
-                           sylviagarciatweets %>%
-                             dplyr::mutate(person = "Sylvia Garcia"),
-                           elaineluriatweets %>%
-                             dplyr::mutate(person = "Elaine Luria"),
-                           spanbergertweets %>%
-                             dplyr::mutate(person = "Spanberger"),
-                           wextontweets %>%
-                             dplyr::mutate(person = "Wexton"),
-                           delbenetweets %>%
-                             dplyr::mutate(person = "Delbene"),
-                           herrerabeutlertweets %>%
-                             dplyr::mutate(person = "Herrera Beutler"),
-                           jayapaltweets %>%
-                             dplyr::mutate(person = "Jayapal"),
-                           kimschriertweets %>%
-                             dplyr::mutate(person = "Kim Schrier"),
-                           gwenmooretweets %>%
-                             dplyr::mutate(person = "Gwen Moore"))
-
-  save_as_csv(horfdtweets, "data/horfdtweets.csv", prepend_ids = TRUE , na = "", fileEncoding = "UTF-8")
+                                    dplyr::mutate(person = "Terri Swell"),
+                                  kirkpatricktweets %>%
+                                    dplyr::mutate(person = "Kirkpatrick"),
+                                  dorismatsuitweets %>%
+                                    dplyr::mutate(person = "Doris Matsui"),
+                                  beratweets %>%
+                                    dplyr::mutate(person = "Bera"),
+                                  pelositweets %>%
+                                    dplyr::mutate(person = "Nancy Pelosi"),
+                                  barbaraleetweets %>%
+                                    dplyr::mutate(person = "Barbara Lee"),
+                                  speiertweets %>%
+                                    dplyr::mutate(person = "Speier"),
+                                  annaeshootweets %>%
+                                    dplyr::mutate(person = "Anna Eshoo"),
+                                  zoelofgrentweets %>%
+                                    dplyr::mutate(person = "Zoe Lofgren"),
+                                  katiehilltweets %>%
+                                    dplyr::mutate(person = "Katie Hill"),
+                                  brownleytweets %>%
+                                    dplyr::mutate(person = "Brownley"),
+                                  judychutweets %>%
+                                    dplyr::mutate(person = "Judy Chu"),
+                                  gracenapolitanotweets %>%
+                                    dplyr::mutate(person = "Grace Napolitano"),
+                                  normatorrestweets %>%
+                                    dplyr::mutate(person = "Norma Torres"),
+                                  karenbasstweets %>%
+                                    dplyr::mutate(person = "Karen Bass"),
+                                  lindasancheztweets %>%
+                                    dplyr::mutate(person = "Linda Sanchez"),
+                                  roybalallardtweets %>%
+                                    dplyr::mutate(person = "Roybal Allard"),
+                                  maxinewaterstweets %>%
+                                    dplyr::mutate(person = "Maxine Waters"),
+                                  barragantweets %>%
+                                    dplyr::mutate(person = "Barragan"),
+                                  katieportertweets %>%
+                                    dplyr::mutate(person = "Katie Porter"),
+                                  susandavistweets %>%
+                                    dplyr::mutate(person = "Susan Davis"),
+                                  dianadegettetweets %>%
+                                    dplyr::mutate(person = "Diana Delgette"),
+                                  rosadelaurotweets %>%
+                                    dplyr::mutate(person = "Rosa Delauro"),
+                                  jahanahayestweets %>%
+                                    dplyr::mutate(person = "Jahana Hayes"),
+                                  lbrtweets %>%
+                                    dplyr::mutate(person = "LBR"),
+                                  eleanornortontweets %>%
+                                    dplyr::mutate(person = "Eleanor Norton"),
+                                  stephmurphytweets %>%
+                                    dplyr::mutate(person = "Steph Murphy"),
+                                  kcastortweets %>%
+                                    dplyr::mutate(person = "K Castor"),
+                                  hastingstweets %>%
+                                    dplyr::mutate(person = "Hastings"),
+                                  loisfrankeltweets %>%
+                                    dplyr::mutate(person = "Lois Frankel"),
+                                  dwsweetstweets %>%
+                                    dplyr::mutate(person = "DW Stweets"),
+                                  wilsontweets %>%
+                                    dplyr::mutate(person = "Wilson"),
+                                  dmptweets %>%
+                                    dplyr::mutate(person = "DMP"),
+                                  shalalatweets %>%
+                                    dplyr::mutate(person = "Shalala"),
+                                  tulsitweets %>%
+                                    dplyr::mutate(person = "Tulsi"),
+                                  finkenauertweets %>%
+                                    dplyr::mutate(person = "Finkenauer"),
+                                  cindyaxnetweets %>%
+                                    dplyr::mutate(person = "Cindy Axne"),
+                                  robinkellytweets %>%
+                                    dplyr::mutate(person = "Robin Kelly"),
+                                  janschakowskytweets %>%
+                                    dplyr::mutate(person = "Janschakowsky"),
+                                  underwoodtweets %>%
+                                    dplyr::mutate(person = "Underwood"),
+                                  cheritweets %>%
+                                    dplyr::mutate(person = "Cheri"),
+                                  davidstweets %>%
+                                    dplyr::mutate(person = "Davids"),
+                                  loritrahantweets %>%
+                                    dplyr::mutate(person = "Lori Trahan"),
+                                  kclarktweets %>%
+                                    dplyr::mutate(person = "K Clark"),
+                                  pressleytweets %>%
+                                    dplyr::mutate(person = "Pressley"),
+                                  haleystevenstweets %>%
+                                    dplyr::mutate(person = "Haley Stevens"),
+                                  debdingelltweets %>%
+                                    dplyr::mutate(person = "Deb Dingell"),
+                                  rashidatweets %>%
+                                    dplyr::mutate(person = "Rashida Talib"),
+                                  lawrencetweets %>%
+                                    dplyr::mutate(person = "Lawrence"),
+                                  angiecraigtweets %>%
+                                    dplyr::mutate(person = "Angie Craig"),
+                                  deanphillipstweets %>%
+                                    dplyr::mutate(person = "Dean Phillips"),
+                                  bettymccollumtweets %>%
+                                    dplyr::mutate(person = "Betty McCollum"),
+                                  ilhantweets %>%
+                                    dplyr::mutate(person = "Ilhan Omar"),
+                                  lacyclaytweets %>%
+                                    dplyr::mutate(person = "Lacy Clay"),
+                                  adamstweets %>%
+                                    dplyr::mutate(person = "Adams"),
+                                  anniekustertweets %>%
+                                    dplyr::mutate(person = "Annie Kuster"),
+                                  bonnietweets %>%
+                                    dplyr::mutate(person = "Bonnie"),
+                                  debhaalandtweets %>%
+                                    dplyr::mutate(person = "Deb Haaland"),
+                                  torressmalltweets %>%
+                                    dplyr::mutate(person = "Torres Small"),
+                                  dinatitustweets %>%
+                                    dplyr::mutate(person = "Dina Titus"),
+                                  susieleetweets %>%
+                                    dplyr::mutate(person = "Susie Lee"),
+                                  kathleenricetweets %>%
+                                    dplyr::mutate(person = "Kathleen Rice"),
+                                  nydiavelazqueztweets %>%
+                                    dplyr::mutate(person = "Nydia Velazquez"),
+                                  yvetteclarketweets %>%
+                                    dplyr::mutate(person = "Yvette Clarke"),
+                                  maloneytweets %>%
+                                    dplyr::mutate(person = "Maloney"),
+                                  aoctweets %>%
+                                    dplyr::mutate(person = "AOC"),
+                                  nitaloweytweets %>%
+                                    dplyr::mutate(person = "Nita Lowey"),
+                                  beattytweets %>%
+                                    dplyr::mutate(person = "Beatty"),
+                                  marcykapturtweets %>%
+                                    dplyr::mutate(person = "Marcy Kaptur"),
+                                  marciafudgetweets %>%
+                                    dplyr::mutate(person = "Marcia Fudge"),
+                                  kendrahorntweets %>%
+                                    dplyr::mutate(person = "Kendra Horn"),
+                                  bonamicitweets %>%
+                                    dplyr::mutate(person = "Bonamici"),
+                                  mgstweets %>%
+                                    dplyr::mutate(person = "MGS"),
+                                  deantweets %>%
+                                    dplyr::mutate(person = "Dean"),
+                                  houlahantweets %>%
+                                    dplyr::mutate(person = "Houlahan"),
+                                  susanwildtweets %>%
+                                    dplyr::mutate(person = "Susan Wild"),
+                                  fletchertweets %>%
+                                    dplyr::mutate(person = "Fletcher"),
+                                  escobartweets %>%
+                                    dplyr::mutate(person = "Escobar"),
+                                  jacksonleetweets %>%
+                                    dplyr::mutate(person = "Jackson Lee"),
+                                  sylviagarciatweets %>%
+                                    dplyr::mutate(person = "Sylvia Garcia"),
+                                  elaineluriatweets %>%
+                                    dplyr::mutate(person = "Elaine Luria"),
+                                  spanbergertweets %>%
+                                    dplyr::mutate(person = "Spanberger"),
+                                  wextontweets %>%
+                                    dplyr::mutate(person = "Wexton"),
+                                  delbenetweets %>%
+                                    dplyr::mutate(person = "Delbene"),
+                                  herrerabeutlertweets %>%
+                                    dplyr::mutate(person = "Herrera Beutler"),
+                                  jayapaltweets %>%
+                                    dplyr::mutate(person = "Jayapal"),
+                                  kimschriertweets %>%
+                                    dplyr::mutate(person = "Kim Schrier"),
+                                  gwenmooretweets %>%
+                                    dplyr::mutate(person = "Gwen Moore"))
+  
+  horfdDF <- twitteR::twListToDF(horfdtweets)
+  write.csv(horfdDf, "data/horfdtweets.csv")
   horfdtweets <- readr::read_csv("data/horfdtweets.csv")
   if(nrow(horfdtweets)>0) {
     message("Check your Data Folder. Function ran successfully")
@@ -1174,398 +1389,580 @@ horfemD <- function() {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Republican in the House of Representatives
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 hormaleR <- function() {
-  donyoung <- rtweet::get_timeline('@repdonyoung', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  byrne <- rtweet::get_timeline('@RepByrne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikerogers <- rtweet::get_timeline('@RepMikeRogersAL', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  robertaderholt <- rtweet::get_timeline('@Robert_Aderholt', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mobrooks <- rtweet::get_timeline('@RepMoBrooks', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  garypalmer <- rtweet::get_timeline('@USRepGaryPalmer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rickcrawford <- rtweet::get_timeline('@RepRickCrawford', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  frenchhill<- rtweet::get_timeline('@RepFrenchHill', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stevewomack <- rtweet::get_timeline('@rep_stevewomack', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  westerman <- rtweet::get_timeline('@RepWesterman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gosar <- rtweet::get_timeline('@RepGosar', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  andybiggs <- rtweet::get_timeline('@RepAndyBiggsAZ', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  david <- rtweet::get_timeline('@RepDavid', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dlesko <- rtweet::get_timeline('@RepDLesko', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lamalfa<- rtweet::get_timeline('@RepLaMalfa', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mcclintock <- rtweet::get_timeline('@RepMcClintock', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  paulcook <- rtweet::get_timeline('@RepPaulCook', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  devinnunes <- rtweet::get_timeline('@RepDevinNunes', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kevinmccarthy <- rtweet::get_timeline('@GOPLeader', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kencalvert<- rtweet::get_timeline('@KenCalvert', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tipton <- rtweet::get_timeline('@RepTipton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kenbuck <- rtweet::get_timeline('@RepKenBuck', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dlamborn <- rtweet::get_timeline('@RepDLamborn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mattgaetz <- rtweet::get_timeline('@RepMattGaetz', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  nealdunn <- rtweet::get_timeline('@DrNealDunnFL2', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tedyoho <- rtweet::get_timeline('@RepTedYoho', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rutherford <- rtweet::get_timeline('@RepRutherfordFL', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  michaelwaltz <- rtweet::get_timeline('@RepMichaelWaltz', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  billposey <- rtweet::get_timeline('@congbillposey', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  webster <- rtweet::get_timeline('@RepWebster', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gusbilirakis <- rtweet::get_timeline('@RepGusBilirakis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  vernbuchanan<- rtweet::get_timeline('@VernBuchanan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gregsteube <- rtweet::get_timeline('@RepGregSteube', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  brianmast <- rtweet::get_timeline('@RepBrianMast', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rooney <- rtweet::get_timeline('@RepRooney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mariodb <- rtweet::get_timeline('@MarioDB', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  buddycarter <- rtweet::get_timeline('@RepBuddyCarter', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  drewferguson <- rtweet::get_timeline('@RepDrewFerguson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  robwoodall<- rtweet::get_timeline('@RepRobWoodall', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  austinscott <- rtweet::get_timeline('@AustinScottGA08', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dougcollins <- rtweet::get_timeline('@RepDougCollins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hice <- rtweet::get_timeline('@CongressmanHice', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  loudermilk <- rtweet::get_timeline('@RepLoudermilk', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rickallen <- rtweet::get_timeline('@RepRickAllen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tomgraves <- rtweet::get_timeline('@RepTomGraves', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  russfulcher <- rtweet::get_timeline('@RepRussFulcher', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikesimpson <- rtweet::get_timeline('@CongMikeSimpson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bost <- rtweet::get_timeline('@RepBost', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rodneydavis <- rtweet::get_timeline('@RodneyDavis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  shimkus <- rtweet::get_timeline('@RepShimkus', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kinzinger <- rtweet::get_timeline('@RepKinzinger', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lahood <- rtweet::get_timeline('@RepLaHood', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimbanks <- rtweet::get_timeline('@RepJimBanks', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimbaird <- rtweet::get_timeline('@RepJimBaird', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gregpence <- rtweet::get_timeline('@RepGregPence', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  larrybucshon <- rtweet::get_timeline('@RepLarryBucshon', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  trey<- rtweet::get_timeline('@RepTrey', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ronestes <- rtweet::get_timeline('@RepRonEstes', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  guthrie <- rtweet::get_timeline('@RepGuthrie', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  thomasmassie <- rtweet::get_timeline('@RepThomasMassie', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  halrogers<- rtweet::get_timeline('@RepHalRogers', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  andybarr <- rtweet::get_timeline('@RepAndyBarr', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stevescalise <- rtweet::get_timeline('@SteveScalise', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  clayhiggins <- rtweet::get_timeline('@RepClayHiggins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikejohnson <- rtweet::get_timeline('@RepMikeJohnson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  abraham <- rtweet::get_timeline('@RepAbraham', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  garretgraves <- rtweet::get_timeline('@RepGarretGraves', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  andyharris<- rtweet::get_timeline('@RepAndyHarrisMD', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jackbergman <- rtweet::get_timeline('@RepJackBergman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  huizenga <- rtweet::get_timeline('@RepHuizenga', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  justinamash <- rtweet::get_timeline('@justinamash', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  moolenaar<- rtweet::get_timeline('@RepMoolenaar', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  fredupton <- rtweet::get_timeline('@RepFredUpton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  walberg <- rtweet::get_timeline('@RepWalberg', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  slotkin <- rtweet::get_timeline('@RepSlotkin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  paulmitchell <- rtweet::get_timeline('@RepPaulMitchell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hagedorn<- rtweet::get_timeline('@RepHagedorn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tomemmer <- rtweet::get_timeline('@RepTomEmmer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  petestauber <- rtweet::get_timeline('@RepPeteStauber', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  blaine <- rtweet::get_timeline('@RepBlaine', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  samgraves<- rtweet::get_timeline('@RepSamGraves', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  long <- rtweet::get_timeline('@USRepLong', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jasonsmith <- rtweet::get_timeline('@RepJasonSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  trentkelly <- rtweet::get_timeline('@RepTrentKelly', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  michaelguest <- rtweet::get_timeline('@RepMichaelGuest', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  palazzo<- rtweet::get_timeline('@CongPalazzo', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  holding <- rtweet::get_timeline('@RepHolding', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  walterjones <- rtweet::get_timeline('@RepWalterJones', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  markwalker <- rtweet::get_timeline('@RepMarkWalker', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davidrouzer <- rtweet::get_timeline('@RepDavidRouzer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  richhudson <- rtweet::get_timeline('@RepRichHudson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  patrickmchenry <- rtweet::get_timeline('@PatrickMcHenry', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  markmeadows <- rtweet::get_timeline('@RepMarkMeadows', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tedbudd <- rtweet::get_timeline('@RepTedBudd', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jefffortenberry <- rtweet::get_timeline('@JeffFortenberry', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  donbacon<- rtweet::get_timeline('@RepDonBacon', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  adriansmith <- rtweet::get_timeline('@RepAdrianSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jvd <- rtweet::get_timeline('@CongressmanJVD', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chrissmith <- rtweet::get_timeline('@RepChrisSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  markamodei <- rtweet::get_timeline('@MarkAmodeiNV2', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  leezeldin <- rtweet::get_timeline('@RepLeeZeldin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  peterking <- rtweet::get_timeline('@RepPeteKing', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tomreed <- rtweet::get_timeline('@RepTomReed', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johnkatko <- rtweet::get_timeline('@RepJohnKatko', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chriscollins <- rtweet::get_timeline('@RepChrisCollins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stevechabot <- rtweet::get_timeline('@RepSteveChabot', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bradwenstrup<- rtweet::get_timeline('@RepBradWenstrup', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimjordan<- rtweet::get_timeline('@Jim_Jordan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  boblatta <- rtweet::get_timeline('@boblatta', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  billjohnson <- rtweet::get_timeline('@RepBillJohnson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bobgibbs <- rtweet::get_timeline('@RepBobGibbs', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  warrendavidson <- rtweet::get_timeline('@WarrenDavidson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  miketurner <- rtweet::get_timeline('@RepMikeTurner', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  balderson <- rtweet::get_timeline('@RepBalderson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davejoyce <- rtweet::get_timeline('@RepDaveJoyce', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stevestivers <- rtweet::get_timeline('@RepSteveStivers', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  agonzalez<- rtweet::get_timeline('@RepAGonzalez', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kevinhern <- rtweet::get_timeline('@repkevinhern', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mullin <- rtweet::get_timeline('@RepMullin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  franklucas <- rtweet::get_timeline('@RepFrankLucas', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tomcole <- rtweet::get_timeline('@TomColeOK04', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  brianfitz <- rtweet::get_timeline('@RepBrianFitz', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  meuser <- rtweet::get_timeline('@RepMeuser', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  scottperry <- rtweet::get_timeline('@RepScottPerry', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  smucker <- rtweet::get_timeline('@RepSmucker', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johnjoyce <- rtweet::get_timeline('@RepJohnJoyce', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  greschenthaler <- rtweet::get_timeline('@GReschenthaler', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gt <- rtweet::get_timeline('@CongressmanGT', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikekelly <- rtweet::get_timeline('@MikeKellyPA', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joewilson <- rtweet::get_timeline('@RepJoeWilson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jeffduncan <- rtweet::get_timeline('@RepJeffDuncan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  timmons <- rtweet::get_timeline('@reptimmons', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ralphnorman <- rtweet::get_timeline('@RepRalphNorman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tomrice <- rtweet::get_timeline('@RepTomRice', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dustyjohnson <- rtweet::get_timeline('@RepDustyJohnson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  philroe <- rtweet::get_timeline('@DrPhilRoe', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  timburchett <- rtweet::get_timeline('@RepTimBurchett', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chuck <- rtweet::get_timeline('@RepChuck', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  desjarlais <- rtweet::get_timeline('@DesJarlaisTN04l', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johnrose <- rtweet::get_timeline('@RepJohnRose', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  markgreen <- rtweet::get_timeline('@RepMarkGreen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davidkustoff <- rtweet::get_timeline('@RepDavidKustoff', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  louiegohmert <- rtweet::get_timeline('@replouiegohmert', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dancrenshaw<- rtweet::get_timeline('@RepDanCrenshaw', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  vantaylor <- rtweet::get_timeline('@RepVanTaylor', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ratcliffe <- rtweet::get_timeline('@RepRatcliffe', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lancegooden <- rtweet::get_timeline('@RepLanceGooden', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ronwright <- rtweet::get_timeline('@RepRonWright', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kevinbrady <- rtweet::get_timeline('@RepKevinBrady', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mccaul <- rtweet::get_timeline('@RepMcCaul', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  conaway <- rtweet::get_timeline('@ConawayTX11', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kaygranger <- rtweet::get_timeline('@RepKayGranger', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mac <- rtweet::get_timeline('@MacTXPress', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  randy <- rtweet::get_timeline('@TXRandy14', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  billflores <- rtweet::get_timeline('@RepBillFlores', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  arrington <- rtweet::get_timeline('@RepArrington', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chiproy <- rtweet::get_timeline('@RepChipRoy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  peteolson <- rtweet::get_timeline('@RepPeteOlson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hurd <- rtweet::get_timeline('@HurdOnTheHill', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  kenmarchant <- rtweet::get_timeline('@RepKenMarchant', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rwilliams <- rtweet::get_timeline('@RepRWilliams', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  michaelburgess <- rtweet::get_timeline('@michaelcburgess', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cloud<- rtweet::get_timeline('@RepCloudTX', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  carter <- rtweet::get_timeline('@JudgeCarter', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  brianbabin <- rtweet::get_timeline('@RepBrianBabin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  robbishop <- rtweet::get_timeline('@RepRobBishop', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chrisstewart <- rtweet::get_timeline('@RepChrisStewart', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johncurtis <- rtweet::get_timeline('@RepJohnCurtis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  robwittman <- rtweet::get_timeline('@RobWittman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  riggleman <- rtweet::get_timeline('@RepRiggleman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bencline <- rtweet::get_timeline('@RepBenCline', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mgriffith <- rtweet::get_timeline('@RepMGriffith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  newhouse <- rtweet::get_timeline('@RepNewhouse', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bryansteil <- rtweet::get_timeline('@RepBryanSteil', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jim <- rtweet::get_timeline('@JimPressOffice', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  grothman <- rtweet::get_timeline('@RepGrothman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  seanduffy <- rtweet::get_timeline('@RepSeanDuffy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gallagher <- rtweet::get_timeline('@RepGallagher', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mckinley <- rtweet::get_timeline('@RepMcKinley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  alexmooney <- rtweet::get_timeline('@RepAlexMooney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  save_as_csv(donyoung,"data/donyoung.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(byrne,"data/byrne.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mikerogers,"data/mikerogers.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(robertaderholt,"data/robertaderholt.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mobrooks,"data/mobrooks.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(garypalmer,"data/garypalmer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rickcrawford,"data/rickcrawford.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(frenchhill,"data/frenchhill.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(stevewomack,"data/stevewomack.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(westerman,"data/westerman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gosar,"data/gosar.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(andybiggs,"data/andybiggs.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(david,"data/david.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dlesko,"data/dlesko.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lamalfa,"data/lamalfa.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mcclintock,"data/mcclintock.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(paulcook,"data/paulcook.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(devinnunes,"data/devinnunes.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kevinmccarthy,"data/kevinmccarthy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kencalvert,"data/kencalvert.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tipton,"data/tipton.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kenbuck,"data/kenbuck.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dlamborn,"data/dlamborn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mattgaetz,"data/mattgaetz.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(nealdunn,"data/nealdunn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tedyoho,"data/tedyoho.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rutherford,"data/rutherford.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(michaelwaltz,"data/michaelwaltz.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(billposey,"data/billposey.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(webster,"data/webster.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gusbilirakis,"data/gusbilirakis.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(vernbuchanan,"data/vernbuchanan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gregsteube,"data/gregsteube.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(brianmast,"data/brianmast.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rooney,"data/rooney.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mariodb,"data/mariodb.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(buddycarter,"data/buddycarter.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(drewferguson,"data/drewferguson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(robwoodall,"data/robwoodall.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(austinscott,"data/austinscott.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dougcollins,"data/dougcollins.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(hice,"data/hice.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(loudermilk,"data/loudermilk.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rickallen,"data/rickallen.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tomgraves,"data/tomgraves.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(russfulcher,"data/russfulcher.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mikesimpson,"data/mikesimpson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bost,"data/bost.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rodneydavis,"data/rodneydavis.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(shimkus,"data/shimkus.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kinzinger,"data/kinzinger.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lahood,"data/lahood.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jimbanks,"data/jimbanks.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jimbaird,"data/jimbaird.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gregpence,"data/gregpence.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(larrybucshon,"data/larrybucshon.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(trey,"data/trey.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(ronestes,"data/ronestes.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(guthrie,"data/guthrie.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(thomasmassie,"data/thomasmassie.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(halrogers,"data/halrogers.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(andybarr,"data/andybarr.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(stevescalise,"data/stevescalise.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(clayhiggins,"data/clayhiggins.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mikejohnson,"data/mikejohnson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(abraham,"data/abraham.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(garretgraves,"data/garretgraves.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(andyharris,"data/andyharris.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jackbergman,"data/jackbergman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(huizenga,"data/huizenga.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(justinamash,"data/justinamash.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(moolenaar,"data/moolenaar.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(fredupton,"data/fredupton.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(walberg,"data/walberg.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(slotkin,"data/slotkin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(paulmitchell,"data/paulmitchell.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(hagedorn,"data/hagedorn.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tomemmer,"data/tomemmer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(petestauber,"data/petestauber.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(blaine,"data/blaine.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(samgraves,"data/samgraves.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(long,"data/long.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jasonsmith,"data/jasonsmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(trentkelly,"data/trentkelly.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(michaelguest,"data/michaelguest.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(palazzo,"data/palazzo.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(holding,"data/holding.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(walterjones,"data/walterjones.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(markwalker,"data/markwalker.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(davidrouzer,"data/davidrouzer.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(richhudson,"data/richhudson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(patrickmchenry,"data/patrickmchenry.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(markmeadows,"data/markmeadows.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tedbudd,"data/tedbudd.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jefffortenberry,"data/jefffortenberry.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(donbacon,"data/donbacon.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(adriansmith,"data/adriansmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jvd,"data/jvd.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(chrissmith,"data/chrissmith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(markamodei,"data/markamodei.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(leezeldin,"data/leezeldin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(peterking,"data/peterking.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tomreed,"data/tomreed.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(johnkatko,"data/johnkatko.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(chriscollins,"data/chriscollins.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(stevechabot,"data/stevechabot.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bradwenstrup,"data/bradwenstrup.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jimjordan,"data/jimjordan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(boblatta,"data/boblatta.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(billjohnson,"data/billjohnson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bobgibbs,"data/bobgibbs.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(warrendavidson,"data/warrendavidson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(miketurner,"data/miketurner.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(balderson,"data/balderson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(davejoyce,"data/davejoyce.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(stevestivers,"data/stevestivers.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(agonzalez,"data/agonzalez.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kevinhern,"data/kevinhern.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mullin,"data/mullin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(franklucas,"data/franklucas.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tomcole,"data/tomcole.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(brianfitz,"data/brianfitz.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(meuser,"data/meuser.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(scottperry,"data/scottperry.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(smucker,"data/smucker.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(johnjoyce,"data/johnjoyce.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(greschenthaler,"data/greschenthaler.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gt,"data/gt.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mikekelly,"data/mikekelly.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(joewilson,"data/joewilson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jeffduncan,"data/jeffduncan.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(timmons,"data/timmons.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(ralphnorman,"data/ralphnorman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(tomrice,"data/tomrice.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dustyjohnson,"data/dustyjohnson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(philroe,"data/philroe.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(timburchett,"data/timburchett.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(chuck,"data/chuck.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(desjarlais,"data/desjarlais.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(johnrose,"data/johnrose.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(markgreen,"data/markgreen.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(davidkustoff,"data/davidkustoff.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(louiegohmert,"data/louiegohmert.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(dancrenshaw,"data/dancrenshaw.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(vantaylor,"data/vantaylor.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(ratcliffe,"data/ratcliffe.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(lancegooden,"data/lancegooden.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(ronwright,"data/ronwright.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kevinbrady,"data/kevinbrady.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mccaul,"data/mccaul.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(conaway,"data/conaway.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kaygranger,"data/kaygranger.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mac,"data/mac.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(randy,"data/randy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(billflores,"data/billflores.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(arrington,"data/arrington.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(chiproy,"data/chiproy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(peteolson,"data/peteolson.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(hurd,"data/hurd.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(kenmarchant,"data/kenmarchant.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(rwilliams,"data/rwilliams.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(michaelburgess,"data/michaelburgess.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(cloud,"data/cloud.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(carter,"data/carter.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(brianbabin,"data/brianbabin.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(robbishop,"data/robbishop.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(chrisstewart,"data/chrisstewart.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(johncurtis,"data/johncurtis.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(robwittman,"data/robwittman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(riggleman,"data/riggleman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bencline,"data/bencline.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mgriffith,"data/mgriffith.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(newhouse,"data/newhouse.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(bryansteil,"data/bryansteil.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(jim,"data/jim.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(grothman,"data/grothman.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(seanduffy,"data/seanduffy.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(gallagher,"data/gallagher.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(mckinley,"data/mckinley.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-  save_as_csv(alexmooney,"data/alexmooney.csv", prepend_ids =  TRUE, na = "", fileEncoding = "UTF-8")
-
-
-
+  donyoung <- twitteR::userTimeline('@repdonyoung', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  byrne <- twitteR::userTimeline('@RepByrne', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikerogers <- twitteR::userTimeline('@RepMikeRogersAL', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  robertaderholt <- twitteR::userTimeline('@Robert_Aderholt', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mobrooks <- twitteR::userTimeline('@RepMoBrooks', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  garypalmer <- twitteR::userTimeline('@USRepGaryPalmer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rickcrawford <- twitteR::userTimeline('@RepRickCrawford', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  frenchhill<- twitteR::userTimeline('@RepFrenchHill', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stevewomack <- twitteR::userTimeline('@rep_stevewomack', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  westerman <- twitteR::userTimeline('@RepWesterman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gosar <- twitteR::userTimeline('@RepGosar', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  andybiggs <- twitteR::userTimeline('@RepAndyBiggsAZ', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  david <- twitteR::userTimeline('@RepDavid', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dlesko <- twitteR::userTimeline('@RepDLesko', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lamalfa<- twitteR::userTimeline('@RepLaMalfa', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mcclintock <- twitteR::userTimeline('@RepMcClintock', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  paulcook <- twitteR::userTimeline('@RepPaulCook', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  devinnunes <- twitteR::userTimeline('@RepDevinNunes', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kevinmccarthy <- twitteR::userTimeline('@GOPLeader', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kencalvert<- twitteR::userTimeline('@KenCalvert', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tipton <- twitteR::userTimeline('@RepTipton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kenbuck <- twitteR::userTimeline('@RepKenBuck', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dlamborn <- twitteR::userTimeline('@RepDLamborn', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mattgaetz <- twitteR::userTimeline('@RepMattGaetz', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  nealdunn <- twitteR::userTimeline('@DrNealDunnFL2', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tedyoho <- twitteR::userTimeline('@RepTedYoho', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rutherford <- twitteR::userTimeline('@RepRutherfordFL', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  michaelwaltz <- twitteR::userTimeline('@RepMichaelWaltz', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  billposey <- twitteR::userTimeline('@congbillposey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  webster <- twitteR::userTimeline('@RepWebster', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gusbilirakis <- twitteR::userTimeline('@RepGusBilirakis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  vernbuchanan<- twitteR::userTimeline('@VernBuchanan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gregsteube <- twitteR::userTimeline('@RepGregSteube', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brianmast <- twitteR::userTimeline('@RepBrianMast', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rooney <- twitteR::userTimeline('@RepRooney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mariodb <- twitteR::userTimeline('@MarioDB', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  buddycarter <- twitteR::userTimeline('@RepBuddyCarter', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  drewferguson <- twitteR::userTimeline('@RepDrewFerguson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  robwoodall<- twitteR::userTimeline('@RepRobWoodall', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  austinscott <- twitteR::userTimeline('@AustinScottGA08', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dougcollins <- twitteR::userTimeline('@RepDougCollins', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hice <- twitteR::userTimeline('@CongressmanHice', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  loudermilk <- twitteR::userTimeline('@RepLoudermilk', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rickallen <- twitteR::userTimeline('@RepRickAllen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomgraves <- twitteR::userTimeline('@RepTomGraves', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  russfulcher <- twitteR::userTimeline('@RepRussFulcher', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikesimpson <- twitteR::userTimeline('@CongMikeSimpson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bost <- twitteR::userTimeline('@RepBost', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rodneydavis <- twitteR::userTimeline('@RodneyDavis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  shimkus <- twitteR::userTimeline('@RepShimkus', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kinzinger <- twitteR::userTimeline('@RepKinzinger', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lahood <- twitteR::userTimeline('@RepLaHood', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimbanks <- twitteR::userTimeline('@RepJimBanks', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimbaird <- twitteR::userTimeline('@RepJimBaird', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gregpence <- twitteR::userTimeline('@RepGregPence', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  larrybucshon <- twitteR::userTimeline('@RepLarryBucshon', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  trey<- twitteR::userTimeline('@RepTrey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ronestes <- twitteR::userTimeline('@RepRonEstes', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  guthrie <- twitteR::userTimeline('@RepGuthrie', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  thomasmassie <- twitteR::userTimeline('@RepThomasMassie', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  halrogers<- twitteR::userTimeline('@RepHalRogers', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  andybarr <- twitteR::userTimeline('@RepAndyBarr', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stevescalise <- twitteR::userTimeline('@SteveScalise', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  clayhiggins <- twitteR::userTimeline('@RepClayHiggins', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikejohnson <- twitteR::userTimeline('@RepMikeJohnson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  abraham <- twitteR::userTimeline('@RepAbraham', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  garretgraves <- twitteR::userTimeline('@RepGarretGraves', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  andyharris<- twitteR::userTimeline('@RepAndyHarrisMD', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jackbergman <- twitteR::userTimeline('@RepJackBergman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  huizenga <- twitteR::userTimeline('@RepHuizenga', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  justinamash <- twitteR::userTimeline('@justinamash', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  moolenaar<- twitteR::userTimeline('@RepMoolenaar', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  fredupton <- twitteR::userTimeline('@RepFredUpton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  walberg <- twitteR::userTimeline('@RepWalberg', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  slotkin <- twitteR::userTimeline('@RepSlotkin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  paulmitchell <- twitteR::userTimeline('@RepPaulMitchell', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hagedorn<- twitteR::userTimeline('@RepHagedorn', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomemmer <- twitteR::userTimeline('@RepTomEmmer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  petestauber <- twitteR::userTimeline('@RepPeteStauber', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  blaine <- twitteR::userTimeline('@RepBlaine', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  samgraves<- twitteR::userTimeline('@RepSamGraves', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  long <- twitteR::userTimeline('@USRepLong', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jasonsmith <- twitteR::userTimeline('@RepJasonSmith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  trentkelly <- twitteR::userTimeline('@RepTrentKelly', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  michaelguest <- twitteR::userTimeline('@RepMichaelGuest', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  palazzo<- twitteR::userTimeline('@CongPalazzo', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  holding <- twitteR::userTimeline('@RepHolding', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  walterjones <- twitteR::userTimeline('@RepWalterJones', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  markwalker <- twitteR::userTimeline('@RepMarkWalker', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidrouzer <- twitteR::userTimeline('@RepDavidRouzer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  richhudson <- twitteR::userTimeline('@RepRichHudson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  patrickmchenry <- twitteR::userTimeline('@PatrickMcHenry', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  markmeadows <- twitteR::userTimeline('@RepMarkMeadows', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tedbudd <- twitteR::userTimeline('@RepTedBudd', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jefffortenberry <- twitteR::userTimeline('@JeffFortenberry', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  donbacon<- twitteR::userTimeline('@RepDonBacon', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  adriansmith <- twitteR::userTimeline('@RepAdrianSmith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jvd <- twitteR::userTimeline('@CongressmanJVD', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chrissmith <- twitteR::userTimeline('@RepChrisSmith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  markamodei <- twitteR::userTimeline('@MarkAmodeiNV2', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  leezeldin <- twitteR::userTimeline('@RepLeeZeldin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  peterking <- twitteR::userTimeline('@RepPeteKing', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomreed <- twitteR::userTimeline('@RepTomReed', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnkatko <- twitteR::userTimeline('@RepJohnKatko', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chriscollins <- twitteR::userTimeline('@RepChrisCollins', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stevechabot <- twitteR::userTimeline('@RepSteveChabot', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bradwenstrup<- twitteR::userTimeline('@RepBradWenstrup', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimjordan<- twitteR::userTimeline('@Jim_Jordan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  boblatta <- twitteR::userTimeline('@boblatta', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  billjohnson <- twitteR::userTimeline('@RepBillJohnson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bobgibbs <- twitteR::userTimeline('@RepBobGibbs', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  warrendavidson <- twitteR::userTimeline('@WarrenDavidson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  miketurner <- twitteR::userTimeline('@RepMikeTurner', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  balderson <- twitteR::userTimeline('@RepBalderson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davejoyce <- twitteR::userTimeline('@RepDaveJoyce', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stevestivers <- twitteR::userTimeline('@RepSteveStivers', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  agonzalez<- twitteR::userTimeline('@RepAGonzalez', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kevinhern <- twitteR::userTimeline('@repkevinhern', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mullin <- twitteR::userTimeline('@RepMullin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  franklucas <- twitteR::userTimeline('@RepFrankLucas', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomcole <- twitteR::userTimeline('@TomColeOK04', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brianfitz <- twitteR::userTimeline('@RepBrianFitz', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  meuser <- twitteR::userTimeline('@RepMeuser', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  scottperry <- twitteR::userTimeline('@RepScottPerry', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  smucker <- twitteR::userTimeline('@RepSmucker', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnjoyce <- twitteR::userTimeline('@RepJohnJoyce', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  greschenthaler <- twitteR::userTimeline('@GReschenthaler', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gt <- twitteR::userTimeline('@CongressmanGT', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikekelly <- twitteR::userTimeline('@MikeKellyPA', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joewilson <- twitteR::userTimeline('@RepJoeWilson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jeffduncan <- twitteR::userTimeline('@RepJeffDuncan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  timmons <- twitteR::userTimeline('@reptimmons', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ralphnorman <- twitteR::userTimeline('@RepRalphNorman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomrice <- twitteR::userTimeline('@RepTomRice', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dustyjohnson <- twitteR::userTimeline('@RepDustyJohnson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  philroe <- twitteR::userTimeline('@DrPhilRoe', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  timburchett <- twitteR::userTimeline('@RepTimBurchett', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chuck <- twitteR::userTimeline('@RepChuck', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  desjarlais <- twitteR::userTimeline('@DesJarlaisTN04l', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnrose <- twitteR::userTimeline('@RepJohnRose', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  markgreen <- twitteR::userTimeline('@RepMarkGreen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidkustoff <- twitteR::userTimeline('@RepDavidKustoff', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  louiegohmert <- twitteR::userTimeline('@replouiegohmert', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dancrenshaw<- twitteR::userTimeline('@RepDanCrenshaw', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  vantaylor <- twitteR::userTimeline('@RepVanTaylor', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ratcliffe <- twitteR::userTimeline('@RepRatcliffe', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lancegooden <- twitteR::userTimeline('@RepLanceGooden', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ronwright <- twitteR::userTimeline('@RepRonWright', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kevinbrady <- twitteR::userTimeline('@RepKevinBrady', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mccaul <- twitteR::userTimeline('@RepMcCaul', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  conaway <- twitteR::userTimeline('@ConawayTX11', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kaygranger <- twitteR::userTimeline('@RepKayGranger', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mac <- twitteR::userTimeline('@MacTXPress', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  randy <- twitteR::userTimeline('@TXRandy14', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  billflores <- twitteR::userTimeline('@RepBillFlores', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  arrington <- twitteR::userTimeline('@RepArrington', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chiproy <- twitteR::userTimeline('@RepChipRoy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  peteolson <- twitteR::userTimeline('@RepPeteOlson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hurd <- twitteR::userTimeline('@HurdOnTheHill', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  kenmarchant <- twitteR::userTimeline('@RepKenMarchant', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rwilliams <- twitteR::userTimeline('@RepRWilliams', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  michaelburgess <- twitteR::userTimeline('@michaelcburgess', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cloud<- twitteR::userTimeline('@RepCloudTX', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  carter <- twitteR::userTimeline('@JudgeCarter', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brianbabin <- twitteR::userTimeline('@RepBrianBabin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  robbishop <- twitteR::userTimeline('@RepRobBishop', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chrisstewart <- twitteR::userTimeline('@RepChrisStewart', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johncurtis <- twitteR::userTimeline('@RepJohnCurtis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  robwittman <- twitteR::userTimeline('@RobWittman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  riggleman <- twitteR::userTimeline('@RepRiggleman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bencline <- twitteR::userTimeline('@RepBenCline', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mgriffith <- twitteR::userTimeline('@RepMGriffith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  newhouse <- twitteR::userTimeline('@RepNewhouse', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bryansteil <- twitteR::userTimeline('@RepBryanSteil', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jim <- twitteR::userTimeline('@JimPressOffice', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  grothman <- twitteR::userTimeline('@RepGrothman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  seanduffy <- twitteR::userTimeline('@RepSeanDuffy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gallagher <- twitteR::userTimeline('@RepGallagher', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mckinley <- twitteR::userTimeline('@RepMcKinley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  alexmooney <- twitteR::userTimeline('@RepAlexMooney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  donyoungDF <- twitteR::twListToDF(donyoung)
+  write.csv(donyoungDF,"data/donyoung.csv")
+  byrneDF <- twitteR::twListToDF(byrne)
+  write.csv(byrneDF,"data/byrne.csv")
+  mikerogersDF <- twitteR::twListToDF(mikerogers)
+  write.csv(mikerogersDF,"data/mikerogers.csv")
+  robertaderholtDF <- twitteR::twListToDF(robertaderholt)
+  write.csv(robertaderholtDF,"data/robertaderholt.csv")
+  mobrooksDF <- twitteR::twListToDF(mobrooks)
+  write.csv(mobrooksDF,"data/mobrooks.csv")
+  garypalmerDF <- twitteR::twListToDF(garypalmer)
+  write.csv(garypalmerDF,"data/garypalmer.csv")
+  rickcrawfordDF <- twitteR::twListToDF(rickcrawford)
+  write.csv(rickcrawfordDF,"data/rickcrawford.csv")
+  frenchillDF <- twitteR::twListToDF(frenchhill)
+  write.csv(frenchillDF,"data/frenchhill.csv")
+  stevewomackDF <- twitteR::twListToDF(stevewomack)
+  write.csv(stevewomackDF,"data/stevewomack.csv")
+  westermanDF <- twitteR::twListToDF(westerman)
+  write.csv(westermanDF,"data/westerman.csv")
+  gosarDF <- twitteR::twListToDF(gosar)
+  write.csv(gosarDF,"data/gosar.csv")
+  andybiggsDF <- twitteR::twListToDF(andybiggs)
+  write.csv(andybiggsDF,"data/andybiggs.csv")
+  davidDF <- twitteR::twListToDF(david)
+  write.csv(davidDF,"data/david.csv")
+  deleskoDF <- twitteR::twListToDF(dlesko)
+  write.csv(deleskoDF,"data/dlesko.csv")
+  lamalfaDF <- twitteR::twListToDF(lamalfa)
+  write.csv(lamalfaDF,"data/lamalfa.csv")
+  mcclintockDF <- twitteR::twListToDF(mcclintock)
+  write.csv(mcclintockDF,"data/mcclintock.csv")
+  paulcookDF <- twitteR::twListToDF(paulcook)
+  write.csv(paulcookDF,"data/paulcook.csv")
+  devinnunesDF <- twitteR::twListToDF(devinnunes)
+  write.csv(devinnunesDF,"data/devinnunes.csv")
+  kevinmccarthyDF <- twitteR::twListToDF(kevinmccarthy)
+  write.csv(kevinmccarthyDF,"data/kevinmccarthy.csv")
+  kencalvertDF <- twitteR::twListToDF(kencalvert)
+  write.csv(kencalvertDF,"data/kencalvert.csv")
+  tiptonDF <- twitteR::twListToDF(tipton)
+  write.csv(tiptonDF,"data/tipton.csv")
+  kenbuckDF <- twitteR::twListToDF(kenbuck)
+  write.csv(kenbuckDF,"data/kenbuck.csv")
+  dlambornDF <- twitteR::twListToDF(dlamborn)
+  write.csv(dlambornDF,"data/dlamborn.csv")
+  mattgaetzDF <- twitteR::twListToDF(mattgaetz)
+  write.csv(mattgaetzDF,"data/mattgaetz.csv")
+  nealdunnDF <- twitteR::twListToDF(nealdunn)
+  write.csv(nealdunnDF,"data/nealdunn.csv")
+  tedyohoDF <- twitteR::twListToDF(tedyoho)
+  write.csv(tedyohoDF,"data/tedyoho.csv")
+  rutherfordDF <- twitteR::twListToDF(rutherford)
+  write.csv(rutherfordDF,"data/rutherford.csv")
+  michaelwaltzDF <- twitteR::twListToDF(michaelwaltz)
+  write.csv(michaelwaltzDF,"data/michaelwaltz.csv")
+  billposeyDF <- twitteR::twListToDF(billposey)
+  write.csv(billposeyDF,"data/billposey.csv")
+  websterDF <- twitteR::twListToDF(webster)
+  write.csv(websterDF,"data/webster.csv")
+  gusbilirakisDF <- twitteR::twListToDF(gusbilirakis)
+  write.csv(gusbilirakisDF,"data/gusbilirakis.csv")
+  vernbuchananDF <- twitteR::twListToDF(vernbuchanan)
+  write.csv(vernbuchananDF,"data/vernbuchanan.csv")
+  gregsteubeDF <- twitteR::twListToDF(gregsteube)
+  write.csv(gregsteubeDF,"data/gregsteube.csv")
+  brianmastDF <- twitteR::twListToDF(brianmast)
+  write.csv(brianmastDF,"data/brianmast.csv")
+  rooneyDF <- twitteR::twListToDF(rooney)
+  write.csv(rooneyDF,"data/rooney.csv")
+  mariodbDF <- twitteR::twListToDF(mariodb)
+  write.csv(mariodbDF,"data/mariodb.csv")
+  buddycarterDF <- twitteR::twListToDF(buddycarter)
+  write.csv(buddycarterDF,"data/buddycarter.csv")
+  drewfergusonDF <- twitteR::twListToDF(drewferguson)
+  write.csv(drewfergusonDF,"data/drewferguson.csv")
+  robwoodallDF <- twitteR::twListToDF(robwoodall)
+  write.csv(robwoodallDF,"data/robwoodall.csv")
+  austinscottDF <- twitteR::twListToDF(austinscott)
+  write.csv(austinscottDF,"data/austinscott.csv")
+  dougcollinsDF <- twitteR::twListToDF(dougcollins)
+  write.csv(dougcollinsDF,"data/dougcollins.csv")
+  hiceDF <- twitteR::twListToDF(hice)
+  write.csv(hiceDF,"data/hice.csv")
+  loudermilkDF <- twitteR::twListToDF(loudermilk)
+  write.csv(loudermilkDF,"data/loudermilk.csv")
+  rickallenDF <- twitteR::twListToDF(rickallen)
+  read.csv(rickallenDF,"data/rickallen.csv")
+  tomgravesDF <- twitteR::twListToDF(tomgraves)
+  write.csv(tomgravesDF,"data/tomgraves.csv")
+  russfulcherDF <- twitteR::twListToDF(russfulcher)
+  write.csv(russfulcherDF,"data/russfulcher.csv")
+  mikesimpsonDF <- twitteR::twListToDF(mikesimpson)
+  write.csv(mikesimpsonDF,"data/mikesimpson.csv")
+  bostDF <- twitteR::twListToDF(bost)
+  write.csv(bostDF,"data/bost.csv")
+  rodneydavisDF <- twitteR::twListToDF(rodneydavis)
+  write.csv(rodneydavisDF,"data/rodneydavis.csv")
+  shimkusDF <- twitteR::twListToDF(shimkus)
+  write.csv(shimkusDF,"data/shimkus.csv")
+  kinzingerDF <- twitteR::twListToDF(kinzinger)
+  write.csv(kinzingerDF, "data/kinzinger.csv")
+  lahoodDF <- twitteR::twListToDF(lahood)
+  write.csv(lahoodDF,"data/lahood.csv")
+  jimbanksDF <- twitteR::twListToDF(jimbanks)
+  write.csv(jimbanksDF,"data/jimbanks.csv")
+  jimbairdDF <- twitteR::twListToDF(jimbaird)
+  write.csv(jimbairdDF,"data/jimbaird.csv")
+  gregpenceDF <- twitteR::twListToDF(gregpence)
+  write.csv(gregpenceDF,"data/gregpence.csv")
+  larrybucshononDF <- twitteR::twListToDF(larrybucshon)
+  write.csv(larrybucshonDF,"data/larrybucshon.csv")
+  treyDF <- twitteR::twListToDF(trey)
+  write.csv(treyDF,"data/trey.csv")
+  ronestesDF <- twitteR::twListToDF(ronestes)
+  write.csv(ronestesDF,"data/ronestes.csv")
+  guthrieDF <- twitteR::twListToDF(guthrie)
+  write.csv(guthrieDF,"data/guthrie.csv")
+  thomasmassieDF <- twitteR::twListToDF(thomasmassie)
+  write.csv(thomasmassieDF,"data/thomasmassie.csv")
+  halrogersDF <- twitteR::twListToDF(halrogers)
+  write.csv(halrogersDF,"data/halrogers.csv")
+  andybarrDF <- twitteR::twListToDF(andybarr)
+  write.csv(andybarrDF,"data/andybarr.csv")
+  stevescaliseDF <- twitteR::twListToDF(stevescalise)
+  write.csv(stevescaliseDF,"data/stevescalise.csv")
+  clayhigginsDF <- twitteR::twListToDF(clayhiggins)
+  write.csv(clayhigginsDF,"data/clayhiggins.csv")
+  mikejohnsonDF <- twitteR::twListToDF(mikejohnson)
+  write.csv(mikejohnsonDF,"data/mikejohnson.csv")
+  abrahamDF <- twitteR::twListToDF(abraham)
+  write.csv(abrahamDF,"data/abraham.csv")
+  garretgravesDF <- twitteR::twListToDF(garretgraves)
+  write.csv(garretgravesDF,"data/garretgraves.csv")
+  andyharrisDF <- twitteR::twListToDF(andyharris)
+  write.csv(andyharrisDF,"data/andyharris.csv")
+  jackbergmanDF <- twitteR::twListToDF(jackbergman)
+  write.csv(jackbergmanDF,"data/jackbergman.csv")
+  huizengaDF <- twitteR::twListToDF(huizenga)
+  write.csv(huizengaDF,"data/huizenga.csv")
+  justinamashDF <- twitteR::twListToDF(justinamash)
+  write.csv(justinamashDF,"data/justinamash.csv")
+  moolenaarDF <- twitteR::twListToDF(moolenaar)
+  write.csv(moolenaarDF,"data/moolenaar.csv")
+  freduptonDF <- twitteR::twListToDF(fredupton)
+  write.csv(freduptonDF,"data/fredupton.csv")
+  walbergDF <- twitteR::twListToDF(walberg)
+  write.csv(walbergDF,"data/walberg.csv")
+  slotkinDF <- twitteR::twListToDF(slotkin)
+  write.csv(slotkinDF,"data/slotkin.csv")
+  paulmitchellDF <- twitteR::twListToDF(paulmitchell)
+  write.csv(paulmitchellDF,"data/paulmitchell.csv")
+  hagedornDF <- twitteR::twListToDF(hagedorn)
+  write.csv(hagedornDF,"data/hagedorn.csv")
+  tomemmerDF <- twitteR::twListToDF(tomemmer)
+  write.csv(tomemmerDF,"data/tomemmer.csv")
+  petestauberDF <- twitteR::twListToDF(petestauber)
+  write.csv(petestauberDF,"data/petestauber.csv")
+  blaineDF <- twitteR::twListToDF(blaine)
+  write.csv(blaineDF,"data/blaine.csv")
+  samgravesDF <- twitteR::twListToDF(samgraves)
+  write.csv(samgravesDF,"data/samgraves.csv")
+  longDF <- twitteR::twListToDF(long)
+  write.csv(longDF,"data/long.csv")
+  jasonsmithDF <- twitteR::twListToDF(jasonsmith)
+  write.csv(jasonsmithDF,"data/jasonsmith.csv")
+  trentkellyDF <- twitteR::twListToDF(trentkelly)
+  write.csv(trentkellyDF,"data/trentkelly.csv")
+  michaelguestDF <- twitteR::twListToDF(michaelguest)
+  write.csv(michaelguestDF,"data/michaelguest.csv")
+  palazzoDF <- twitteR::twListToDF(palazzo)
+  write.csv(palazzoDF,"data/palazzo.csv")
+  holdingDF <- twitteR::twListToDF(holding)
+  write.csv(holdingDF,"data/holding.csv")
+  walterjonesDF <- twitteR::twListToDF(walterjones)
+  write.csv(walterjonesDF,"data/walterjones.csv")
+  markwalkerDF <- twitteR::twListToDF(markwalker)
+  write.csv(markwalkerDF,"data/markwalker.csv")
+  davidrouzerDF <- twitteR::twListToDF(davidrouzer)
+  write.csv(davidrouzer,"data/davidrouzer.csv")
+  richhudsonDF <- twitteR::twListToDF(richhudson)
+  write.csv(richhudsonDF,"data/richhudson.csv")
+  patrickmchenryDF <- twitteR::twListToDF(patrickmchenry)
+  write.csv(patrickmchenryDF,"data/patrickmchenry.csv")
+  markmeadowsDF <- twitteR::twListToDF(markmeadows)
+  write.csv(markmeadowsDF,"data/markmeadows.csv")
+  tedbuddDF <- twitteR::twListToDF(tedbudd)
+  write.csv(tedbuddDF,"data/tedbudd.csv")
+  jefffortenberryDF <- twitteR::twListToDF(jefffortenberry)
+  write.csv(jefffortenberryDF,"data/jefffortenberry.csv")
+  donbaconDF <- twitteR::twListToDF(donbacon)
+  write.csv(donbaconDF,"data/donbacon.csv")
+  adriansmithDF <- twitteR::twListToDF(adriansmith)
+  write.csv(adriansmithDF,"data/adriansmith.csv")
+  jvdDF <- twitteR::twListToDF(jvd)
+  write.csv(jvdDF,"data/jvd.csv")
+  chrissmithDF <- twitteR::twListToDF(chrissmith)
+  write.csv(chrissmithDF,"data/chrissmith.csv")
+  markmodeiDF <- twitteR::twListToDF(markamodei)
+  write.csv(markmodeiDF,"data/markamodei.csv")
+  leezeldinDF <- twitteR::twListToDF(leezeldin)
+  write.csv(leezeldinDF,"data/leezeldin.csv")
+  peterkingDF <- twitteR::twListToDF(peterking)
+  write.csv(peterkingDF,"data/peterking.csv")
+  tomreedDF <- twitteR::twListToDF(tomreed)
+  write.csv(tomreedDF,"data/tomreed.csv")
+  johnkatkoDF <- twitteR::twListToDF(johnkatko)
+  write.csv(johnkatkoDF,"data/johnkatko.csv")
+  chriscollinsDF <- twitteR::twListToDF(chriscollins)
+  write.csv(chriscollinsDF,"data/chriscollins.csv")
+  stevechabotDF <- twitteR::twListToDF(stevechabot)
+  write.csv(stevechabotDF,"data/stevechabot.csv")
+  bradwenstrupDF <- twitteR::twListToDF(bradwenstrup)
+  write.csv(bradwenstrupDF,"data/bradwenstrup.csv")
+  jimjordanDF <- twitteR::twListToDF(jimjordan)
+  write.csv(jimjordanDF,"data/jimjordan.csv")
+  boblattaDF <- twitteR::twListToDF(boblatta)
+  write.csv(boblattaDF,"data/boblatta.csv")
+  billjohnsonDF <- twitteR::twListToDF(billjohnson)
+  write.csv(billjohnsonDF,"data/billjohnson.csv")
+  bobgibbsDF <- twitteR::twListToDF(bobgibbs)
+  write.csv(bobgibbsDF,"data/bobgibbs.csv")
+  warrendavidsonDF <- twitteR::twListToDF(warrendavidson)
+  write.csv(warrendavidsonDF,"data/warrendavidson.csv")
+  miketurnerDF <- twitteR::twListToDF(miketurner)
+  write.csv(miketurnerDF,"data/miketurner.csv")
+  baldersonDF <- twitteR::twListToDF(balderson)
+  write.csv(baldersonDF,"data/balderson.csv")
+  davejoyceDF <- twitteR::twListToDF(davejoyce)
+  write.csv(davejoyceDF,"data/davejoyce.csv")
+  stevestiversDF <- twitteR::twListToDF(stevestivers)
+  write.csv(stevestiversDF,"data/stevestivers.csv")
+  agonzalezDF <- twitteR::twListToDF(agonzalez)
+  write.csv(agonzalezDF,"data/agonzalez.csv")
+  kevinhernDF <- twitteR::twListToDF(kevinhern)
+  write.csv(kevinhernDF,"data/kevinhern.csv")
+  mullinDF <- twitteR::twListToDF(mullin)
+  write.csv(mullinDF,"data/mullin.csv")
+  franklucasDF <- twitteR::twListToDF(franklucas)
+  write.csv(franklucasDF,"data/franklucas.csv")
+  tomcoleDF <- twitteR::twListToDF(tomcole)
+  write.csv(tomcoleDF,"data/tomcole.csv")
+  brianfitzDF <- twitteR::twListToDF(brianfitz)
+  write.csv(brianfitzDF,"data/brianfitz.csv")
+  meuserDF <- twitteR::twListToDF(meuser)
+  write.csv(meuserDF,"data/meuser.csv")
+  scottperryDF <- twitteR::twListToDF(scottperry)
+  write.csv(scottperryDF,"data/scottperry.csv")
+  smuckerDF <- twitteR::twListToDF(smucker)
+  write.csv(smuckerDF,"data/smucker.csv")
+  johnjoyceDF <- twitteR::twListToDF(johnjoyce)
+  write.csv(johnjoyceDF,"data/johnjoyce.csv")
+  greschentalerDF <- twitteR::twListToDF(greschenthaler)
+  write.csv(greschenthalerDF,"data/greschenthaler.csv")
+  gtDF <- twitteR::twListToDF(gt)
+  write.csv(gtDF, "data/gt.csv")
+  mikekellyDF <- twitteR::twListToDF(mikekelly)
+  write.csv(mikekellyDF,"data/mikekelly.csv")
+  joewilsonDF <- twitteR::twListToDF(joewilson)
+  write.csv(joewilsonDF,"data/joewilson.csv")
+  jeffduncanDF <- twitteR::twListToDF(jeffduncan)
+  write.csv(jeffduncanDF,"data/jeffduncan.csv")
+  timmonsDF <- twitteR::twListToDF(timmons)
+  write.csv(timmonsDF,"data/timmons.csv")
+  ralphnormanDF <- twitteR::twListToDF(ralphnorman)
+  write.csv(ralphnormanDF,"data/ralphnorman.csv")
+  tomriceDF <- twitteR::twListToDF(tomrice)
+  write.csv(tomriceDF,"data/tomrice.csv")
+  dustyjohnsonDF <- twitteR::twListToDF(dustyjohnson)
+  write.csv(dustyjohnsonDF,"data/dustyjohnson.csv")
+  philroeDF <- twitteR::twListToDF(philroe)
+  write.csv(philroeDF,"data/philroe.csv")
+  timburchettDF <- twitteR::twListToDF(timburchett)
+  write.csv(timburchettDF,"data/timburchett.csv")
+  chuckDF <- twitteR::twListToDF(chuck)
+  write.csv(chuckDF,"data/chuck.csv")
+  dejarlaisDF <- twitteR::twListToDF(desjarlais)
+  write.csv(dejarlaisDF,"data/desjarlais.csv")
+  johnroseDF <- twitteR::twListToDF(johnrose)
+  write.csv(johnroseDF,"data/johnrose.csv")
+  markgreenDF <- twitteR::twListToDF(markgreen)
+  write.csv(markgreenDF,"data/markgreen.csv")
+  davidkustoffDF <- twitteR::twListToDF(davidkustoff)
+  write.csv(davidkustoffDF,"data/davidkustoff.csv")
+  louiegohmertDF <- twitteR::twListToDF(louiegohmert)
+  write.csv(louiegohmertDF,"data/louiegohmert.csv")
+  dancrenshawDF <- twitteR::twListToDF(dancrenshaw)
+  write.csv(dancrenshawDF,"data/dancrenshaw.csv")
+  vantaylorDF <- twitteR::twListToDF(vantaylor)
+  write.csv(vantaylorDF,"data/vantaylor.csv")
+  ratcliffeDF <- twitteR::twListToDF(ratcliffe)
+  write.csv(ratcliffeDF,"data/ratcliffe.csv")
+  lancegoodenDF <- twitteR::twListToDF(lancegooden)
+  write.csv(lancegoodenDF,"data/lancegooden.csv")
+  ronwrightDF <- twitteR::twListToDF(ronwright)
+  write.csv(ronwrightDF,"data/ronwright.csv")
+  kevinbradyDF <- twitteR::twListToDF(kevinbrady)
+  write.csv(kevinbradyDF,"data/kevinbrady.csv")
+  mccaulDF <- twitteR::twListToDF(mccaul)
+  write.csv(mccaulDF,"data/mccaul.csv")
+  conawayDF <- twitteR::twListToDF(conaway)
+  write.csv(conawayDF,"data/conaway.csv")
+  kaygrangerDF <- twitteR::twListToDF(kaygranger)
+  write.csv(kaygrangerDF,"data/kaygranger.csv")
+  macDF <- twitteR::twListToDF(mac)
+  write.csv(macDF,"data/mac.csv")
+  randyDF <- twitteR::twListToDF(randy)
+  write.csv(randyDF,"data/randy.csv")
+  billfloresDF <- twitteR::twListToDF(billflores)
+  write.csv(billfloresDF,"data/billflores.csv")
+  arringtonDF <- twitteR::twListToDF(arrington)
+  write.csv(arringtonDF,"data/arrington.csv")
+  chiproyDF <- twitteR::twListToDF(chiproy)
+  write.csv(chiproy,"data/chiproy.csv")
+  peteolsonDF <- twitteR::twListToDF(peteolson)
+  write.csv(peteolsonDF,"data/peteolson.csv")
+  hurdDF <- twitteR::twListToDF(hurd)
+  write.csv(hurdDF,"data/hurd.csv")
+  kenmarchantDF <- twitteR::twListToDF(kenmarchant)
+  write.csv(kenmarchantDF,"data/kenmarchant.csv")
+  rwilliamsDF <- twitteR::twListToDF(rwilliams)
+  write.csv(rwilliamsDF,"data/rwilliams.csv")
+  michaelburgessDF <- twitteR::twListToDF(michaelburgess)
+  write.csv(michaelburgessDF,"data/michaelburgess.csv")
+  cloudDF <- twitteR::twListToDF(cloud)
+  write.csv(cloudDF,"data/cloud.csv")
+  carterDF <- twitteR::twListToDF(carter)
+  write.csv(carterDF,"data/carter.csv")
+  brianbabinDF <- twitteR::twListToDF(brianbabin)
+  write.csv(brianbabinDF,"data/brianbabin.csv")
+  robbishopDF <- twitteR::twListToDF(robbishop)
+  write.csv(robbishopDF,"data/robbishop.csv")
+  chrisstewartDF <- twitteR::twListToDF(chrisstewart)
+  write.csv(chrisstewartDF,"data/chrisstewart.csv")
+  johncurtisDF <- twitteR::twListToDF(johncurtis)
+  write.csv(johncurtisDF,"data/johncurtis.csv")
+  robwittmanDF <- twitteR::twListToDF(robwittman)
+  write.csv(robwittmanDF,"data/robwittman.csv")
+  rigglemanDF <- twitteR::twListToDF(riggleman)
+  write.csv(rigglemanDF,"data/riggleman.csv")
+  benclineDF <- twitteR::twListToDF(bencline)
+  write.csv(benclineDF,"data/bencline.csv")
+  mgriffithDF <- twitteR::twListToDF(mgriffith)
+  write.csv(mgriffithDF,"data/mgriffith.csv")
+  newhouseDF <- twitteR::twListToDF(newhouse)
+  write.csv(newhouseDF,"data/newhouse.csv")
+  bryansteilDF <- twitteR::twListToDF(bryansteil)
+  write.csv(bryansteilDF,"data/bryansteil.csv")
+  jimDF <- twitteR::twListToDF(jim)
+  write.csv(jimDF,"data/jim.csv")
+  grothmanDF <- twitteR::twListToDF(grothman)
+  write.csv(grothmanDF,"data/grothman.csv")
+  seanduffyDF <- twitteR::twListToDF(seanduffy)
+  write.csv(seanduffyDF,"data/seanduffy.csv")
+  gallagherDF <- twitteR::twListToDF(gallagher)
+  write.csv(gallagherDF,"data/gallagher.csv")
+  mckinleyDF <- twitteR::twListToDF(mckinley)
+  write.csv(mckinleyDF,"data/mckinley.csv")
+  alexmooneyDF <- twitteR::twListToDF(alexmooney)
+  write.csv(alexmooneyDF,"data/alexmooney.csv")
+  
+  
+  
   donyoungtweets <- readr::read_csv("data/donyoung.csv")
   byrnetweets <- readr::read_csv("data/byrne.csv")
   mikerogerstweets <- readr::read_csv("data/mikerogers.csv")
@@ -1746,371 +2143,372 @@ hormaleR <- function() {
   gallaghertweets <- readr::read_csv("data/gallagher.csv")
   mckinleytweets <- readr::read_csv("data/mckinley.csv")
   alexmooneytweets <- readr::read_csv("data/alexmooney.csv")
-
-
-
+  
+  
+  
   hormrtweets <- dplyr::bind_rows(donyoungtweets %>%
-                             dplyr::mutate(person = "Don Young"),
-                           byrnetweets %>%
-                             dplyr::mutate(person = "Byrne"),
-                           mikerogerstweets %>%
-                             dplyr::mutate(person = "Mike Rogers"),
-                           robertaderholttweets %>%
-                             dplyr::mutate(person = "Robert Aderholt"),
-                           mobrookstweets %>%
-                             dplyr::mutate(person = "Mo Brooks"),
-                           garypalmertweets %>%
-                             dplyr::mutate(person = "Gary Palmer"),
-                           rickcrawfordtweets %>%
-                             dplyr::mutate(person = "Rick Crawford"),
-                           frenchhilltweets %>%
-                             dplyr::mutate(person = "French Hill"),
-                           stevewomacktweets %>%
-                             dplyr::mutate(person = "Steve Womack"),
-                           westermantweets %>%
-                             dplyr::mutate(person = "Westerman"),
-                           gosartweets %>%
-                             dplyr::mutate(person = "Gosar"),
-                           andybiggstweets %>%
-                             dplyr::mutate(person = "Andy Biggs"),
-                           davidtweets %>%
-                             dplyr::mutate(person = "David"),
-                           dleskotweets %>%
-                             dplyr::mutate(person = "D Lesko"),
-                           lamalfatweets %>%
-                             dplyr::mutate(person = "Lamalfa"),
-                           mcclintocktweets %>%
-                             dplyr::mutate(person = "McClintock"),
-                           paulcooktweets %>%
-                             dplyr::mutate(person = "Paul Cook"),
-                           devinnunestweets %>%
-                             dplyr::mutate(person = "Devin Nunes"),
-                           kevinmccarthytweets %>%
-                             dplyr::mutate(person = "Kevin McCarthy"),
-                           kencalverttweets %>%
-                             dplyr::mutate(person = "Ken Calvert"),
-                           tiptontweets %>%
-                             dplyr::mutate(person = "Tipton"),
-                           kenbucktweets %>%
-                             dplyr::mutate(person = "Ken Buck"),
-                           dlamborntweets %>%
-                             dplyr::mutate(person = "D Lamborn"),
-                           mattgaetztweets %>%
-                             dplyr::mutate(person = "Matt Gaetz"),
-                           nealdunntweets %>%
-                             dplyr::mutate(person = "Neal Dunn"),
-                           tedyohotweets %>%
-                             dplyr::mutate(person = "Ted Yoho"),
-                           rutherfordtweets %>%
-                             dplyr::mutate(person = "Rutherford"),
-                           michaelwaltztweets %>%
-                             dplyr::mutate(person = "Michael Waltz"),
-                           billposeytweets %>%
-                             dplyr::mutate(person = "Bill Posey"),
-                           webstertweets %>%
-                             dplyr::mutate(person = "Webster"),
-                           gusbilirakistweets %>%
-                             dplyr::mutate(person = "Gus Bilirakis"),
-                           vernbuchanantweets %>%
-                             dplyr::mutate(person = "Vern Buchanon"),
-                           gregsteubetweets %>%
-                             dplyr::mutate(person = "Greg Steube"),
-                           brianmasttweets %>%
-                             dplyr::mutate(person = "Brian Mast"),
-                           rooneytweets %>%
-                             dplyr::mutate(person = "Rooney"),
-                           mariodbtweets %>%
-                             dplyr::mutate(person = "Mario DB"),
-                           buddycartertweets %>%
-                             dplyr::mutate(person = "Buddy Carter"),
-                           drewfergusontweets %>%
-                             dplyr::mutate(person = "Drew Ferguson"),
-                           robwoodalltweets %>%
-                             dplyr::mutate(person = "Rob Woodall"),
-                           austinscotttweets %>%
-                             dplyr::mutate(person = "Austin Scott"),
-                           dougcollinstweets %>%
-                             dplyr::mutate(person = "Doug Collins"),
-                           hicetweets %>%
-                             dplyr::mutate(person = "Hice"),
-                           loudermilktweets %>%
-                             dplyr::mutate(person = "Loudermilk"),
-                           rickallentweets %>%
-                             dplyr::mutate(person = "Rick Allen"),
-                           tomgravestweets %>%
-                             dplyr::mutate(person = "Tom Graves"),
-                           russfulchertweets %>%
-                             dplyr::mutate(person = "Russ Fulcher"),
-                           mikesimpsontweets %>%
-                             dplyr::mutate(person = "Mike Simpson"),
-                           bosttweets %>%
-                             dplyr::mutate(person = "Bost"),
-                           rodneydavistweets %>%
-                             dplyr::mutate(person = "Rodney Davis"),
-                           shimkustweets %>%
-                             dplyr::mutate(person = "Shimkus"),
-                           kinzingertweets %>%
-                             dplyr::mutate(person = "Kinzinger"),
-                           lahoodtweets %>%
-                             dplyr::mutate(person = "Lahood"),
-                           jimbankstweets %>%
-                             dplyr::mutate(person = "Jim Banks"),
-                           jimbairdtweets %>%
-                             dplyr::mutate(person = "Jim Baird"),
-                           gregpencetweets %>%
-                             dplyr::mutate(person = "Greg Pence"),
-                           larrybucshontweets %>%
-                             dplyr::mutate(person = "Larry Bucschon"),
-                           treytweets %>%
-                             dplyr::mutate(person = "Trey"),
-                           ronestestweets %>%
-                             dplyr::mutate(person = "Ron Estes"),
-                           guthrietweets %>%
-                             dplyr::mutate(person = "Guthrie"),
-                           thomasmassietweets %>%
-                             dplyr::mutate(person = "Thomas Massie"),
-                           halrogerstweets %>%
-                             dplyr::mutate(person = "Hal Rogers"),
-                           andybarrtweets %>%
-                             dplyr::mutate(person = "Andy Barr"),
-                           stevescalisetweets %>%
-                             dplyr::mutate(person = "Steve Scalise"),
-                           clayhigginstweets %>%
-                             dplyr::mutate(person = "Clay Higgins"),
-                           mikejohnsontweets %>%
-                             dplyr::mutate(person = "Mike Johnson"),
-                           abrahamtweets %>%
-                             dplyr::mutate(person = "Abraham"),
-                           garretgravestweets %>%
-                             dplyr::mutate(person = "Garret Graves"),
-                           andyharristweets %>%
-                             dplyr::mutate(person = "Andy Harris"),
-                           jackbergmantweets %>%
-                             dplyr::mutate(person = "Jack Bergman"),
-                           huizengatweets %>%
-                             dplyr::mutate(person = "Huizenga"),
-                           justinamashtweets %>%
-                             dplyr::mutate(person = "Justin Amash"),
-                           moolenaartweets %>%
-                             dplyr::mutate(person = "Moolenaar"),
-                           freduptontweets %>%
-                             dplyr::mutate(person = "Fred Upton"),
-                           walbergtweets %>%
-                             dplyr::mutate(person = "Walberg"),
-                           slotkintweets %>%
-                             dplyr::mutate(person = "Slotkin"),
-                           paulmitchelltweets %>%
-                             dplyr::mutate(person = "Paul Mitchell"),
-                           hagedorntweets %>%
-                             dplyr::mutate(person = "Hagedorn"),
-                           tomemmertweets %>%
-                             dplyr::mutate(person = "Tom Emmer"),
-                           petestaubertweets %>%
-                             dplyr::mutate(person = "Peter Stauber"),
-                           blainetweets %>%
-                             dplyr::mutate(person = "Blaine"),
-                           samgravestweets %>%
-                             dplyr::mutate(person = "Sam Graves"),
-                           longtweets %>%
-                             dplyr::mutate(person = "Long"),
-                           jasonsmithtweets %>%
-                             dplyr::mutate(person = "Jason Smith"),
-                           trentkellytweets %>%
-                             dplyr::mutate(person = "Trent Kelly"),
-                           michaelguesttweets %>%
-                             dplyr::mutate(person = "Michael Guest"),
-                           palazzotweets %>%
-                             dplyr::mutate(person = "Palazzo"),
-                           holdingtweets %>%
-                             dplyr::mutate(person = "Holding"),
-                           walterjonestweets %>%
-                             dplyr::mutate(person = "Walter Jones"),
-                           markwalkertweets %>%
-                             dplyr::mutate(person = "Mark Walker"),
-                           davidrouzertweets %>%
-                             dplyr::mutate(person = "David Rouzer"),
-                           richhudsontweets %>%
-                             dplyr::mutate(person = "Rich Hudson"),
-                           patrickmchenrytweets %>%
-                             dplyr::mutate(person = "Patrick McHenry"),
-                           markmeadowstweets %>%
-                             dplyr::mutate(person = "Mark Meadows"),
-                           tedbuddtweets %>%
-                             dplyr::mutate(person = "Ted Budd"),
-                           jefffortenberrytweets %>%
-                             dplyr::mutate(person = "Jeff Fortenberry"),
-                           donbacontweets %>%
-                             dplyr::mutate(person = "Don Bacon"),
-                           adriansmithtweets %>%
-                             dplyr::mutate(person = "Adrian Smith"),
-                           jvdtweets %>%
-                             dplyr::mutate(person = "JVD"),
-                           chrissmithtweets %>%
-                             dplyr::mutate(person = "Chris Smith"),
-                           markamodeitweets %>%
-                             dplyr::mutate(person = "Mark Modei"),
-                           leezeldintweets %>%
-                             dplyr::mutate(person = "Lee Zeldin"),
-                           peterkingtweets %>%
-                             dplyr::mutate(person = "Peter King"),
-                           tomreedtweets %>%
-                             dplyr::mutate(person = "Tom Reed"),
-                           johnkatkotweets %>%
-                             dplyr::mutate(person = "John Katko"),
-                           chriscollinstweets %>%
-                             dplyr::mutate(person = "Chris Collins"),
-                           stevechabottweets %>%
-                             dplyr::mutate(person = "Steve Chabot"),
-                           bradwenstruptweets %>%
-                             dplyr::mutate(person = "Braden Strup"),
-                           jimjordantweets %>%
-                             dplyr::mutate(person = "Jim Jordan"),
-                           boblattatweets %>%
-                             dplyr::mutate(person = "Bob Latta"),
-                           billjohnsontweets %>%
-                             dplyr::mutate(person = "Bill Johnson"),
-                           bobgibbstweets %>%
-                             dplyr::mutate(person = "Bob Gibbs"),
-                           warrendavidsontweets %>%
-                             dplyr::mutate(person = "Warren Davidson"),
-                           miketurnertweets %>%
-                             dplyr::mutate(person = "Mike Turner"),
-                           baldersontweets %>%
-                             dplyr::mutate(person = "Balderson"),
-                           davejoycetweets %>%
-                             dplyr::mutate(person = "Dave Joycet"),
-                           stevestiverstweets %>%
-                             dplyr::mutate(person = "Steve Stivers"),
-                           agonzaleztweets %>%
-                             dplyr::mutate(person = "A Gonzalez"),
-                           kevinherntweets %>%
-                             dplyr::mutate(person = "Kevin Hern"),
-                           mullintweets %>%
-                             dplyr::mutate(person = "Mullin"),
-                           franklucastweets %>%
-                             dplyr::mutate(person = "Frank Lucas"),
-                           tomcoletweets %>%
-                             dplyr::mutate(person = "Tom Cole"),
-                           brianfitztweets %>%
-                             dplyr::mutate(person = "Brian Fitz"),
-                           meusertweets %>%
-                             dplyr::mutate(person = "Meuser"),
-                           scottperrytweets %>%
-                             dplyr::mutate(person = "Scott Perry"),
-                           smuckertweets %>%
-                             dplyr::mutate(person = "Smucker"),
-                           johnjoycetweets %>%
-                             dplyr::mutate(person = "John Joyce"),
-                           greschenthalertweets %>%
-                             dplyr::mutate(person = "Greschenthaler"),
-                           gttweets %>%
-                             dplyr::mutate(person = "GT"),
-                           mikekellytweets %>%
-                             dplyr::mutate(person = "Mike Kelly"),
-                           joewilsontweets %>%
-                             dplyr::mutate(person = "Joe Wilson"),
-                           jeffduncantweets %>%
-                             dplyr::mutate(person = "Jeff Duncan"),
-                           timmonstweets %>%
-                             dplyr::mutate(person = "Timmons"),
-                           ralphnormantweets %>%
-                             dplyr::mutate(person = "Ralph Norman"),
-                           tomricetweets %>%
-                             dplyr::mutate(person = "Tom Rice"),
-                           dustyjohnsontweets %>%
-                             dplyr::mutate(person = "Dusty Johnson"),
-                           philroetweets %>%
-                             dplyr::mutate(person = "Phil Roe"),
-                           timburchetttweets %>%
-                             dplyr::mutate(person = "Tim Burchett"),
-                           chucktweets %>%
-                             dplyr::mutate(person = "Chuck"),
-                           desjarlaistweets %>%
-                             dplyr::mutate(person = "Des Jarlais"),
-                           johnrosetweets %>%
-                             dplyr::mutate(person = "John Rose"),
-                           markgreentweets %>%
-                             dplyr::mutate(person = "Mark Green"),
-                           davidkustofftweets %>%
-                             dplyr::mutate(person = "David Kustoff"),
-                           louiegohmerttweets %>%
-                             dplyr::mutate(person = "Louie Gohmer"),
-                           dancrenshawtweets %>%
-                             dplyr::mutate(person = "Dan Crenshaw"),
-                           vantaylortweets %>%
-                             dplyr::mutate(person = "Van Taylor"),
-                           ratcliffetweets %>%
-                             dplyr::mutate(person = "Ratcliffe"),
-                           lancegoodentweets %>%
-                             dplyr::mutate(person = "Lance Gooden"),
-                           ronwrighttweets %>%
-                             dplyr::mutate(person = "Ron Wright"),
-                           kevinbradytweets %>%
-                             dplyr::mutate(person = "Kevin Brady"),
-                           mccaultweets %>%
-                             dplyr::mutate(person = "McCaul"),
-                           conawaytweets %>%
-                             dplyr::mutate(person = "Conaway"),
-                           kaygrangertweets %>%
-                             dplyr::mutate(person = "Kay Granger"),
-                           mactweets %>%
-                             dplyr::mutate(person = "Mac"),
-                           randytweets %>%
-                             dplyr::mutate(person = "Randy"),
-                           billflorestweets %>%
-                             dplyr::mutate(person = "Bill Flores"),
-                           arringtontweets %>%
-                             dplyr::mutate(person = "Arrington"),
-                           chiproytweets %>%
-                             dplyr::mutate(person = "Chip Roy"),
-                           peteolsontweets %>%
-                             dplyr::mutate(person = "Pete Olson"),
-                           hurdtweets %>%
-                             dplyr::mutate(person = "Hurd"),
-                           kenmarchanttweets %>%
-                             dplyr::mutate(person = "Ken Marchant"),
-                           rwilliamstweets %>%
-                             dplyr::mutate(person = "R Williams"),
-                           michaelburgesstweets %>%
-                             dplyr::mutate(person = "Michael Burgess"),
-                           cloudtweets %>%
-                             dplyr::mutate(person = "Cloud"),
-                           cartertweets %>%
-                             dplyr::mutate(person = "Carter"),
-                           brianbabintweets %>%
-                             dplyr::mutate(person = "Brian Babin"),
-                           robbishoptweets %>%
-                             dplyr::mutate(person = "Robbi Shop"),
-                           chrisstewarttweets %>%
-                             dplyr::mutate(person = "Chris Stewart"),
-                           johncurtistweets %>%
-                             dplyr::mutate(person = "John Curtis"),
-                           robwittmantweets %>%
-                             dplyr::mutate(person = "Rob Wittman"),
-                           rigglemantweets %>%
-                             dplyr::mutate(person = "Riggleman"),
-                           benclinetweets %>%
-                             dplyr::mutate(person = "Ben Cline"),
-                           mgriffithtweets %>%
-                             dplyr::mutate(person = "M Griffith"),
-                           newhousetweets %>%
-                             dplyr::mutate(person = "Newhouse"),
-                           bryansteiltweets %>%
-                             dplyr::mutate(person = "Bryan Steil"),
-                           jimtweets %>%
-                             dplyr::mutate(person = "Jim"),
-                           grothmantweets %>%
-                             dplyr::mutate(person = "Grothman"),
-                           seanduffytweets %>%
-                             dplyr::mutate(person = "Sean Duffy"),
-                           gallaghertweets %>%
-                             dplyr::mutate(person = "Gallagher"),
-                           mckinleytweets %>%
-                             dplyr::mutate(person = "McKinley"),
-                           alexmooneytweets %>%
-                             dplyr::mutate(person = "Alex Mooney"))
-
-  save_as_csv(hormrtweets, "data/hormrtweets.csv", prepend_ids = TRUE , na = "", fileEncoding = "UTF-8")
+                                    dplyr::mutate(person = "Don Young"),
+                                  byrnetweets %>%
+                                    dplyr::mutate(person = "Byrne"),
+                                  mikerogerstweets %>%
+                                    dplyr::mutate(person = "Mike Rogers"),
+                                  robertaderholttweets %>%
+                                    dplyr::mutate(person = "Robert Aderholt"),
+                                  mobrookstweets %>%
+                                    dplyr::mutate(person = "Mo Brooks"),
+                                  garypalmertweets %>%
+                                    dplyr::mutate(person = "Gary Palmer"),
+                                  rickcrawfordtweets %>%
+                                    dplyr::mutate(person = "Rick Crawford"),
+                                  frenchhilltweets %>%
+                                    dplyr::mutate(person = "French Hill"),
+                                  stevewomacktweets %>%
+                                    dplyr::mutate(person = "Steve Womack"),
+                                  westermantweets %>%
+                                    dplyr::mutate(person = "Westerman"),
+                                  gosartweets %>%
+                                    dplyr::mutate(person = "Gosar"),
+                                  andybiggstweets %>%
+                                    dplyr::mutate(person = "Andy Biggs"),
+                                  davidtweets %>%
+                                    dplyr::mutate(person = "David"),
+                                  dleskotweets %>%
+                                    dplyr::mutate(person = "D Lesko"),
+                                  lamalfatweets %>%
+                                    dplyr::mutate(person = "Lamalfa"),
+                                  mcclintocktweets %>%
+                                    dplyr::mutate(person = "McClintock"),
+                                  paulcooktweets %>%
+                                    dplyr::mutate(person = "Paul Cook"),
+                                  devinnunestweets %>%
+                                    dplyr::mutate(person = "Devin Nunes"),
+                                  kevinmccarthytweets %>%
+                                    dplyr::mutate(person = "Kevin McCarthy"),
+                                  kencalverttweets %>%
+                                    dplyr::mutate(person = "Ken Calvert"),
+                                  tiptontweets %>%
+                                    dplyr::mutate(person = "Tipton"),
+                                  kenbucktweets %>%
+                                    dplyr::mutate(person = "Ken Buck"),
+                                  dlamborntweets %>%
+                                    dplyr::mutate(person = "D Lamborn"),
+                                  mattgaetztweets %>%
+                                    dplyr::mutate(person = "Matt Gaetz"),
+                                  nealdunntweets %>%
+                                    dplyr::mutate(person = "Neal Dunn"),
+                                  tedyohotweets %>%
+                                    dplyr::mutate(person = "Ted Yoho"),
+                                  rutherfordtweets %>%
+                                    dplyr::mutate(person = "Rutherford"),
+                                  michaelwaltztweets %>%
+                                    dplyr::mutate(person = "Michael Waltz"),
+                                  billposeytweets %>%
+                                    dplyr::mutate(person = "Bill Posey"),
+                                  webstertweets %>%
+                                    dplyr::mutate(person = "Webster"),
+                                  gusbilirakistweets %>%
+                                    dplyr::mutate(person = "Gus Bilirakis"),
+                                  vernbuchanantweets %>%
+                                    dplyr::mutate(person = "Vern Buchanon"),
+                                  gregsteubetweets %>%
+                                    dplyr::mutate(person = "Greg Steube"),
+                                  brianmasttweets %>%
+                                    dplyr::mutate(person = "Brian Mast"),
+                                  rooneytweets %>%
+                                    dplyr::mutate(person = "Rooney"),
+                                  mariodbtweets %>%
+                                    dplyr::mutate(person = "Mario DB"),
+                                  buddycartertweets %>%
+                                    dplyr::mutate(person = "Buddy Carter"),
+                                  drewfergusontweets %>%
+                                    dplyr::mutate(person = "Drew Ferguson"),
+                                  robwoodalltweets %>%
+                                    dplyr::mutate(person = "Rob Woodall"),
+                                  austinscotttweets %>%
+                                    dplyr::mutate(person = "Austin Scott"),
+                                  dougcollinstweets %>%
+                                    dplyr::mutate(person = "Doug Collins"),
+                                  hicetweets %>%
+                                    dplyr::mutate(person = "Hice"),
+                                  loudermilktweets %>%
+                                    dplyr::mutate(person = "Loudermilk"),
+                                  rickallentweets %>%
+                                    dplyr::mutate(person = "Rick Allen"),
+                                  tomgravestweets %>%
+                                    dplyr::mutate(person = "Tom Graves"),
+                                  russfulchertweets %>%
+                                    dplyr::mutate(person = "Russ Fulcher"),
+                                  mikesimpsontweets %>%
+                                    dplyr::mutate(person = "Mike Simpson"),
+                                  bosttweets %>%
+                                    dplyr::mutate(person = "Bost"),
+                                  rodneydavistweets %>%
+                                    dplyr::mutate(person = "Rodney Davis"),
+                                  shimkustweets %>%
+                                    dplyr::mutate(person = "Shimkus"),
+                                  kinzingertweets %>%
+                                    dplyr::mutate(person = "Kinzinger"),
+                                  lahoodtweets %>%
+                                    dplyr::mutate(person = "Lahood"),
+                                  jimbankstweets %>%
+                                    dplyr::mutate(person = "Jim Banks"),
+                                  jimbairdtweets %>%
+                                    dplyr::mutate(person = "Jim Baird"),
+                                  gregpencetweets %>%
+                                    dplyr::mutate(person = "Greg Pence"),
+                                  larrybucshontweets %>%
+                                    dplyr::mutate(person = "Larry Bucschon"),
+                                  treytweets %>%
+                                    dplyr::mutate(person = "Trey"),
+                                  ronestestweets %>%
+                                    dplyr::mutate(person = "Ron Estes"),
+                                  guthrietweets %>%
+                                    dplyr::mutate(person = "Guthrie"),
+                                  thomasmassietweets %>%
+                                    dplyr::mutate(person = "Thomas Massie"),
+                                  halrogerstweets %>%
+                                    dplyr::mutate(person = "Hal Rogers"),
+                                  andybarrtweets %>%
+                                    dplyr::mutate(person = "Andy Barr"),
+                                  stevescalisetweets %>%
+                                    dplyr::mutate(person = "Steve Scalise"),
+                                  clayhigginstweets %>%
+                                    dplyr::mutate(person = "Clay Higgins"),
+                                  mikejohnsontweets %>%
+                                    dplyr::mutate(person = "Mike Johnson"),
+                                  abrahamtweets %>%
+                                    dplyr::mutate(person = "Abraham"),
+                                  garretgravestweets %>%
+                                    dplyr::mutate(person = "Garret Graves"),
+                                  andyharristweets %>%
+                                    dplyr::mutate(person = "Andy Harris"),
+                                  jackbergmantweets %>%
+                                    dplyr::mutate(person = "Jack Bergman"),
+                                  huizengatweets %>%
+                                    dplyr::mutate(person = "Huizenga"),
+                                  justinamashtweets %>%
+                                    dplyr::mutate(person = "Justin Amash"),
+                                  moolenaartweets %>%
+                                    dplyr::mutate(person = "Moolenaar"),
+                                  freduptontweets %>%
+                                    dplyr::mutate(person = "Fred Upton"),
+                                  walbergtweets %>%
+                                    dplyr::mutate(person = "Walberg"),
+                                  slotkintweets %>%
+                                    dplyr::mutate(person = "Slotkin"),
+                                  paulmitchelltweets %>%
+                                    dplyr::mutate(person = "Paul Mitchell"),
+                                  hagedorntweets %>%
+                                    dplyr::mutate(person = "Hagedorn"),
+                                  tomemmertweets %>%
+                                    dplyr::mutate(person = "Tom Emmer"),
+                                  petestaubertweets %>%
+                                    dplyr::mutate(person = "Peter Stauber"),
+                                  blainetweets %>%
+                                    dplyr::mutate(person = "Blaine"),
+                                  samgravestweets %>%
+                                    dplyr::mutate(person = "Sam Graves"),
+                                  longtweets %>%
+                                    dplyr::mutate(person = "Long"),
+                                  jasonsmithtweets %>%
+                                    dplyr::mutate(person = "Jason Smith"),
+                                  trentkellytweets %>%
+                                    dplyr::mutate(person = "Trent Kelly"),
+                                  michaelguesttweets %>%
+                                    dplyr::mutate(person = "Michael Guest"),
+                                  palazzotweets %>%
+                                    dplyr::mutate(person = "Palazzo"),
+                                  holdingtweets %>%
+                                    dplyr::mutate(person = "Holding"),
+                                  walterjonestweets %>%
+                                    dplyr::mutate(person = "Walter Jones"),
+                                  markwalkertweets %>%
+                                    dplyr::mutate(person = "Mark Walker"),
+                                  davidrouzertweets %>%
+                                    dplyr::mutate(person = "David Rouzer"),
+                                  richhudsontweets %>%
+                                    dplyr::mutate(person = "Rich Hudson"),
+                                  patrickmchenrytweets %>%
+                                    dplyr::mutate(person = "Patrick McHenry"),
+                                  markmeadowstweets %>%
+                                    dplyr::mutate(person = "Mark Meadows"),
+                                  tedbuddtweets %>%
+                                    dplyr::mutate(person = "Ted Budd"),
+                                  jefffortenberrytweets %>%
+                                    dplyr::mutate(person = "Jeff Fortenberry"),
+                                  donbacontweets %>%
+                                    dplyr::mutate(person = "Don Bacon"),
+                                  adriansmithtweets %>%
+                                    dplyr::mutate(person = "Adrian Smith"),
+                                  jvdtweets %>%
+                                    dplyr::mutate(person = "JVD"),
+                                  chrissmithtweets %>%
+                                    dplyr::mutate(person = "Chris Smith"),
+                                  markamodeitweets %>%
+                                    dplyr::mutate(person = "Mark Modei"),
+                                  leezeldintweets %>%
+                                    dplyr::mutate(person = "Lee Zeldin"),
+                                  peterkingtweets %>%
+                                    dplyr::mutate(person = "Peter King"),
+                                  tomreedtweets %>%
+                                    dplyr::mutate(person = "Tom Reed"),
+                                  johnkatkotweets %>%
+                                    dplyr::mutate(person = "John Katko"),
+                                  chriscollinstweets %>%
+                                    dplyr::mutate(person = "Chris Collins"),
+                                  stevechabottweets %>%
+                                    dplyr::mutate(person = "Steve Chabot"),
+                                  bradwenstruptweets %>%
+                                    dplyr::mutate(person = "Braden Strup"),
+                                  jimjordantweets %>%
+                                    dplyr::mutate(person = "Jim Jordan"),
+                                  boblattatweets %>%
+                                    dplyr::mutate(person = "Bob Latta"),
+                                  billjohnsontweets %>%
+                                    dplyr::mutate(person = "Bill Johnson"),
+                                  bobgibbstweets %>%
+                                    dplyr::mutate(person = "Bob Gibbs"),
+                                  warrendavidsontweets %>%
+                                    dplyr::mutate(person = "Warren Davidson"),
+                                  miketurnertweets %>%
+                                    dplyr::mutate(person = "Mike Turner"),
+                                  baldersontweets %>%
+                                    dplyr::mutate(person = "Balderson"),
+                                  davejoycetweets %>%
+                                    dplyr::mutate(person = "Dave Joycet"),
+                                  stevestiverstweets %>%
+                                    dplyr::mutate(person = "Steve Stivers"),
+                                  agonzaleztweets %>%
+                                    dplyr::mutate(person = "A Gonzalez"),
+                                  kevinherntweets %>%
+                                    dplyr::mutate(person = "Kevin Hern"),
+                                  mullintweets %>%
+                                    dplyr::mutate(person = "Mullin"),
+                                  franklucastweets %>%
+                                    dplyr::mutate(person = "Frank Lucas"),
+                                  tomcoletweets %>%
+                                    dplyr::mutate(person = "Tom Cole"),
+                                  brianfitztweets %>%
+                                    dplyr::mutate(person = "Brian Fitz"),
+                                  meusertweets %>%
+                                    dplyr::mutate(person = "Meuser"),
+                                  scottperrytweets %>%
+                                    dplyr::mutate(person = "Scott Perry"),
+                                  smuckertweets %>%
+                                    dplyr::mutate(person = "Smucker"),
+                                  johnjoycetweets %>%
+                                    dplyr::mutate(person = "John Joyce"),
+                                  greschenthalertweets %>%
+                                    dplyr::mutate(person = "Greschenthaler"),
+                                  gttweets %>%
+                                    dplyr::mutate(person = "GT"),
+                                  mikekellytweets %>%
+                                    dplyr::mutate(person = "Mike Kelly"),
+                                  joewilsontweets %>%
+                                    dplyr::mutate(person = "Joe Wilson"),
+                                  jeffduncantweets %>%
+                                    dplyr::mutate(person = "Jeff Duncan"),
+                                  timmonstweets %>%
+                                    dplyr::mutate(person = "Timmons"),
+                                  ralphnormantweets %>%
+                                    dplyr::mutate(person = "Ralph Norman"),
+                                  tomricetweets %>%
+                                    dplyr::mutate(person = "Tom Rice"),
+                                  dustyjohnsontweets %>%
+                                    dplyr::mutate(person = "Dusty Johnson"),
+                                  philroetweets %>%
+                                    dplyr::mutate(person = "Phil Roe"),
+                                  timburchetttweets %>%
+                                    dplyr::mutate(person = "Tim Burchett"),
+                                  chucktweets %>%
+                                    dplyr::mutate(person = "Chuck"),
+                                  desjarlaistweets %>%
+                                    dplyr::mutate(person = "Des Jarlais"),
+                                  johnrosetweets %>%
+                                    dplyr::mutate(person = "John Rose"),
+                                  markgreentweets %>%
+                                    dplyr::mutate(person = "Mark Green"),
+                                  davidkustofftweets %>%
+                                    dplyr::mutate(person = "David Kustoff"),
+                                  louiegohmerttweets %>%
+                                    dplyr::mutate(person = "Louie Gohmer"),
+                                  dancrenshawtweets %>%
+                                    dplyr::mutate(person = "Dan Crenshaw"),
+                                  vantaylortweets %>%
+                                    dplyr::mutate(person = "Van Taylor"),
+                                  ratcliffetweets %>%
+                                    dplyr::mutate(person = "Ratcliffe"),
+                                  lancegoodentweets %>%
+                                    dplyr::mutate(person = "Lance Gooden"),
+                                  ronwrighttweets %>%
+                                    dplyr::mutate(person = "Ron Wright"),
+                                  kevinbradytweets %>%
+                                    dplyr::mutate(person = "Kevin Brady"),
+                                  mccaultweets %>%
+                                    dplyr::mutate(person = "McCaul"),
+                                  conawaytweets %>%
+                                    dplyr::mutate(person = "Conaway"),
+                                  kaygrangertweets %>%
+                                    dplyr::mutate(person = "Kay Granger"),
+                                  mactweets %>%
+                                    dplyr::mutate(person = "Mac"),
+                                  randytweets %>%
+                                    dplyr::mutate(person = "Randy"),
+                                  billflorestweets %>%
+                                    dplyr::mutate(person = "Bill Flores"),
+                                  arringtontweets %>%
+                                    dplyr::mutate(person = "Arrington"),
+                                  chiproytweets %>%
+                                    dplyr::mutate(person = "Chip Roy"),
+                                  peteolsontweets %>%
+                                    dplyr::mutate(person = "Pete Olson"),
+                                  hurdtweets %>%
+                                    dplyr::mutate(person = "Hurd"),
+                                  kenmarchanttweets %>%
+                                    dplyr::mutate(person = "Ken Marchant"),
+                                  rwilliamstweets %>%
+                                    dplyr::mutate(person = "R Williams"),
+                                  michaelburgesstweets %>%
+                                    dplyr::mutate(person = "Michael Burgess"),
+                                  cloudtweets %>%
+                                    dplyr::mutate(person = "Cloud"),
+                                  cartertweets %>%
+                                    dplyr::mutate(person = "Carter"),
+                                  brianbabintweets %>%
+                                    dplyr::mutate(person = "Brian Babin"),
+                                  robbishoptweets %>%
+                                    dplyr::mutate(person = "Robbi Shop"),
+                                  chrisstewarttweets %>%
+                                    dplyr::mutate(person = "Chris Stewart"),
+                                  johncurtistweets %>%
+                                    dplyr::mutate(person = "John Curtis"),
+                                  robwittmantweets %>%
+                                    dplyr::mutate(person = "Rob Wittman"),
+                                  rigglemantweets %>%
+                                    dplyr::mutate(person = "Riggleman"),
+                                  benclinetweets %>%
+                                    dplyr::mutate(person = "Ben Cline"),
+                                  mgriffithtweets %>%
+                                    dplyr::mutate(person = "M Griffith"),
+                                  newhousetweets %>%
+                                    dplyr::mutate(person = "Newhouse"),
+                                  bryansteiltweets %>%
+                                    dplyr::mutate(person = "Bryan Steil"),
+                                  jimtweets %>%
+                                    dplyr::mutate(person = "Jim"),
+                                  grothmantweets %>%
+                                    dplyr::mutate(person = "Grothman"),
+                                  seanduffytweets %>%
+                                    dplyr::mutate(person = "Sean Duffy"),
+                                  gallaghertweets %>%
+                                    dplyr::mutate(person = "Gallagher"),
+                                  mckinleytweets %>%
+                                    dplyr::mutate(person = "McKinley"),
+                                  alexmooneytweets %>%
+                                    dplyr::mutate(person = "Alex Mooney"))
+  
+  hormrDF <- twitteR::twListToDF(hormrtweets)
+  write.csv(hormrDF, "data/hormrtweets.csv")
   hormrtweets <- readr::read_csv("data/hormrtweets.csv")
   if(nrow(hormrtweets)>0) {
     message("Check your Data Folder. Function ran successfully")
@@ -2124,324 +2522,474 @@ hormaleR <- function() {
 #' Saves those tweets in individual csv (for each MC) and uses the UTF-8 file encoding for the CSV
 #' Creates one dataframe to combine all of the tweets from each MC
 #' With the one large dataframe, it creates a CSV to hold the 50 most recent tweets for each Male Democrat in the House of Representatives
+#' @import twitteR
 #' @import rtweet
 #' @import dplyr
 #' @import readr
 #' @import utils
 #' @import tm
 #' @import tidytext
+#' @import remotes
 #' @export
 
 hormaleD <- function() {
-  ohalleran <- rtweet::get_timeline('@RepOHalleran', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  raulgrijalva<- rtweet::get_timeline('@RepRaulGrijalva', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rubengallego <- rtweet::get_timeline('@RepRubenGallego', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gregstanton<- rtweet::get_timeline('@RepGregStanton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  garamendi<- rtweet::get_timeline('@RepGaramendi', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  thompson<- rtweet::get_timeline('@RepThompson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mcnerney <- rtweet::get_timeline('@RepMcNerney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joshharder <- rtweet::get_timeline('@RepJoshHarder', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  desaulnier<- rtweet::get_timeline('@RepDeSaulnier', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  swalwell<- rtweet::get_timeline('@RepSwalwell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimcosta <- rtweet::get_timeline('@RepJimCosta', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  rokhanna <- rtweet::get_timeline('@RepRoKhanna', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimmypanetta <- rtweet::get_timeline('@RepJimmyPanetta', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tjcox<- rtweet::get_timeline('@RepTjCox', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  carbajal <- rtweet::get_timeline('@RepCarbajal', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  adamschiff <- rtweet::get_timeline('@RepAdamSchiff', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cardenas<- rtweet::get_timeline('@RepCardenas', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bradsherman <- rtweet::get_timeline('@BradSherman', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  peteaguilar<- rtweet::get_timeline('@RepPeteAguilar', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tedlieu<- rtweet::get_timeline('@RepTedLieu', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimmygomez <- rtweet::get_timeline('@RepJimmyGomez', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ruiz<- rtweet::get_timeline('@CongressmanRuiz', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gilcisneros <- rtweet::get_timeline('@RepGilCisneros', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  marktakano<- rtweet::get_timeline('@RepMarkTakano', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  loucorrea<- rtweet::get_timeline('@RepLouCorrea', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lowenthal<- rtweet::get_timeline('@RepLowenthal', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  harley<- rtweet::get_timeline('@RepHarley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikelevin <- rtweet::get_timeline('@RepMikeLevin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hunter<- rtweet::get_timeline('@Rep_Hunter', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  juanvargas <- rtweet::get_timeline('@RepJuanVargas', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  scottpeters<- rtweet::get_timeline('@RepScottPeters', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joeneguse<- rtweet::get_timeline('@RepJoeNeguse', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jasoncrow<- rtweet::get_timeline('@RepJasonCrow', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  perlmutter<- rtweet::get_timeline('@RepPerlmutter', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johnlarson<- rtweet::get_timeline('@RepJohnLarson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joecourtney<- rtweet::get_timeline('@RepJoeCourtney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jahimes<- rtweet::get_timeline('@jahimes', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  allawson <- rtweet::get_timeline('@RepAlLawsonJr', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  darrensoto <- rtweet::get_timeline('@RepDarrenSoto', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  valdemings<- rtweet::get_timeline('@RepValDemings', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  charliecrist<- rtweet::get_timeline('@RepCharlieCrist', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  teddeutch<- rtweet::get_timeline('@RepTedDeutch', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  sanfordbishop<- rtweet::get_timeline('@SanfordBishop', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hankjohnson<- rtweet::get_timeline('@RepHankJohnson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johnlewis<- rtweet::get_timeline('@repjohnlewis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lucymcbath<- rtweet::get_timeline('@RepLucyMcBath', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davidscott<- rtweet::get_timeline('@repdavidscott', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  edcase<- rtweet::get_timeline('@RepEdCase', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  daveloebsack <- rtweet::get_timeline('@daveloebsack', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bobbyrush<- rtweet::get_timeline('@RepBobbyRush', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lipinski<- rtweet::get_timeline('@RepLipinski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chuygarcia <- rtweet::get_timeline('@RepChuyGarcia', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikequigley<- rtweet::get_timeline('@RepMikeQuigley', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  casten<- rtweet::get_timeline('@RepCasten', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dannydavis <- rtweet::get_timeline('@RepDannyDavis', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  raja<- rtweet::get_timeline('@CongressmanRaja', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  schneider <- rtweet::get_timeline('@RepSchneider', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  billfoster<- rtweet::get_timeline('@RepBillFoster', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  visclosky<- rtweet::get_timeline('@RepVisclosky', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  andrecarson<- rtweet::get_timeline('@RepAndreCarson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  johnyarmuth<- rtweet::get_timeline('@RepJohnYarmuth', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  richmond<- rtweet::get_timeline('@RepRichmond', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chelliepingree <- rtweet::get_timeline('@chelliepingree', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  golden<- rtweet::get_timeline('@RepGolden', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dutch <- rtweet::get_timeline('@Call_Me_Dutch', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  sarbanes <- rtweet::get_timeline('@RepSarbanes', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  anthonybrown <- rtweet::get_timeline('@RepAnthonyBrown', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  hoyer<- rtweet::get_timeline('@LeaderHoyer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davidtrone<- rtweet::get_timeline('@RepDavidTrone', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cummings<- rtweet::get_timeline('@RepCummings', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  raskin <- rtweet::get_timeline('@RepRaskin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  richardneal <- rtweet::get_timeline('@RepRichardNeal', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mcgovern<- rtweet::get_timeline('@RepMcGovern', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joekennedy <- rtweet::get_timeline('@RepJoeKennedy', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  moulton<- rtweet::get_timeline('@teammoulton', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  stephenlynch <- rtweet::get_timeline('@RepStephenLynch', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  keating<- rtweet::get_timeline('@USRepKeating', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dankildee <- rtweet::get_timeline('@RepDanKildee', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  andylevin<- rtweet::get_timeline('@RepAndyLevin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cleaver<- rtweet::get_timeline('@repcleaver', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  benniethompson <- rtweet::get_timeline('@BennieGThompson', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gkbutterfield<- rtweet::get_timeline('@GKButterfield', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davidprice<- rtweet::get_timeline('@RepDavidEPrice', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  chrispappas<- rtweet::get_timeline('@RepChrisPappas', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  donaldnorcross<- rtweet::get_timeline('@DonaldNorcross', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  andykim<- rtweet::get_timeline('@RepAndyKimNJ', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joshg <- rtweet::get_timeline('@RepJoshG', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  frankpallone <- rtweet::get_timeline('@FrankPallone', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  malinowski<- rtweet::get_timeline('@RepMalinowski', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  sires<- rtweet::get_timeline('@RepSires', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  billpascrell <- rtweet::get_timeline('@BillPascrell', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  donaldpayne<- rtweet::get_timeline('@RepDonaldPayne', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  sherrill<- rtweet::get_timeline('@RepSherrill', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  benraylujan <- rtweet::get_timeline('@repbenraylujan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  horsford<- rtweet::get_timeline('@RepHorsford', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  tomsuozzi <- rtweet::get_timeline('@RepTomSuozzi', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gregorymeeks<- rtweet::get_timeline('@RepGregoryMeeks', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gracemeng<- rtweet::get_timeline('@RepGraceMeng', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jeffries<- rtweet::get_timeline('@RepJeffries', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jerrynadler <- rtweet::get_timeline('@RepJerryNadler', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  maxrose<- rtweet::get_timeline('@RepMaxRose', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  espaillat <- rtweet::get_timeline('@RepEspaillat', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joseserrano<- rtweet::get_timeline('@RepJoseSerrano', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  eliotengel<- rtweet::get_timeline('@RepEliotEngel', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  seanmaloney<- rtweet::get_timeline('@RepSeanMaloney', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  delgado<- rtweet::get_timeline('@repdelgado', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  paultonko <- rtweet::get_timeline('@RepPaulTonko', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  brindisi<- rtweet::get_timeline('@RepBrindisi', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joemorelle <- rtweet::get_timeline('@RepJoeMorelle', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  brianhiggins<- rtweet::get_timeline('@RepBrianHiggins', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  timryan<- rtweet::get_timeline('@RepTimRyan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gregwalden <- rtweet::get_timeline('@repgregwalden', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  blumenauer<- rtweet::get_timeline('@repblumenauer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  peterdefazio<- rtweet::get_timeline('@RepPeterDeFazio', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  schrader<- rtweet::get_timeline('@RepSchrader', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  boyle <- rtweet::get_timeline('@CongBoyle', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dwightevans <- rtweet::get_timeline('@RepDwightEvans', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cartwright<- rtweet::get_timeline('@RepCartwright', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  conorlamb<- rtweet::get_timeline('@RepConorLamb', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mikedoyle<- rtweet::get_timeline('@USRepMikeDoyle', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  davidcicilline<- rtweet::get_timeline('@davidcicilline', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimlangevin<- rtweet::get_timeline('@JimLangevin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cunningham<- rtweet::get_timeline('@RepCunningham', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  clyburn<- rtweet::get_timeline('@WhipClyburn', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  jimcooper <- rtweet::get_timeline('@repjimcooper', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cohen<- rtweet::get_timeline('@RepCohen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  algreen <- rtweet::get_timeline('@RepAlGreen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gonzalez <- rtweet::get_timeline('@RepGonzalez', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  joaquincastro <- rtweet::get_timeline('@JoaquinCastrotx', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  cuellar<- rtweet::get_timeline('@RepCuellar', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ebj <- rtweet::get_timeline('@RepEBJ', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  colinallred <- rtweet::get_timeline('@RepColinAllred', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  veasey<- rtweet::get_timeline('@RepVeasey', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  filemonvela <- rtweet::get_timeline('@RepFilemonVela', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  lloyddoggett<- rtweet::get_timeline('@RepLloydDoggett', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  benmcadams<- rtweet::get_timeline('@RepBenMcAdams', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  bobbyscott<- rtweet::get_timeline('@BobbyScott', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  mceachin<- rtweet::get_timeline('@RepMcEachin', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  donbeyer <- rtweet::get_timeline('@RepDonBeyer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  gerryconnolly <- rtweet::get_timeline('@GerryConnolly', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  peterwelch<- rtweet::get_timeline('@PeterWelch', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ricklarsen<- rtweet::get_timeline('@RepRickLarsen', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  derekkilmer<- rtweet::get_timeline('@RepDerekKilmer', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  adamsmith<- rtweet::get_timeline('@RepAdamSmith', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  dennyheck<- rtweet::get_timeline('@RepDennyHeck', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  markpocan<- rtweet::get_timeline('@repmarkpocan', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  ronkind<- rtweet::get_timeline('@RepRonKind', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-  carolmiller <- rtweet::get_timeline('@RepCarolMiller', n = 50, max_id = NULL, home = FALSE, parse = TRUE, check = FALSE, , include_rts = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-  save_as_csv(ohalleran,"data/ohalleran.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(raulgrijalva,"data/raulgrijalva.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(rubengallego,"data/rubengallego.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gregstanton,"data/gregstanton.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(garamendi,"data/garamendi.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(thompson,"data/thompson.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(mcnerney,"data/mcnerney.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joshharder,"data/joshharder.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(desaulnier,"data/desaulnier.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(swalwell,"data/swalwell.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jimcosta,"data/jimcosta.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(rokhanna,"data/rokhanna.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jimmypanetta,"data/jimmypanetta.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(tjcox,"data/tjcox.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(carbajal,"data/carbajal.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(adamschiff,"data/adamschiff.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cardenas,"data/cardenas.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(bradsherman,"data/bradsherman.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(peteaguilar,"data/peteaguilar.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(tedlieu,"data/tedlieu.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jimmygomez,"data/jimmygomez.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(ruiz,"data/ruiz.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gilcisneros,"data/gilcisneros.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(marktakano,"data/marktakano.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(loucorrea,"data/loucorrea.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(lowenthal,"data/lowenthal.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(harley,"data/harley.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(mikelevin,"data/mikelevin.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(hunter,"data/hunter.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(juanvargas,"data/juanvargas.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(scottpeters,"data/scottpeters.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joeneguse,"data/joeneguse.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jasoncrow,"data/jasoncrow.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(perlmutter,"data/perlmutter.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(johnlarson,"data/johnlarson.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joecourtney,"data/joecourtney.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jahimes,"data/jahimes.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(allawson,"data/allawson.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(darrensoto,"data/darrensoto.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(valdemings,"data/valdemings.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(charliecrist,"data/charliecrist.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(teddeutch,"data/teddeutch.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(sanfordbishop,"data/sanfordbishop.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(hankjohnson,"data/hankjohnson.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(johnlewis,"data/johnlewis.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(lucymcbath,"data/lucymcbath.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(davidscott,"data/davidscott.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(edcase,"data/edcase.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(daveloebsack,"data/daveloebsack.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(bobbyrush,"data/bobbyrush.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(lipinski,"data/lipinski.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(chuygarcia,"data/chuygarcia.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(mikequigley,"data/mikequigley.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(casten,"data/casten.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(dannydavis,"data/dannydavis.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(raja,"data/raja.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(schneider,"data/schneider.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(billfoster,"data/billfoster.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(visclosky,"data/visclosky.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(andrecarson,"data/andrecarson.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(johnyarmuth,"data/johnyarmuth.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(richmond,"data/richmond.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(chelliepingree,"data/chelliepingree.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(golden,"data/golden.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(dutch,"data/dutch.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(sarbanes,"data/sarbanes.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(anthonybrown,"data/anthonybrown.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(hoyer,"data/hoyer.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(davidtrone,"data/davidtrone.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cummings,"data/cummings.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(raskin,"data/raskin.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(richardneal,"data/richardneal.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(mcgovern,"data/mcgovern.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joekennedy,"data/joekennedy.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(moulton,"data/moulton.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(stephenlynch,"data/stephenlynch.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(keating,"data/keating.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(dankildee,"data/dankildee.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(andylevin,"data/andylevin.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cleaver,"data/cleaver.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(benniethompson,"data/benniethompson.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gkbutterfield,"data/gkbutterfield.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(davidprice,"data/davidprice.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(chrispappas,"data/chrispappas.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(donaldnorcross,"data/donaldnorcross.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(andykim,"data/andykim.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joshg,"data/joshg.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(frankpallone,"data/frankpallone.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(malinowski,"data/malinowski.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(sires,"data/sires.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(billpascrell,"data/billpascrell.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(donaldpayne,"data/donaldpayne.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(sherrill,"data/sherrill.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(benraylujan,"data/benraylujan.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(horsford,"data/horsford.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(tomsuozzi,"data/tomsuozzi.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gregorymeeks,"data/gregorymeeks.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gracemeng,"data/gracemeng.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jeffries,"data/jeffries.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jerrynadler,"data/jerrynadler.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(maxrose,"data/maxrose.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(espaillat,"data/espaillat.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joseserrano,"data/joseserrano.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(eliotengel,"data/eliotengel.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(seanmaloney,"data/seanmaloney.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(delgado,"data/delgado.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(paultonko,"data/paultonko.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(brindisi,"data/brindisi.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joemorelle,"data/joemorelle.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(brianhiggins,"data/brianhiggins.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(timryan,"data/timryan.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gregwalden,"data/gregwalden.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(blumenauer,"data/blumenauer.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(peterdefazio,"data/peterdefazio.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(schrader,"data/schrader.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(boyle,"data/boyle.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(dwightevans,"data/dwightevans.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cartwright,"data/cartwright.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(conorlamb,"data/conorlamb.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(mikedoyle,"data/mikedoyle.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(davidcicilline,"data/davidcicilline.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jimlangevin,"data/jimlangevin.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cunningham,"data/cunningham.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(clyburn,"data/clyburn.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(jimcooper,"data/jimcooper.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cohen,"data/cohen.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(algreen,"data/algreen.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gonzalez,"data/gonzalez.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(joaquincastro,"data/joaquincastro.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(cuellar,"data/cuellar.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(ebj,"data/ebj.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(colinallred,"data/colinallred.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(veasey,"data/veasey.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(filemonvela,"data/filemonvela.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(lloyddoggett,"data/lloyddoggett.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(benmcadams,"data/benmcadams.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(bobbyscott,"data/bobbyscott.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(mceachin,"data/mceachin.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(donbeyer,"data/donbeyer.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(gerryconnolly,"data/gerryconnolly.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(peterwelch,"data/peterwelch.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(ricklarsen,"data/ricklarsen.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(derekkilmer,"data/derekkilmer.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(adamsmith,"data/adamsmith.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(dennyheck,"data/dennyheck.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(markpocan,"data/markpocan.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(ronkind,"data/ronkind.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-  save_as_csv(carolmiller,"data/carolmiller.csv",prepend_ids = TRUE, na="", fileEncoding = "UTF-8")
-
-
+  ohalleran <- twitteR::userTimeline('@RepOHalleran', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  raulgrijalva<- twitteR::userTimeline('@RepRaulGrijalva', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rubengallego <- twitteR::userTimeline('@RepRubenGallego', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gregstanton<- twitteR::userTimeline('@RepGregStanton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  garamendi<- twitteR::userTimeline('@RepGaramendi', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  thompson<- twitteR::userTimeline('@RepThompson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mcnerney <- twitteR::userTimeline('@RepMcNerney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joshharder <- twitteR::userTimeline('@RepJoshHarder', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  desaulnier<- twitteR::userTimeline('@RepDeSaulnier', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  swalwell<- twitteR::userTimeline('@RepSwalwell', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimcosta <- twitteR::userTimeline('@RepJimCosta', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  rokhanna <- twitteR::userTimeline('@RepRoKhanna', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimmypanetta <- twitteR::userTimeline('@RepJimmyPanetta', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tjcox<- twitteR::userTimeline('@RepTjCox', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  carbajal <- twitteR::userTimeline('@RepCarbajal', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  adamschiff <- twitteR::userTimeline('@RepAdamSchiff', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cardenas<- twitteR::userTimeline('@RepCardenas', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bradsherman <- twitteR::userTimeline('@BradSherman', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  peteaguilar<- twitteR::userTimeline('@RepPeteAguilar', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tedlieu<- twitteR::userTimeline('@RepTedLieu', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimmygomez <- twitteR::userTimeline('@RepJimmyGomez', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ruiz<- twitteR::userTimeline('@CongressmanRuiz', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gilcisneros <- twitteR::userTimeline('@RepGilCisneros', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  marktakano<- twitteR::userTimeline('@RepMarkTakano', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  loucorrea<- twitteR::userTimeline('@RepLouCorrea', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lowenthal<- twitteR::userTimeline('@RepLowenthal', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  harley<- twitteR::userTimeline('@RepHarley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikelevin <- twitteR::userTimeline('@RepMikeLevin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hunter<- twitteR::userTimeline('@Rep_Hunter', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  juanvargas <- twitteR::userTimeline('@RepJuanVargas', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  scottpeters<- twitteR::userTimeline('@RepScottPeters', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joeneguse<- twitteR::userTimeline('@RepJoeNeguse', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jasoncrow<- twitteR::userTimeline('@RepJasonCrow', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  perlmutter<- twitteR::userTimeline('@RepPerlmutter', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnlarson<- twitteR::userTimeline('@RepJohnLarson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joecourtney<- twitteR::userTimeline('@RepJoeCourtney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jahimes<- twitteR::userTimeline('@jahimes', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  allawson <- twitteR::userTimeline('@RepAlLawsonJr', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  darrensoto <- twitteR::userTimeline('@RepDarrenSoto', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  valdemings<- twitteR::userTimeline('@RepValDemings', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  charliecrist<- twitteR::userTimeline('@RepCharlieCrist', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  teddeutch<- twitteR::userTimeline('@RepTedDeutch', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sanfordbishop<- twitteR::userTimeline('@SanfordBishop', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hankjohnson<- twitteR::userTimeline('@RepHankJohnson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnlewis<- twitteR::userTimeline('@repjohnlewis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lucymcbath<- twitteR::userTimeline('@RepLucyMcBath', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidscott<- twitteR::userTimeline('@repdavidscott', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  edcase<- twitteR::userTimeline('@RepEdCase', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  daveloebsack <- twitteR::userTimeline('@daveloebsack', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bobbyrush<- twitteR::userTimeline('@RepBobbyRush', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lipinski<- twitteR::userTimeline('@RepLipinski', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chuygarcia <- twitteR::userTimeline('@RepChuyGarcia', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikequigley<- twitteR::userTimeline('@RepMikeQuigley', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  casten<- twitteR::userTimeline('@RepCasten', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dannydavis <- twitteR::userTimeline('@RepDannyDavis', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  raja<- twitteR::userTimeline('@CongressmanRaja', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  schneider <- twitteR::userTimeline('@RepSchneider', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  billfoster<- twitteR::userTimeline('@RepBillFoster', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  visclosky<- twitteR::userTimeline('@RepVisclosky', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  andrecarson<- twitteR::userTimeline('@RepAndreCarson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  johnyarmuth<- twitteR::userTimeline('@RepJohnYarmuth', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  richmond<- twitteR::userTimeline('@RepRichmond', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chelliepingree <- twitteR::userTimeline('@chelliepingree', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  golden<- twitteR::userTimeline('@RepGolden', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dutch <- twitteR::userTimeline('@Call_Me_Dutch', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sarbanes <- twitteR::userTimeline('@RepSarbanes', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  anthonybrown <- twitteR::userTimeline('@RepAnthonyBrown', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  hoyer<- twitteR::userTimeline('@LeaderHoyer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidtrone<- twitteR::userTimeline('@RepDavidTrone', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cummings<- twitteR::userTimeline('@RepCummings', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  raskin <- twitteR::userTimeline('@RepRaskin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  richardneal <- twitteR::userTimeline('@RepRichardNeal', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mcgovern<- twitteR::userTimeline('@RepMcGovern', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joekennedy <- twitteR::userTimeline('@RepJoeKennedy', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  moulton<- twitteR::userTimeline('@teammoulton', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  stephenlynch <- twitteR::userTimeline('@RepStephenLynch', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  keating<- twitteR::userTimeline('@USRepKeating', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dankildee <- twitteR::userTimeline('@RepDanKildee', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  andylevin<- twitteR::userTimeline('@RepAndyLevin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cleaver<- twitteR::userTimeline('@repcleaver', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  benniethompson <- twitteR::userTimeline('@BennieGThompson', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gkbutterfield<- twitteR::userTimeline('@GKButterfield', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidprice<- twitteR::userTimeline('@RepDavidEPrice', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  chrispappas<- twitteR::userTimeline('@RepChrisPappas', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  donaldnorcross<- twitteR::userTimeline('@DonaldNorcross', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  andykim<- twitteR::userTimeline('@RepAndyKimNJ', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joshg <- twitteR::userTimeline('@RepJoshG', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  frankpallone <- twitteR::userTimeline('@FrankPallone', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  malinowski<- twitteR::userTimeline('@RepMalinowski', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sires<- twitteR::userTimeline('@RepSires', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  billpascrell <- twitteR::userTimeline('@BillPascrell', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  donaldpayne<- twitteR::userTimeline('@RepDonaldPayne', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  sherrill<- twitteR::userTimeline('@RepSherrill', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  benraylujan <- twitteR::userTimeline('@repbenraylujan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  horsford<- twitteR::userTimeline('@RepHorsford', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  tomsuozzi <- twitteR::userTimeline('@RepTomSuozzi', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gregorymeeks<- twitteR::userTimeline('@RepGregoryMeeks', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gracemeng<- twitteR::userTimeline('@RepGraceMeng', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jeffries<- twitteR::userTimeline('@RepJeffries', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jerrynadler <- twitteR::userTimeline('@RepJerryNadler', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  maxrose<- twitteR::userTimeline('@RepMaxRose', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  espaillat <- twitteR::userTimeline('@RepEspaillat', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joseserrano<- twitteR::userTimeline('@RepJoseSerrano', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  eliotengel<- twitteR::userTimeline('@RepEliotEngel', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  seanmaloney<- twitteR::userTimeline('@RepSeanMaloney', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  delgado<- twitteR::userTimeline('@repdelgado', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  paultonko <- twitteR::userTimeline('@RepPaulTonko', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brindisi<- twitteR::userTimeline('@RepBrindisi', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joemorelle <- twitteR::userTimeline('@RepJoeMorelle', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  brianhiggins<- twitteR::userTimeline('@RepBrianHiggins', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  timryan<- twitteR::userTimeline('@RepTimRyan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gregwalden <- twitteR::userTimeline('@repgregwalden', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  blumenauer<- twitteR::userTimeline('@repblumenauer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  peterdefazio<- twitteR::userTimeline('@RepPeterDeFazio', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  schrader<- twitteR::userTimeline('@RepSchrader', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  boyle <- twitteR::userTimeline('@CongBoyle', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dwightevans <- twitteR::userTimeline('@RepDwightEvans', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cartwright<- twitteR::userTimeline('@RepCartwright', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  conorlamb<- twitteR::userTimeline('@RepConorLamb', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mikedoyle<- twitteR::userTimeline('@USRepMikeDoyle', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  davidcicilline<- twitteR::userTimeline('@davidcicilline', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimlangevin<- twitteR::userTimeline('@JimLangevin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cunningham<- twitteR::userTimeline('@RepCunningham', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  clyburn<- twitteR::userTimeline('@WhipClyburn', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  jimcooper <- twitteR::userTimeline('@repjimcooper', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cohen<- twitteR::userTimeline('@RepCohen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  algreen <- twitteR::userTimeline('@RepAlGreen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gonzalez <- twitteR::userTimeline('@RepGonzalez', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  joaquincastro <- twitteR::userTimeline('@JoaquinCastrotx', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  cuellar<- twitteR::userTimeline('@RepCuellar', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ebj <- twitteR::userTimeline('@RepEBJ', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  colinallred <- twitteR::userTimeline('@RepColinAllred', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  veasey<- twitteR::userTimeline('@RepVeasey', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  filemonvela <- twitteR::userTimeline('@RepFilemonVela', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  lloyddoggett<- twitteR::userTimeline('@RepLloydDoggett', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  benmcadams<- twitteR::userTimeline('@RepBenMcAdams', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  bobbyscott<- twitteR::userTimeline('@BobbyScott', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  mceachin<- twitteR::userTimeline('@RepMcEachin', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  donbeyer <- twitteR::userTimeline('@RepDonBeyer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  gerryconnolly <- twitteR::userTimeline('@GerryConnolly', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  peterwelch<- twitteR::userTimeline('@PeterWelch', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ricklarsen<- twitteR::userTimeline('@RepRickLarsen', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  derekkilmer<- twitteR::userTimeline('@RepDerekKilmer', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  adamsmith<- twitteR::userTimeline('@RepAdamSmith', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  dennyheck<- twitteR::userTimeline('@RepDennyHeck', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  markpocan<- twitteR::userTimeline('@repmarkpocan', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  ronkind<- twitteR::userTimeline('@RepRonKind', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  carolmiller <- twitteR::userTimeline('@RepCarolMiller', n = 50, maxID=NULL, includeRts=FALSE, excludeReplies=TRUE)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ohalleranDF <- twitteR::twListToDF(ohalleran)
+  write.csv(ohalleranDF,"data/ohalleran.csv")
+  raulgrijalvaDF <- twitteR::twListToDF(raulgrijalva)
+  write.csv(raulgrijalvaDF,"data/raulgrijalva.csv")
+  rubengallegoDF <- twitteR::twListToDF(rubengallego)
+  write.csv(rubengallegoDF,"data/rubengallego.csv")
+  gregstantonDF <- twitteR::twListToDF(gregstanton)
+  write.csv(gregstantonDF,"data/gregstanton.csv")
+  garamendiDF <- twitteR::twListToDF(garamendi)
+  write.csv(garamendiDF,"data/garamendi.csv")
+  thompsonDF <- twitteR::twListToDF(thompson)
+  write.csv(thompsonDF,"data/thompson.csv")
+  mcnerneyDF <- twitteR::twListToDF(mcnerney)
+  write.csv(mcnerneyDF,"data/mcnerney.csv")
+  joshharderDF <- twitteR::twListToDF(joshharder)
+  write.csv(joshharderDF,"data/joshharder.csv")
+  desaulnierDF <- twitteR::twListToDF(desaulnier)
+  write.csv(desaulnierDF,"data/desaulnier.csv")
+  swalwellDF <- twitteR::twListToDF(swalwell)
+  write.csv(swalwellDF,"data/swalwell.csv")
+  jimcostaDF <- twitteR::twListToDF(jimcosta)
+  write.csv(jimcostaDF,"data/jimcosta.csv")
+  rokhannaDF <- twitteR::twListToDF(rokhanna)
+  write.csv(rokhannaDF,"data/rokhanna.csv")
+  jimmypanettaDF <- twitteR::twListToDF(jimmypanetta)
+  write.csv(jimmypanettaDF,"data/jimmypanetta.csv")
+  tjcoxDF <- twitteR::twListToDF(tjcox)
+  write.csv(tjcoxDF,"data/tjcox.csv")
+  carbajalDF <- twitteR::twListToDF(carbajal)
+  write.csv(carbahal,"data/carbajal.csv")
+  adamschiffDF <- twitteR::twListToDF(adamschiff)
+  write.csv(adamschiffDF,"data/adamschiff.csv")
+  cardenasDF <- twitteR::twListToDF(cardenas)
+  write.csv(cardenasDF,"data/cardenas.csv")
+  bradshermanDF <- twitteR::twListToDF(bradsherman)
+  write.csv(bradshermanDF,"data/bradsherman.csv")
+  peteaguilarDF <- twitteR::twListToDF(peteaguilar)
+  write.csv(peteaguilarDF,"data/peteaguilar.csv")
+  tedlieuDF <- twitteR::twListToDF(tedlieu)
+  write.csv(tedlieuDF,"data/tedlieu.csv")
+  jimmygomezDF <- twitteR::twListToDF(jimmygomez)
+  write.csv(jimmygomezDF,"data/jimmygomez.csv")
+  ruizDF <- twitteR::twListToDF(ruiz)
+  write.csv(ruizDF,"data/ruiz.csv")
+  gilcisnerosDF <- twitteR::twListToDF(gilcisneros)
+  write.csv(gilcisnerosDF,"data/gilcisneros.csv")
+  marktakanoDF <- twitteR::twListToDF(marktakano)
+  write.csv(marktakanoDF,"data/marktakano.csv")
+  loucorreaDF <- twitteR::twListToDF(loucorrea)
+  write.csv(loucorreaDF,"data/loucorrea.csv")
+  lowenthalDF <- twitteR::twListToDF(lowenthal)
+  write.csv(lowenthalDF,"data/lowenthal.csv")
+  harleyDF <- twitteR::twListToDF(harley)
+  write.csv(harleyDF,"data/harley.csv")
+  mikelevinDF <- twitteR::twListToDF(mikelevin)
+  write.csv(mikelevinDF,"data/mikelevin.csv")
+  hunterDF <- twitteR::twListToDF(hunter)
+  write.csv(hunterDF,"data/hunter.csv")
+  juanvargasDF <- twitteR::twListToDF(juanvargas)
+  write.csv(juanvargasDF,"data/juanvargas.csv")
+  scottpetersDF <- twitteR::twListToDF(scottpeters)
+  write.csv(scottpetersDF,"data/scottpeters.csv")
+  joeneguseDF <- twitteR::twListToDF(joeneguse)
+  write.csv(joeneguseDF,"data/joeneguse.csv")
+  jasoncrowDF <- twitteR::twListToDF(jasoncrow)
+  write.csv(jasoncrowDF,"data/jasoncrow.csv")
+  perlmutterDF <- twitteR::twListToDF(perlmutter)
+  write.csv(perlmutterDF,"data/perlmutter.csv")
+  johnlarsonDF <- twitteR::twListToDF(johnlarson)
+  write.csv(johnlarsonDF,"data/johnlarson.csv")
+  joecourtneyDF <- twitteR::twListToDF(joecourtney)
+  write.csv(joecourtneyDF,"data/joecourtney.csv")
+  jahimesDF <- twitteR::twListToDF(jahimes)
+  write.csv(jahimesDF,"data/jahimes.csv")
+  allawsonDF <- twitteR::twListToDF(allawson)
+  write.csv(allawsonDF,"data/allawson.csv")
+  darrensotoDF <- twitteR::twListToDF(darrensoto)
+  write.csv(darrensotoDF,"data/darrensoto.csv")
+  valdemingsDF <- twitteR::twListToDF(valdemings)
+  write.csv(valdemingsDF,"data/valdemings.csv")
+  charliecristDF <- twitteR::twListToDF(charliecrist)
+  write.csv(charliecristDF, "data/charliecrist.csv")
+  teddeutchDF <- twitteR::twListToDF(teddeutch)
+  write.csv(teddeutchDF,"data/teddeutch.csv")
+  sanfordbishopDF <- twitteR::twListToDF(sanfordbishop)
+  write.csv(sanfordbishopDF,"data/sanfordbishop.csv")
+  hankjohnsonDF <- twitteR::twListToDF(hankjohnson)
+  write.csv(hankjohnsonDF,"data/hankjohnson.csv")
+  johnlewisDF <- twitteR::twListToDF(johnlewis)
+  write.csv(johnlewisDF,"data/johnlewis.csv")
+  lucymcbathDF <- twitteR::twListToDF(lucymcbath)
+  write.csv(lucymcbathDF,"data/lucymcbath.csv")
+  davidscottDF <- twitteR::twListToDF(davidscott)
+  write.csv(davidscottDF,"data/davidscott.csv")
+  edcaseDF <- twitteR::twListToDF(edcase)
+  write.csv(edcaseDF,"data/edcase.csv")
+  daveloebsackDF <- twitteR::twListToDF(daveloebsack)
+  write.csv(daveloebsackDF,"data/daveloebsack.csv")
+  bobbyrushDF <- twitteR::twListToDF(bobbyrush)
+  write.csv(bobbyrushDF,"data/bobbyrush.csv")
+  lipinskiDF <- twitteR::twListToDF(lipinski)
+  write.csv(lipinskiDF,"data/lipinski.csv")
+  chuygarciaDF <- twitteR::twListToDF(chuygarcia)
+  write.csv(chuygarciaDF,"data/chuygarcia.csv")
+  mikequigleyDF <- twitteR::twListToDF(mikequigley)
+  write.csv(mikequigleyDF,"data/mikequigley.csv")
+  castenDF <- twitteR::twListToDF(casten)
+  write.csv(castenDF,"data/casten.csv")
+  dannydavisDF <- twitteR::twListToDF(dannydavis)
+  write.csv(dannydavisDF,"data/dannydavis.csv")
+  rajaDF <- twitteR::twListToDF(raja)
+  write.csv(rajaDF,"data/raja.csv")
+  schneiderDF <- twitteR::twListToDF(schneider)
+  write.csv(schneiderDF,"data/schneider.csv")
+  billfosterDF <- twitteR::twListToDF(billfoster)
+  write.csv(billfosterDF,"data/billfoster.csv")
+  viscloskyDF <- twitteR::twListToDF(visclosky)
+  write.csv(viscloskyDF,"data/visclosky.csv")
+  andrecarsonDF <- twitteR::twListToDF(andrecarson)
+  write.csv(andrecarsonDF,"data/andrecarson.csv")
+  johnyarmuthDF <- twitteR::twListToDF(johnyarmuth)
+  write.csv(johnyarmuthDF,"data/johnyarmuth.csv")
+  richmondDF <- twitteR::twListToDF(richmond)
+  write.csv(richmondDF,"data/richmond.csv")
+  chelliepingreeDF <- twitteR::twListToDF(chelliepingree)
+  write.csv(chelliepingreeDF,"data/chelliepingree.csv")
+  goldenDF <- twitteR::twListToDF(golden)
+  write.csv(goldenDF,"data/golden.csv")
+  dutchDF <- twitteR::twListToDF(dutch)
+  write.csv(dutchDF,"data/dutch.csv")
+  sarbanesDF <- twitteR::twListToDF(sarbanes)
+  write.csv(sarbanesDF,"data/sarbanes.csv")
+  anthonybrownDF <- twitteR::twListToDF(anthonybrown)
+  write.csv(anthonybrownDF,"data/anthonybrown.csv")
+  hoyerDF <- twitteR::twListToDF(hoyer)
+  write.csv(hoyerDF,"data/hoyer.csv")
+  davidtroneDF <- twitteR::twListToDF(davidtrone)
+  write.csv(davidtroneDF,"data/davidtrone.csv")
+  cummingsDF <- twitteR::twListToDF(cummings)
+  write.csv(cummingsDF,"data/cummings.csv")
+  raskinDF <- twitteR::twListToDF(raskin)
+  write.csv(raskinDF,"data/raskin.csv")
+  richardnealDF <- twitteR::twListToDF(richardneal)
+  write.csv(richardnealDF,"data/richardneal.csv")
+  mcgovernDF <- twitteR::twListToDF(mcgovern)
+  write.csv(mcgovernDF,"data/mcgovern.csv")
+  joekennedyDF <- twitteR::twListToDF(joekennedy)
+  write.csv(joekennedyDF,"data/joekennedy.csv")
+  moultonDF <- twitteR::twListToDF(moulton)
+  write.csv(moultonDF,"data/moulton.csv")
+  stephenlynchDF <- twitteR::twListToDF(stephenlynch)
+  write.csv(stephenlynchDF,"data/stephenlynch.csv")
+  keatingDF <- twitteR::twListToDF(keating)
+  write.csv(keatingDF,"data/keating.csv")
+  dankildeeDF <- twitteR::twListToDF(dankildee)
+  write.csv(dankildeeDF,"data/dankildee.csv")
+  andylevinDF <- twitteR::twListToDF(andylevin)
+  write.csv(andylevinDF,"data/andylevin.csv")
+  cleaverDF <- twitteR::twListToDF(cleaver)
+  write.csv(cleaverDF,"data/cleaver.csv")
+  benniethompsonDF <- twitteR::twListToDF(benniethompson)
+  write.csv(benniethompsonDF,"data/benniethompson.csv")
+  gkbutterfieldDF <- twitteR::twListToDF(gkbutterfield)
+  write.csv(gkbutterfieldDF,"data/gkbutterfield.csv")
+  davidpriceDF <- twitteR::twListToDF(davidprice)
+  write.csv(davidpriceDF,"data/davidprice.csv")
+  chrispappasDF <- twitteR::twListToDF(chrispappas)
+  write.csv(chrispappasDF,"data/chrispappas.csv")
+  donaldnorcrossDF <- twitteR::twListToDF(donaldnorcross)
+  write.csv(donaldnorcrossDF,"data/donaldnorcross.csv")
+  andykimDF <- twitteR::twListToDF(andykim)
+  write.csv(andykimDF,"data/andykim.csv")
+  joshgDF <- twitteR::twListToDF(joshg)
+  write.csv(joshgDF,"data/joshg.csv")
+  frankpalloneDF <- twitteR::twListToDF(frankpallone)
+  write.csv(frankpalloneDF,"data/frankpallone.csv")
+  malinowskiDF <- twitteR::twListToDF(malinowski)
+  write.csv(malinowskiDF,"data/malinowski.csv")
+  siresDF <- twitteR::twListToDF(sires)
+  write.csv(siresDF,"data/sires.csv")
+  billpascrellDF <- twitteR::twListToDF(billpascrell)
+  write.csv(billpascrellDF,"data/billpascrell.csv")
+  donaldpayneDF <- twitteR::twListToDF(donaldpayne)
+  write.csv(donaldpayneDF,"data/donaldpayne.csv")
+  sherrillDF <- twitteR::twListToDF(sherrill)
+  write.csv(sherrillDF,"data/sherrill.csv")
+  benraylujanDF <- twitteR::twListToDF(benraylujan)
+  write.csv(benraylujanDF,"data/benraylujan.csv")
+  horsfordDF <- twitteR::twListToDF(horsford)
+  write.csv(horsfordDF,"data/horsford.csv")
+  tomuozziDF <- twitteR::twListToDF(tomsuozzi)
+  write.csv(tomuozziDF,"data/tomsuozzi.csv")
+  gregorymeeksDF <- twitteR::twListToDF(gregorymeeks)
+  write.csv(gregorymeeksDF,"data/gregorymeeks.csv")
+  gracemengDF <- twitteR::twListToDF(gracemeng)
+  write.csv(gracemengDF,"data/gracemeng.csv")
+  jeffriesDF <- twitteR::twListToDF(jeffries)
+  write.csv(jeffriesDF,"data/jeffries.csv")
+  jerrynadlerDF <- twitteR::twListToDF(jerrynadler)
+  write.csv(jerrynadlerDF,"data/jerrynadler.csv")
+  maxroseDF <- twitteR::twListToDF(maxrose)
+  write.csv(maxroseDF,"data/maxrose.csv")
+  espillatDF <- twitteR::twListToDF(espaillat)
+  write.csv(espillatDF,"data/espaillat.csv")
+  joseserranoDF <- twitteR::twListToDF(joseserrano)
+  write.csv(joseserranoDF,"data/joseserrano.csv")
+  eliotengelDF <- twitteR::twListToDF(eliotengel)
+  write.csv(eliotengelDF,"data/eliotengel.csv")
+  seanmaloneyDF <- twitteR::twListToDF(seanmaloney)
+  write.csv(seanmaloneyDF,"data/seanmaloney.csv")
+  delgadoDF <- twitteR::twListToDF(delgado)
+  write.csv(delgadoDF,"data/delgado.csv")
+  paultonkoDF <- twitteR::twListToDF(paultonko)
+  write.csv(paultonkoDF,"data/paultonko.csv")
+  brindisiDF <- twitteR::twListToDF(brindisi)
+  write.csv(brindisiDF,"data/brindisi.csv")
+  joemorelleDF <- twitteR::twListToDF(joemorelle)
+  write.csv(joemorelleDF,"data/joemorelle.csv")
+  brianhigginsDF <- twitteR::twListToDF(brianhiggins)
+  write.csv(brianhigginsDF,"data/brianhiggins.csv")
+  timryanDF <- twitteR::twListToDF(timryan)
+  write.csv(timryanDF,"data/timryan.csv")
+  gregwaldenDF <- twitteR::twListToDF(gregwalden)
+  write.csv(gregwaldenDF,"data/gregwalden.csv")
+  blumenauerDF <- twitteR::twListToDF(blumenauer)
+  write.csv(blumenauerDF,"data/blumenauer.csv")
+  peterdefazioDF <- twitteR::twListToDF(peterdefazio)
+  write.csv(peterdefazioDF,"data/peterdefazio.csv")
+  schraderDF <- twitteR::twListToDF(schrader)
+  write.csv(schraderDF,"data/schrader.csv")
+  boyleDF <- twitteR::twListToDF(boyle)
+  write.csv(boyleDF,"data/boyle.csv")
+  dwightevansDF <- twitteR::twListToDF(dwightevans)
+  write.csv(dwightevansDF,"data/dwightevans.csv")
+  cartwrightDF <- twitteR::twListToDF(cartwright)
+  write.csv(cartwrightDF,"data/cartwright.csv")
+  conorlambDF <- twitteR::twListToDF(conorlamb)
+  write.csv(conorlambDF,"data/conorlamb.csv")
+  mikedoyleDF <- twitteR::twListToDF(mikedoyle)
+  write.csv(mikedoyleDF,"data/mikedoyle.csv")
+  davidcicillineDF <- twitteR::twListToDF(davidcicilline)
+  write.csv(davidcicillineDF,"data/davidcicilline.csv")
+  jimlangevinDF <- twitteR::twListToDF(jimlangevin)
+  write.csv(jimlangevinDF,"data/jimlangevin.csv")
+  cunninghamDF <- twitteR::twListToDF(cunningham)
+  write.csv(cunninghamDF,"data/cunningham.csv")
+  clyburnDF <- twitteR::twListToDF(clyburn)
+  write.csv(clyburnDF,"data/clyburn.csv")
+  jimcooperDF <- twitteR::twListToDF(jimcooper)
+  write.csv(jimcooperDF,"data/jimcooper.csv")
+  cohenDF <- twitteR::twListToDF(cohen)
+  write.csv(cohenDF,"data/cohen.csv")
+  algreenDF <- twitteR::twListToDF(algreen)
+  write.csv(algreenDF,"data/algreen.csv")
+  gonzalezDF <- twitteR::twListToDF(gonzalez)
+  write.csv(gonzalezDF,"data/gonzalez.csv")
+  joaquincastroDF <- twitteR::twListToDF(joaquincastro)
+  write.csv(joaquincastroDF,"data/joaquincastro.csv")
+  cuellarDF <- twitteR::twListToDF(cuellar)
+  write.csv(cuellarDF,"data/cuellar.csv")
+  ebjDF <- twitteR::twListToDF(ebj)
+  write.csv(ebjDF,"data/ebj.csv")
+  colinallredDF <- twitteR::twListToDF(colinallred)
+  write.csv(colinallredDF,"data/colinallred.csv")
+  veaseyDF <- twitteR::twListToDF(veasey)
+  write.csv(veaseyDF,"data/veasey.csv")
+  filemonvelaDF <- twitteR::twListToDF(filemonvela)
+  write.csv(filemonvelaDF,"data/filemonvela.csv")
+  lloyddoggettDF <- twitteR::twListToDF(lloyddoggett)
+  write.csv(lloyddoggettDF,"data/lloyddoggett.csv")
+  benmcadamsDF <- twitteR::twListToDF(benmcadams)
+  write.csv(benmcadamsDF,"data/benmcadams.csv")
+  bobbyscottDF <- twitteR::twListToDF(bobbyscott)
+  write.csv(bobbyscottDF,"data/bobbyscott.csv")
+  mceachinDF <- twitteR::twListToDF(mceachin)
+  write.csv(mceachinDF,"data/mceachin.csv")
+  donbeyerDF <- twitteR::twListToDF(donbeyer)
+  write.csv(donbeyerDF,"data/donbeyer.csv")
+  gerryconnollyDF <- twitteR::twListToDF(gerryconnolly)
+  write.csv(gerryconnollyDF,"data/gerryconnolly.csv")
+  peterwelchDF <- twitteR::twListToDF(peterwelch)
+  write.csv(peterwelchDF,"data/peterwelch.csv")
+  ricklarsenDF <- twitteR::twListToDF(ricklarsen)
+  write.csv(ricklarsenDF,"data/ricklarsen.csv")
+  derekkilmerDF <- twitteR::twListToDF(derekkilmer)
+  write.csv(derekkilmerDF,"data/derekkilmer.csv")
+  adamsmithDF <- twitteR::twListToDF(adamsmith)
+  write.csv(adamsmithDF,"data/adamsmith.csv")
+  dennyheckDF <- twitteR::twListToDF(dennyheck)
+  write.csv(dennyheckDF,"data/dennyheck.csv")
+  markpocanDF <- twitteR::twListToDF(markpocan)
+  write.csv(markpocanDF,"data/markpocan.csv")
+  ronkindDF <- twitteR::twListToDF(ronkind)
+  write.csv(ronkindDF,"data/ronkind.csv")
+  carolmillerDF <- twitteR::twListToDF(carolmiller)
+  write.csv(carolmillerDF,"data/carolmiller.csv")
+  
+  
   ohallerantweets <- readr::read_csv("data/ohalleran.csv")
   raulgrijalvatweets <- readr::read_csv("data/raulgrijalva.csv")
   rubengallegotweets <- readr::read_csv("data/rubengallego.csv")
@@ -2590,309 +3138,311 @@ hormaleD <- function() {
   markpocantweets <- readr::read_csv("data/markpocan.csv")
   ronkindtweets <- readr::read_csv("data/ronkind.csv")
   carolmillertweets <- readr::read_csv("data/carolmiller.csv")
-
-
+  
+  
   hormdtweets <- dplyr::bind_rows(ohallerantweets %>%
-                             dplyr::mutate(person = "OHalleran"),
-                           raulgrijalvatweets %>%
-                             dplyr::mutate(person = "Raul Grijalva"),
-                           rubengallegotweets %>%
-                             dplyr::mutate(person = "Ruben Gallego"),
-                           gregstantontweets %>%
-                             dplyr::mutate(person = "Greg Stanton"),
-                           garamendtweets %>%
-                             dplyr::mutate(person = "Garamend"),
-                           thompsontweets %>%
-                             dplyr::mutate(person = "Thompson"),
-                           mcnerneytweets %>%
-                             dplyr::mutate(person = "McNerney"),
-                           joshhardertweets %>%
-                             dplyr::mutate(person = "Josh Hardert"),
-                           desaulniertweets %>%
-                             dplyr::mutate(person = "DeSaulnier"),
-                           swalwelltweets %>%
-                             dplyr::mutate(person = "Swalwell"),
-                           jimcostatweets %>%
-                             dplyr::mutate(person = "Jim Costa"),
-                           rokhannatweets %>%
-                             dplyr::mutate(person = "Rokhanna"),
-                           jimmypanettatweets %>%
-                             dplyr::mutate(person = "Jimmy Panetta"),
-                           tjcoxtweets %>%
-                             dplyr::mutate(person = "Tj Cox"),
-                           carbajaltweets %>%
-                             dplyr::mutate(person = "Carbajal"),
-                           adamschifftweets %>%
-                             dplyr::mutate(person = "Adam Schiff"),
-                           cardenastweets %>%
-                             dplyr::mutate(person = "Cardenas"),
-                           bradshermantweets %>%
-                             dplyr::mutate(person = "Brad Sherman"),
-                           peteaguilartweets %>%
-                             dplyr::mutate(person = "Pete Aguilar"),
-                           tedlieutweets %>%
-                             dplyr::mutate(person = "Ted Lieu"),
-                           jimmygomeztweets %>%
-                             dplyr::mutate(person = "Jimmy Gomez"),
-                           ruiztweets %>%
-                             dplyr::mutate(person = "Ruiz"),
-                           gilcisnerostweets %>%
-                             dplyr::mutate(person = "Gil Cisneros"),
-                           marktakanotweets %>%
-                             dplyr::mutate(person = "Mark Takano"),
-                           loucorreatweets %>%
-                             dplyr::mutate(person = "Lou Correa"),
-                           lowenthaltweets %>%
-                             dplyr::mutate(person = "Lownthal"),
-                           harleytweets %>%
-                             dplyr::mutate(person = "Harley"),
-                           mikelevintweets %>%
-                             dplyr::mutate(person = "Mike Levin"),
-                           huntertweets %>%
-                             dplyr::mutate(person = "Hunter"),
-                           juanvargastweets %>%
-                             dplyr::mutate(person = "Juan Vargas"),
-                           scottpeterstweets %>%
-                             dplyr::mutate(person = "Scott Peters"),
-                           joenegusetweets %>%
-                             dplyr::mutate(person = "Joe Neguse"),
-                           jasoncrowtweets %>%
-                             dplyr::mutate(person = "Jason Crow"),
-                           perlmuttertweets %>%
-                             dplyr::mutate(person = "Perlmutter"),
-                           johnlarsontweets %>%
-                             dplyr::mutate(person = "John Larson"),
-                           joecourtneytweets %>%
-                             dplyr::mutate(person = "Joe Courtney"),
-                           jahimestweets %>%
-                             dplyr::mutate(person = "Jahimes"),
-                           allawsontweets %>%
-                             dplyr::mutate(person = "Al Lawson"),
-                           darrensototweets %>%
-                             dplyr::mutate(person = "Darren Soto"),
-                           valdemingstweets %>%
-                             dplyr::mutate(person = "Val Demings"),
-                           charliecristtweets %>%
-                             dplyr::mutate(person = "Charlie Crist"),
-                           teddeutchtweets %>%
-                             dplyr::mutate(person = "Ted Deutch"),
-                           sanfordbishoptweets %>%
-                             dplyr::mutate(person = "Sanford Bishop"),
-                           hankjohnsontweets %>%
-                             dplyr::mutate(person = "Hank Johnson"),
-                           johnlewistweets %>%
-                             dplyr::mutate(person = "John Lewis"),
-                           lucymcbathtweets %>%
-                             dplyr::mutate(person = "Lucy McBath"),
-                           davidscotttweets %>%
-                             dplyr::mutate(person = "David Scott"),
-                           edcasetweets %>%
-                             dplyr::mutate(person = "Ed Case"),
-                           daveloebsacktweets %>%
-                             dplyr::mutate(person = "Dave Loebsack"),
-                           bobbyrushtweets %>%
-                             dplyr::mutate(person = "Bobby Rush"),
-                           lipinskitweets %>%
-                             dplyr::mutate(person = "Lipinski"),
-                           chuygarciatweets %>%
-                             dplyr::mutate(person = "Chuy Garcia"),
-                           mikequigleytweets %>%
-                             dplyr::mutate(person = "Mike Quigley"),
-                           castentweets %>%
-                             dplyr::mutate(person = "Casten"),
-                           dannydavistweets %>%
-                             dplyr::mutate(person = "Danny Davis"),
-                           rajatweets %>%
-                             dplyr::mutate(person = "Raja"),
-                           schneidertweets %>%
-                             dplyr::mutate(person = "Schneider"),
-                           billfostertweets %>%
-                             dplyr::mutate(person = "Bill Foster"),
-                           viscloskytweets %>%
-                             dplyr::mutate(person = "Visclosky"),
-                           andrecarsontweets %>%
-                             dplyr::mutate(person = "Andre Carson"),
-                           johnyarmuthtweets %>%
-                             dplyr::mutate(person = "Johny Armuth"),
-                           richmondtweets %>%
-                             dplyr::mutate(person = "Richmond"),
-                           chelliepingreetweets %>%
-                             dplyr::mutate(person = "Chellipingree"),
-                           goldentweets %>%
-                             dplyr::mutate(person = "Golden"),
-                           dutchtweets %>%
-                             dplyr::mutate(person = "Dutch"),
-                           sarbanestweets %>%
-                             dplyr::mutate(person = "Sarbanes"),
-                           anthonybrowntweets %>%
-                             dplyr::mutate(person = "Anthony Brown"),
-                           hoyertweets %>%
-                             dplyr::mutate(person = "Hoyer"),
-                           davidtronetweets %>%
-                             dplyr::mutate(person = "David Trone"),
-                           cummingstweets %>%
-                             dplyr::mutate(person = "Cummings"),
-                           raskintweets %>%
-                             dplyr::mutate(person = "Raskin"),
-                           richardnealtweets %>%
-                             dplyr::mutate(person = "Richard Neal"),
-                           mcgoverntweets %>%
-                             dplyr::mutate(person = "McGovern"),
-                           joekennedytweets %>%
-                             dplyr::mutate(person = "Joe Kennedy"),
-                           moultontweets %>%
-                             dplyr::mutate(person = "Moulton"),
-                           stephenlynchtweets %>%
-                             dplyr::mutate(person = "Stephen Lynch"),
-                           keatingtweets %>%
-                             dplyr::mutate(person = "Keating"),
-                           dankildeetweets %>%
-                             dplyr::mutate(person = "Dan Kildee"),
-                           andylevintweets %>%
-                             dplyr::mutate(person = "Andy Levin"),
-                           cleavertweets %>%
-                             dplyr::mutate(person = "Cleaver"),
-                           benniethompsontweets %>%
-                             dplyr::mutate(person = "Bennie Thompson"),
-                           gkbutterfieldtweets %>%
-                             dplyr::mutate(person = "GK Butterfield"),
-                           davidpricetweets %>%
-                             dplyr::mutate(person = "David Price"),
-                           chrispappastweets %>%
-                             dplyr::mutate(person = "Chris Pappas"),
-                           donaldnorcrosstweets %>%
-                             dplyr::mutate(person = "Donald Norcross"),
-                           andykimtweets %>%
-                             dplyr::mutate(person = "Andy Kim"),
-                           joshgtweets %>%
-                             dplyr::mutate(person = "Josh G"),
-                           frankpallonetweets %>%
-                             dplyr::mutate(person = "Frank Pallone"),
-                           malinowskitweets %>%
-                             dplyr::mutate(person = "Malinowski"),
-                           sirestweets %>%
-                             dplyr::mutate(person = "Sires"),
-                           billpascrelltweets %>%
-                             dplyr::mutate(person = "Bill Pascrell"),
-                           donaldpaynetweets %>%
-                             dplyr::mutate(person = "Donald Payne"),
-                           sherrilltweets %>%
-                             dplyr::mutate(person = "Sherrill"),
-                           benraylujantweets %>%
-                             dplyr::mutate(person = "Ben Raylujan"),
-                           horsfordtweets %>%
-                             dplyr::mutate(person = "Horsford"),
-                           tomsuozzitweets %>%
-                             dplyr::mutate(person = "Tom Suouzzi"),
-                           gregorymeekstweets %>%
-                             dplyr::mutate(person = "Gregory Meeks"),
-                           gracemengtweets %>%
-                             dplyr::mutate(person = "Grace Meng"),
-                           jeffriestweets %>%
-                             dplyr::mutate(person = "Jeffries"),
-                           jerrynadlertweets %>%
-                             dplyr::mutate(person = "Jerry Nadler"),
-                           maxrosetweets %>%
-                             dplyr::mutate(person = "Max Rose"),
-                           espaillattweets %>%
-                             dplyr::mutate(person = "Espailla"),
-                           joseserranotweets %>%
-                             dplyr::mutate(person = "Jose Serrano"),
-                           eliotengeltweets %>%
-                             dplyr::mutate(person = "Eli Otengel"),
-                           seanmaloneytweets %>%
-                             dplyr::mutate(person = "Sean Maloney"),
-                           delgadotweets %>%
-                             dplyr::mutate(person = "Delgado"),
-                           paultonkotweets %>%
-                             dplyr::mutate(person = "Paul Tonko"),
-                           brindisitweets %>%
-                             dplyr::mutate(person = "Brindisi"),
-                           joemorelletweets %>%
-                             dplyr::mutate(person = "Joe Morelle"),
-                           brianhigginstweets %>%
-                             dplyr::mutate(person = "Brian Higgins"),
-                           timryantweets %>%
-                             dplyr::mutate(person = "Tim Ryan"),
-                           gregwaldentweets %>%
-                             dplyr::mutate(person = "Greg Walden"),
-                           blumenauertweets %>%
-                             dplyr::mutate(person = "Blumenauer"),
-                           peterdefaziotweets %>%
-                             dplyr::mutate(person = "Peter DeFazio"),
-                           schradertweets %>%
-                             dplyr::mutate(person = "Schrader"),
-                           boyletweets %>%
-                             dplyr::mutate(person = "Boyle"),
-                           dwightevanstweets %>%
-                             dplyr::mutate(person = "Dwight Evans"),
-                           cartwrighttweets %>%
-                             dplyr::mutate(person = "Cartwright"),
-                           conorlambtweets %>%
-                             dplyr::mutate(person = "Conor Lamb"),
-                           mikedoyletweets %>%
-                             dplyr::mutate(person = "Mike Doyle"),
-                           davidcicillinetweets %>%
-                             dplyr::mutate(person = "David Cicilline"),
-                           jimlangevintweets %>%
-                             dplyr::mutate(person = "Jim Langevin"),
-                           cunninghamtweets %>%
-                             dplyr::mutate(person = "Cunningham"),
-                           clyburntweets %>%
-                             dplyr::mutate(person = "Clyburn"),
-                           jimcoopertweets %>%
-                             dplyr::mutate(person = "Jim Cooper"),
-                           cohentweets %>%
-                             dplyr::mutate(person = "Cohen"),
-                           algreentweets %>%
-                             dplyr::mutate(person = "Al Green"),
-                           gonzaleztweets %>%
-                             dplyr::mutate(person = "Gonzalez"),
-                           joaquincastrotweets %>%
-                             dplyr::mutate(person = "Joaquin Castro"),
-                           cuellartweets %>%
-                             dplyr::mutate(person = "Cuellar"),
-                           ebjtweets %>%
-                             dplyr::mutate(person = "EBJ"),
-                           colinallredtweets %>%
-                             dplyr::mutate(person = "Colin Allred"),
-                           veaseytweets %>%
-                             dplyr::mutate(person = "Veasey"),
-                           filemonvelatweets %>%
-                             dplyr::mutate(person = "File Monvela"),
-                           lloyddoggetttweets %>%
-                             dplyr::mutate(person = "Lloyd Doggett"),
-                           benmcadamstweets %>%
-                             dplyr::mutate(person = "Ben McAdams"),
-                           bobbyscotttweets %>%
-                             dplyr::mutate(person = "Bobby Scott"),
-                           mceachintweets %>%
-                             dplyr::mutate(person = "McEachin"),
-                           donbeyertweets %>%
-                             dplyr::mutate(person = "Don Beyer"),
-                           gerryconnollytweets %>%
-                             dplyr::mutate(person = "Gerry Connolly"),
-                           peterwelchtweets %>%
-                             dplyr::mutate(person = "Peter Welch"),
-                           ricklarsentweets %>%
-                             dplyr::mutate(person = "Rick Larson"),
-                           derekkilmertweets %>%
-                             dplyr::mutate(person = "Derek Kilmer"),
-                           adamsmithtweets %>%
-                             dplyr::mutate(person = "Adam Smith"),
-                           dennyhecktweets %>%
-                             dplyr::mutate(person = "Denny Heck"),
-                           markpocantweets %>%
-                             dplyr::mutate(person = "Mark Pocan"),
-                           ronkindtweets %>%
-                             dplyr::mutate(person = "Ron Kind"),
-                           carolmillertweets %>%
-                             dplyr::mutate(person = "Carol Miller"))
-
-  save_as_csv(hormdtweets, "data/hormdtweets.csv", prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
+                                    dplyr::mutate(person = "OHalleran"),
+                                  raulgrijalvatweets %>%
+                                    dplyr::mutate(person = "Raul Grijalva"),
+                                  rubengallegotweets %>%
+                                    dplyr::mutate(person = "Ruben Gallego"),
+                                  gregstantontweets %>%
+                                    dplyr::mutate(person = "Greg Stanton"),
+                                  garamendtweets %>%
+                                    dplyr::mutate(person = "Garamend"),
+                                  thompsontweets %>%
+                                    dplyr::mutate(person = "Thompson"),
+                                  mcnerneytweets %>%
+                                    dplyr::mutate(person = "McNerney"),
+                                  joshhardertweets %>%
+                                    dplyr::mutate(person = "Josh Hardert"),
+                                  desaulniertweets %>%
+                                    dplyr::mutate(person = "DeSaulnier"),
+                                  swalwelltweets %>%
+                                    dplyr::mutate(person = "Swalwell"),
+                                  jimcostatweets %>%
+                                    dplyr::mutate(person = "Jim Costa"),
+                                  rokhannatweets %>%
+                                    dplyr::mutate(person = "Rokhanna"),
+                                  jimmypanettatweets %>%
+                                    dplyr::mutate(person = "Jimmy Panetta"),
+                                  tjcoxtweets %>%
+                                    dplyr::mutate(person = "Tj Cox"),
+                                  carbajaltweets %>%
+                                    dplyr::mutate(person = "Carbajal"),
+                                  adamschifftweets %>%
+                                    dplyr::mutate(person = "Adam Schiff"),
+                                  cardenastweets %>%
+                                    dplyr::mutate(person = "Cardenas"),
+                                  bradshermantweets %>%
+                                    dplyr::mutate(person = "Brad Sherman"),
+                                  peteaguilartweets %>%
+                                    dplyr::mutate(person = "Pete Aguilar"),
+                                  tedlieutweets %>%
+                                    dplyr::mutate(person = "Ted Lieu"),
+                                  jimmygomeztweets %>%
+                                    dplyr::mutate(person = "Jimmy Gomez"),
+                                  ruiztweets %>%
+                                    dplyr::mutate(person = "Ruiz"),
+                                  gilcisnerostweets %>%
+                                    dplyr::mutate(person = "Gil Cisneros"),
+                                  marktakanotweets %>%
+                                    dplyr::mutate(person = "Mark Takano"),
+                                  loucorreatweets %>%
+                                    dplyr::mutate(person = "Lou Correa"),
+                                  lowenthaltweets %>%
+                                    dplyr::mutate(person = "Lownthal"),
+                                  harleytweets %>%
+                                    dplyr::mutate(person = "Harley"),
+                                  mikelevintweets %>%
+                                    dplyr::mutate(person = "Mike Levin"),
+                                  huntertweets %>%
+                                    dplyr::mutate(person = "Hunter"),
+                                  juanvargastweets %>%
+                                    dplyr::mutate(person = "Juan Vargas"),
+                                  scottpeterstweets %>%
+                                    dplyr::mutate(person = "Scott Peters"),
+                                  joenegusetweets %>%
+                                    dplyr::mutate(person = "Joe Neguse"),
+                                  jasoncrowtweets %>%
+                                    dplyr::mutate(person = "Jason Crow"),
+                                  perlmuttertweets %>%
+                                    dplyr::mutate(person = "Perlmutter"),
+                                  johnlarsontweets %>%
+                                    dplyr::mutate(person = "John Larson"),
+                                  joecourtneytweets %>%
+                                    dplyr::mutate(person = "Joe Courtney"),
+                                  jahimestweets %>%
+                                    dplyr::mutate(person = "Jahimes"),
+                                  allawsontweets %>%
+                                    dplyr::mutate(person = "Al Lawson"),
+                                  darrensototweets %>%
+                                    dplyr::mutate(person = "Darren Soto"),
+                                  valdemingstweets %>%
+                                    dplyr::mutate(person = "Val Demings"),
+                                  charliecristtweets %>%
+                                    dplyr::mutate(person = "Charlie Crist"),
+                                  teddeutchtweets %>%
+                                    dplyr::mutate(person = "Ted Deutch"),
+                                  sanfordbishoptweets %>%
+                                    dplyr::mutate(person = "Sanford Bishop"),
+                                  hankjohnsontweets %>%
+                                    dplyr::mutate(person = "Hank Johnson"),
+                                  johnlewistweets %>%
+                                    dplyr::mutate(person = "John Lewis"),
+                                  lucymcbathtweets %>%
+                                    dplyr::mutate(person = "Lucy McBath"),
+                                  davidscotttweets %>%
+                                    dplyr::mutate(person = "David Scott"),
+                                  edcasetweets %>%
+                                    dplyr::mutate(person = "Ed Case"),
+                                  daveloebsacktweets %>%
+                                    dplyr::mutate(person = "Dave Loebsack"),
+                                  bobbyrushtweets %>%
+                                    dplyr::mutate(person = "Bobby Rush"),
+                                  lipinskitweets %>%
+                                    dplyr::mutate(person = "Lipinski"),
+                                  chuygarciatweets %>%
+                                    dplyr::mutate(person = "Chuy Garcia"),
+                                  mikequigleytweets %>%
+                                    dplyr::mutate(person = "Mike Quigley"),
+                                  castentweets %>%
+                                    dplyr::mutate(person = "Casten"),
+                                  dannydavistweets %>%
+                                    dplyr::mutate(person = "Danny Davis"),
+                                  rajatweets %>%
+                                    dplyr::mutate(person = "Raja"),
+                                  schneidertweets %>%
+                                    dplyr::mutate(person = "Schneider"),
+                                  billfostertweets %>%
+                                    dplyr::mutate(person = "Bill Foster"),
+                                  viscloskytweets %>%
+                                    dplyr::mutate(person = "Visclosky"),
+                                  andrecarsontweets %>%
+                                    dplyr::mutate(person = "Andre Carson"),
+                                  johnyarmuthtweets %>%
+                                    dplyr::mutate(person = "Johny Armuth"),
+                                  richmondtweets %>%
+                                    dplyr::mutate(person = "Richmond"),
+                                  chelliepingreetweets %>%
+                                    dplyr::mutate(person = "Chellipingree"),
+                                  goldentweets %>%
+                                    dplyr::mutate(person = "Golden"),
+                                  dutchtweets %>%
+                                    dplyr::mutate(person = "Dutch"),
+                                  sarbanestweets %>%
+                                    dplyr::mutate(person = "Sarbanes"),
+                                  anthonybrowntweets %>%
+                                    dplyr::mutate(person = "Anthony Brown"),
+                                  hoyertweets %>%
+                                    dplyr::mutate(person = "Hoyer"),
+                                  davidtronetweets %>%
+                                    dplyr::mutate(person = "David Trone"),
+                                  cummingstweets %>%
+                                    dplyr::mutate(person = "Cummings"),
+                                  raskintweets %>%
+                                    dplyr::mutate(person = "Raskin"),
+                                  richardnealtweets %>%
+                                    dplyr::mutate(person = "Richard Neal"),
+                                  mcgoverntweets %>%
+                                    dplyr::mutate(person = "McGovern"),
+                                  joekennedytweets %>%
+                                    dplyr::mutate(person = "Joe Kennedy"),
+                                  moultontweets %>%
+                                    dplyr::mutate(person = "Moulton"),
+                                  stephenlynchtweets %>%
+                                    dplyr::mutate(person = "Stephen Lynch"),
+                                  keatingtweets %>%
+                                    dplyr::mutate(person = "Keating"),
+                                  dankildeetweets %>%
+                                    dplyr::mutate(person = "Dan Kildee"),
+                                  andylevintweets %>%
+                                    dplyr::mutate(person = "Andy Levin"),
+                                  cleavertweets %>%
+                                    dplyr::mutate(person = "Cleaver"),
+                                  benniethompsontweets %>%
+                                    dplyr::mutate(person = "Bennie Thompson"),
+                                  gkbutterfieldtweets %>%
+                                    dplyr::mutate(person = "GK Butterfield"),
+                                  davidpricetweets %>%
+                                    dplyr::mutate(person = "David Price"),
+                                  chrispappastweets %>%
+                                    dplyr::mutate(person = "Chris Pappas"),
+                                  donaldnorcrosstweets %>%
+                                    dplyr::mutate(person = "Donald Norcross"),
+                                  andykimtweets %>%
+                                    dplyr::mutate(person = "Andy Kim"),
+                                  joshgtweets %>%
+                                    dplyr::mutate(person = "Josh G"),
+                                  frankpallonetweets %>%
+                                    dplyr::mutate(person = "Frank Pallone"),
+                                  malinowskitweets %>%
+                                    dplyr::mutate(person = "Malinowski"),
+                                  sirestweets %>%
+                                    dplyr::mutate(person = "Sires"),
+                                  billpascrelltweets %>%
+                                    dplyr::mutate(person = "Bill Pascrell"),
+                                  donaldpaynetweets %>%
+                                    dplyr::mutate(person = "Donald Payne"),
+                                  sherrilltweets %>%
+                                    dplyr::mutate(person = "Sherrill"),
+                                  benraylujantweets %>%
+                                    dplyr::mutate(person = "Ben Raylujan"),
+                                  horsfordtweets %>%
+                                    dplyr::mutate(person = "Horsford"),
+                                  tomsuozzitweets %>%
+                                    dplyr::mutate(person = "Tom Suouzzi"),
+                                  gregorymeekstweets %>%
+                                    dplyr::mutate(person = "Gregory Meeks"),
+                                  gracemengtweets %>%
+                                    dplyr::mutate(person = "Grace Meng"),
+                                  jeffriestweets %>%
+                                    dplyr::mutate(person = "Jeffries"),
+                                  jerrynadlertweets %>%
+                                    dplyr::mutate(person = "Jerry Nadler"),
+                                  maxrosetweets %>%
+                                    dplyr::mutate(person = "Max Rose"),
+                                  espaillattweets %>%
+                                    dplyr::mutate(person = "Espailla"),
+                                  joseserranotweets %>%
+                                    dplyr::mutate(person = "Jose Serrano"),
+                                  eliotengeltweets %>%
+                                    dplyr::mutate(person = "Eli Otengel"),
+                                  seanmaloneytweets %>%
+                                    dplyr::mutate(person = "Sean Maloney"),
+                                  delgadotweets %>%
+                                    dplyr::mutate(person = "Delgado"),
+                                  paultonkotweets %>%
+                                    dplyr::mutate(person = "Paul Tonko"),
+                                  brindisitweets %>%
+                                    dplyr::mutate(person = "Brindisi"),
+                                  joemorelletweets %>%
+                                    dplyr::mutate(person = "Joe Morelle"),
+                                  brianhigginstweets %>%
+                                    dplyr::mutate(person = "Brian Higgins"),
+                                  timryantweets %>%
+                                    dplyr::mutate(person = "Tim Ryan"),
+                                  gregwaldentweets %>%
+                                    dplyr::mutate(person = "Greg Walden"),
+                                  blumenauertweets %>%
+                                    dplyr::mutate(person = "Blumenauer"),
+                                  peterdefaziotweets %>%
+                                    dplyr::mutate(person = "Peter DeFazio"),
+                                  schradertweets %>%
+                                    dplyr::mutate(person = "Schrader"),
+                                  boyletweets %>%
+                                    dplyr::mutate(person = "Boyle"),
+                                  dwightevanstweets %>%
+                                    dplyr::mutate(person = "Dwight Evans"),
+                                  cartwrighttweets %>%
+                                    dplyr::mutate(person = "Cartwright"),
+                                  conorlambtweets %>%
+                                    dplyr::mutate(person = "Conor Lamb"),
+                                  mikedoyletweets %>%
+                                    dplyr::mutate(person = "Mike Doyle"),
+                                  davidcicillinetweets %>%
+                                    dplyr::mutate(person = "David Cicilline"),
+                                  jimlangevintweets %>%
+                                    dplyr::mutate(person = "Jim Langevin"),
+                                  cunninghamtweets %>%
+                                    dplyr::mutate(person = "Cunningham"),
+                                  clyburntweets %>%
+                                    dplyr::mutate(person = "Clyburn"),
+                                  jimcoopertweets %>%
+                                    dplyr::mutate(person = "Jim Cooper"),
+                                  cohentweets %>%
+                                    dplyr::mutate(person = "Cohen"),
+                                  algreentweets %>%
+                                    dplyr::mutate(person = "Al Green"),
+                                  gonzaleztweets %>%
+                                    dplyr::mutate(person = "Gonzalez"),
+                                  joaquincastrotweets %>%
+                                    dplyr::mutate(person = "Joaquin Castro"),
+                                  cuellartweets %>%
+                                    dplyr::mutate(person = "Cuellar"),
+                                  ebjtweets %>%
+                                    dplyr::mutate(person = "EBJ"),
+                                  colinallredtweets %>%
+                                    dplyr::mutate(person = "Colin Allred"),
+                                  veaseytweets %>%
+                                    dplyr::mutate(person = "Veasey"),
+                                  filemonvelatweets %>%
+                                    dplyr::mutate(person = "File Monvela"),
+                                  lloyddoggetttweets %>%
+                                    dplyr::mutate(person = "Lloyd Doggett"),
+                                  benmcadamstweets %>%
+                                    dplyr::mutate(person = "Ben McAdams"),
+                                  bobbyscotttweets %>%
+                                    dplyr::mutate(person = "Bobby Scott"),
+                                  mceachintweets %>%
+                                    dplyr::mutate(person = "McEachin"),
+                                  donbeyertweets %>%
+                                    dplyr::mutate(person = "Don Beyer"),
+                                  gerryconnollytweets %>%
+                                    dplyr::mutate(person = "Gerry Connolly"),
+                                  peterwelchtweets %>%
+                                    dplyr::mutate(person = "Peter Welch"),
+                                  ricklarsentweets %>%
+                                    dplyr::mutate(person = "Rick Larson"),
+                                  derekkilmertweets %>%
+                                    dplyr::mutate(person = "Derek Kilmer"),
+                                  adamsmithtweets %>%
+                                    dplyr::mutate(person = "Adam Smith"),
+                                  dennyhecktweets %>%
+                                    dplyr::mutate(person = "Denny Heck"),
+                                  markpocantweets %>%
+                                    dplyr::mutate(person = "Mark Pocan"),
+                                  ronkindtweets %>%
+                                    dplyr::mutate(person = "Ron Kind"),
+                                  carolmillertweets %>%
+                                    dplyr::mutate(person = "Carol Miller"))
+  
+  hormdDF <- twitteR::twListToDF(hormdtweets)
+  write.csv(hormdDF, "data/hormdtweets.csv")
   hormdtweets <- readr::read_csv("data/hormdtweets.csv")
   if(nrow(hormdtweets)>0) {
     message("Check your Data Folder. Function ran successfully")
   }
 }
+
 
