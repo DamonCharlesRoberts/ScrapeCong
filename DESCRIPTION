@@ -11,22 +11,7 @@ BugReports: https://github.com/damoncharlesroberts/ScrapeCong/issues
 License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
-<<<<<<< HEAD
-Imports: twitteR,remotes,tidytext,rtweet,dplyr,readr,tm,utils
+Imports: tidytext,rtweet,dplyr,readr,tm,utils
 Suggests: testthat,knitr,rmarkdown,
-=======
-Depends:
-  tidytext,
-	rtweet,
-	dplyr,
-	readr,
-	tm,
-	utils
-Suggests: 
-    testthat,
-    knitr,
-    rmarkdown,
-    ggplot2
->>>>>>> parent of 0badd50... Final Changes before CRAN
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0
