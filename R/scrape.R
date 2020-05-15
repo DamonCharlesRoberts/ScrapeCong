@@ -2,7 +2,10 @@
 # ScrapeCongress          #
 ##########################
 
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 0badd50... Final Changes before CRAN
 library(rtweet)
 library(tidytext)
 library(dplyr)
@@ -35,6 +38,7 @@ library(utils)
 # (7) hormaleR()
 # (8) hormaleD()
 
+<<<<<<< HEAD
 
 library(rtweet)
 library(tidytext)
@@ -45,6 +49,8 @@ library(utils)
 library(remotes)
 
 
+=======
+>>>>>>> parent of 0badd50... Final Changes before CRAN
 #############################
 #--------(1) senmaleD-------#
 #############################

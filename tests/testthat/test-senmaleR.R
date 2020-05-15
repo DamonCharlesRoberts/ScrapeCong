@@ -1,6 +1,7 @@
 context("senmaleR")
 library(ScrapeCongress)
 <<<<<<< HEAD
+<<<<<<< HEAD
 consumer_key <- readRDS('~/Desktop/RDS/consumer_key.RDS')
 consumer_secret <- readRDS('~/Desktop/RDS/consumer_secret.RDS')
 access_token <- readRDS('~/Desktop/RDS/access_token.RDS')
@@ -14,6 +15,17 @@ test_that('senmaleR', {
 test_that('senmaleR', {
   skip_on_cran()
   testthat::expect_warning(senmaleR())
+=======
+
+context("senmaleR")
+library(ScrapeCongress)
+library(rtweet)
+test_that('senmaleR', {
+  skip_on_cran()
+  token <- rtweet::get_token()
+  f <- senmaleD()
+  expect_message(f, "Check your Data Folder. Function ran successfully")
+>>>>>>> parent of 0badd50... Final Changes before CRAN
 =======
 
 context("senmaleR")
